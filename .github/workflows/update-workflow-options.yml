@@ -10,7 +10,7 @@ permissions:
   contents: write
   pull-requests: write
   workflow: write
-
+  
 jobs:
   update-options:
     runs-on: ubuntu-latest
