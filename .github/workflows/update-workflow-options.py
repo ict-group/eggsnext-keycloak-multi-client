@@ -1,9 +1,4 @@
 #!/usr/bin/env python3
-"""
-Script per aggiornare automaticamente i dropdown del workflow
-con le versioni e i client disponibili
-"""
-
 import json
 import subprocess
 import requests
@@ -26,13 +21,11 @@ def get_keycloak_versions(limit=20):
         for tag in tags:
             name = tag.get('name', '')
 
-            # ✅ REGEX RIGOROSO: solo X.Y.Z (es: 24.0.0, 23.0.1)
+            # REGEX RIGOROSO: solo X.Y.Z
             if re.match(r'^\d+\.\d+\.\d+$', name):
-                # Esclude alpha, beta, rc, dev, snapshot
                 if not any(x in name.lower() for x in ['alpha', 'beta', 'rc', 'dev', 'snapshot']):
                     versions.append(name)
 
-        # Rimuovi duplicati e ordina in discendente
         versions = sorted(
             set(versions),
             key=lambda x: tuple(map(int, x.split('.'))),
@@ -50,8 +43,8 @@ def get_keycloak_versions(limit=20):
         traceback.print_exc()
         return []
 
-def get_available_clients():
-    """Recupera i client disponibili dalla struttura"""
+def get_available_clienti():
+    """Recupera i clienti disponibili dalla struttura clienti/"""
     try:
         result = subprocess.run(
             ["find", "clienti", "-maxdepth", "1", "-type", "d"],
@@ -59,39 +52,59 @@ def get_available_clients():
             text=True
         )
 
-        clients = [
+        clienti = [
             d.split('/')[-1] for d in result.stdout.strip().split('\n')
             if d and d != 'clienti' and d.strip()
         ]
 
-        print(f"✅ Trovati {len(clients)} clienti:")
-        for c in clients:
+        print(f"✅ Trovati {len(clienti)} clienti:")
+        for c in clienti:
             print(f"   - {c}")
-        return sorted(clients)
+        return sorted(clienti)
 
     except Exception as e:
-        print(f"❌ Errore nel recuperare client: {e}", file=sys.stderr)
+        print(f"❌ Errore nel recuperare clienti: {e}", file=sys.stderr)
         import traceback
         traceback.print_exc()
         return []
 
-def update_workflow(versions, clients):
+def update_workflow(versions, clienti):
     """Aggiorna il file workflow con le nuove opzioni"""
     workflow_path = '.github/workflows/build-image.yml'
 
     try:
         # Leggi il file YAML
         with open(workflow_path, 'r') as f:
-            workflow = yaml.safe_load(f)
+            content = f.read()
+
+        # Parse YAML
+        workflow = yaml.safe_load(content)
+
+        # ✅ SOLUZIONE: Cerca la chiave 'on' in modo sicuro
+        trigger_key = None
+        for key in workflow.keys():
+            if key == 'on' or str(key).lower() == 'on':
+                trigger_key = key
+                break
+
+        if trigger_key is None:
+            print(f"❌ Chiave 'on' non trovata nel workflow!", file=sys.stderr)
+            print(f"Chiavi disponibili: {list(workflow.keys())}", file=sys.stderr)
+            return False
 
         # Aggiorna gli input
-        client_options = ['all'] + clients
+        clienti_options = ['all'] + clienti
         version_options = versions
 
-        workflow['on']['workflow_dispatch']['inputs']['client']['options'] = client_options
-        workflow['on']['workflow_dispatch']['inputs']['keycloak_version']['options'] = version_options
+        # Accedi ai trigger e aggiorna
+        if 'workflow_dispatch' in workflow[trigger_key]:
+            workflow[trigger_key]['workflow_dispatch']['inputs']['client']['options'] = clienti_options
+            workflow[trigger_key]['workflow_dispatch']['inputs']['keycloak_version']['options'] = version_options
+        else:
+            print("❌ workflow_dispatch non trovato nel trigger 'on'", file=sys.stderr)
+            return False
 
-        # Scrivi il file aggiornato con formato pulito
+        # Scrivi il file aggiornato
         with open(workflow_path, 'w') as f:
             yaml.dump(
                 workflow,
@@ -102,7 +115,7 @@ def update_workflow(versions, clients):
             )
 
         print(f"\n✅ Workflow aggiornato!")
-        print(f"   Client ({len(client_options)}): {', '.join(client_options)}")
+        print(f"   Clienti ({len(clienti_options)}): {', '.join(clienti_options)}")
         print(f"   Versioni ({len(version_options)}): {', '.join(version_options[:5])}...")
 
         return True
@@ -118,13 +131,13 @@ if __name__ == '__main__':
     print()
 
     versions = get_keycloak_versions(20)
-    clients = get_available_clients()
+    clienti = get_available_clienti()
 
     print()
-    if versions and clients:
-        if update_workflow(versions, clients):
+    if versions and clienti:
+        if update_workflow(versions, clienti):
             print("\n🎉 Aggiornamento completato con successo!")
             sys.exit(0)
 
-    print("\n❌ Impossibile recuperare versioni o client")
+    print("\n❌ Impossibile recuperare versioni o clienti")
     sys.exit(1)
