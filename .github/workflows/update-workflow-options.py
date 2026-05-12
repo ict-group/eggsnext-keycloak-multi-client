@@ -54,17 +54,17 @@ def get_available_clients():
     """Recupera i client disponibili dalla struttura"""
     try:
         result = subprocess.run(
-            ["find", "clients", "-maxdepth", "1", "-type", "d"],
+            ["find", "clienti", "-maxdepth", "1", "-type", "d"],
             capture_output=True,
             text=True
         )
 
         clients = [
             d.split('/')[-1] for d in result.stdout.strip().split('\n')
-            if d and d != 'clients' and d.strip()
+            if d and d != 'clienti' and d.strip()
         ]
 
-        print(f"✅ Trovati {len(clients)} client:")
+        print(f"✅ Trovati {len(clients)} clienti:")
         for c in clients:
             print(f"   - {c}")
         return sorted(clients)
