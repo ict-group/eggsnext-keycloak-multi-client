@@ -1,4 +1,9 @@
 #!/usr/bin/env python3
+"""
+Script per aggiornare automaticamente i dropdown del workflow
+con le versioni e i client disponibili
+"""
+
 import json
 import subprocess
 import requests
@@ -21,11 +26,13 @@ def get_keycloak_versions(limit=20):
         for tag in tags:
             name = tag.get('name', '')
 
-            # REGEX RIGOROSO: solo X.Y.Z
+            # REGEX RIGOROSO: solo X.Y.Z (es: 26.6.1, 26.6.0)
             if re.match(r'^\d+\.\d+\.\d+$', name):
+                # Esclude alpha, beta, rc, dev, snapshot
                 if not any(x in name.lower() for x in ['alpha', 'beta', 'rc', 'dev', 'snapshot']):
                     versions.append(name)
 
+        # Rimuovi duplicati e ordina in discendente
         versions = sorted(
             set(versions),
             key=lambda x: tuple(map(int, x.split('.'))),
@@ -80,16 +87,17 @@ def update_workflow(versions, clienti):
         # Parse YAML
         workflow = yaml.safe_load(content)
 
-        # ✅ SOLUZIONE: Cerca la chiave 'on' in modo sicuro
-        trigger_key = None
-        for key in workflow.keys():
-            if key == 'on' or str(key).lower() == 'on':
-                trigger_key = key
-                break
+        # ✅ SOLUZIONE: La chiave 'on:' in YAML diventa True in PyYAML
+        trigger_key = True
 
-        if trigger_key is None:
-            print(f"❌ Chiave 'on' non trovata nel workflow!", file=sys.stderr)
+        if trigger_key not in workflow:
+            print(f"❌ Chiave 'on' (True) non trovata nel workflow!", file=sys.stderr)
             print(f"Chiavi disponibili: {list(workflow.keys())}", file=sys.stderr)
+            return False
+
+        # Verifica che workflow_dispatch esista
+        if 'workflow_dispatch' not in workflow[trigger_key]:
+            print("❌ workflow_dispatch non trovato nel trigger 'on'", file=sys.stderr)
             return False
 
         # Aggiorna gli input
@@ -97,14 +105,10 @@ def update_workflow(versions, clienti):
         version_options = versions
 
         # Accedi ai trigger e aggiorna
-        if 'workflow_dispatch' in workflow[trigger_key]:
-            workflow[trigger_key]['workflow_dispatch']['inputs']['client']['options'] = clienti_options
-            workflow[trigger_key]['workflow_dispatch']['inputs']['keycloak_version']['options'] = version_options
-        else:
-            print("❌ workflow_dispatch non trovato nel trigger 'on'", file=sys.stderr)
-            return False
+        workflow[trigger_key]['workflow_dispatch']['inputs']['client']['options'] = clienti_options
+        workflow[trigger_key]['workflow_dispatch']['inputs']['keycloak_version']['options'] = version_options
 
-        # Scrivi il file aggiornato
+        # Scrivi il file aggiornato con configurazione YAML pulita
         with open(workflow_path, 'w') as f:
             yaml.dump(
                 workflow,
@@ -113,6 +117,22 @@ def update_workflow(versions, clienti):
                 sort_keys=False,
                 allow_unicode=True
             )
+
+        # Leggi il file e rimpiazza True con 'on' nella prima linea di trigger
+        with open(workflow_path, 'r') as f:
+            content = f.read()
+
+        # Rimpiazza "True:" con "on:" nelle sezioni appropriate
+        lines = content.split('\n')
+        fixed_lines = []
+        for i, line in enumerate(lines):
+            if i < 10 and line.strip() == 'True:':  # Cerca True nei primi 10 righe (sezione trigger)
+                fixed_lines.append('on:')
+            else:
+                fixed_lines.append(line)
+
+        with open(workflow_path, 'w') as f:
+            f.write('\n'.join(fixed_lines))
 
         print(f"\n✅ Workflow aggiornato!")
         print(f"   Clienti ({len(clienti_options)}): {', '.join(clienti_options)}")
