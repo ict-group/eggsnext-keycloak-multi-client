@@ -2,8 +2,8 @@ name: Update Workflow Options
 
 on:
   schedule:
-    - cron: '0 9 * * 1'
-  workflow_dispatch:
+    - cron: '0 9 * * 1' # Ogni lunedì alle 09:00
+  workflow_dispatch:   # Permette l'avvio manuale
 
 jobs:
   update-options:
@@ -13,7 +13,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.MY_SECRET }}
-          persist-credentials: false
+          persist-credentials: true # Fondamentale per poter fare il push dopo
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -26,11 +26,17 @@ jobs:
       - name: Update workflow options
         run: python .github/workflows/update-workflow-options.py
 
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v5
-        with:
-          token: ${{ secrets.MY_SECRET }}
-          commit-message: 'ci: update workflow options'
-          title: 'chore: update versions'
-          branch: update/workflow-options
-          delete-branch: true
+      - name: Commit and Push changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          
+          # Verifica se ci sono cambiamenti prima di fare il commit
+          if git diff --quiet .github/workflows/build-image.yml; then
+            echo "Nessuna modifica rilevata."
+          else
+            git add .github/workflows/build-image.yml
+            git commit -m "ci: update workflow options [skip ci]"
+            git push origin main
+            echo "Modifiche inviate direttamente al main."
+          fi
