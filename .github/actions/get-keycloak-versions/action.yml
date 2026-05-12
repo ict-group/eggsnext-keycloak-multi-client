@@ -1,0 +1,38 @@
+name: Get Keycloak Versions
+description: 'Recupera le versioni disponibili di Keycloak da Quay.io'
+
+outputs:
+  versions:
+    description: 'Array JSON delle versioni'
+    value: ${{ steps.fetch.outputs.versions }}
+  versions_choice:
+    description: 'Versioni formattate per choice'
+    value: ${{ steps.fetch.outputs.versions_choice }}
+
+runs:
+  using: composite
+  steps:
+    - name: Fetch from Quay.io
+      id: fetch
+      shell: bash
+      run: |
+        echo "🔄 Recuperando versioni da Quay.io..."
+        
+        # Fetch dall'API Quay.io
+        RESPONSE=$(curl -s https://quay.io/api/v1/repository/keycloak/keycloak/tag?limit=100)
+        
+        # Estrai versioni stabili (formato X.Y.Z)
+        VERSIONS=$(echo "$RESPONSE" | jq -r '.tags[].name' | \
+          grep -E '^[0-9]+\.[0-9]+\.[0-9]+$' | \
+          sort -V -r | head -20)
+        
+        # Converti in JSON array
+        VERSIONS_JSON=$(echo "$VERSIONS" | jq -R -s -c 'split("\n")[:-1]')
+        
+        echo "versions=$(echo $VERSIONS_JSON)" >> $GITHUB_OUTPUT
+        echo "versions_choice<<EOF" >> $GITHUB_OUTPUT
+        echo "$VERSIONS" >> $GITHUB_OUTPUT
+        echo "EOF" >> $GITHUB_OUTPUT
+        
+        echo "✅ Versioni recuperate:"
+        echo "$VERSIONS"
