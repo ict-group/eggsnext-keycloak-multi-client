@@ -12,7 +12,7 @@ import sys
 import re
 
 def get_keycloak_versions(limit=20):
-    """Recupera le versioni disponibili da Quay.io"""
+    """Recupera le versioni e filtra per mostrare solo le ultime di ogni release Minor"""
     try:
         response = requests.get(
             'https://quay.io/api/v1/repository/keycloak/keycloak/tag?limit=100',
@@ -21,33 +21,38 @@ def get_keycloak_versions(limit=20):
         response.raise_for_status()
 
         tags = response.json().get('tags', [])
-        versions = []
+        all_stable = []
 
         for tag in tags:
             name = tag.get('name', '')
-
-            # REGEX RIGOROSO: solo X.Y.Z (es: 26.6.1, 26.6.0)
+            # Filtro base: X.Y.Z stabili
             if re.match(r'^\d+\.\d+\.\d+$', name):
-                # Esclude alpha, beta, rc, dev, snapshot
                 if not any(x in name.lower() for x in ['alpha', 'beta', 'rc', 'dev', 'snapshot']):
-                    versions.append(name)
+                    all_stable.append(name)
 
-        # Rimuovi duplicati e ordina in discendente
-        versions = sorted(
-            set(versions),
-            key=lambda x: tuple(map(int, x.split('.'))),
-            reverse=True
-        )
+        # Ordina tutte le versioni dalla più recente alla più vecchia
+        all_stable.sort(key=lambda x: tuple(map(int, x.split('.'))), reverse=True)
 
-        print(f"✅ Trovate {len(versions)} versioni valide")
-        for v in versions[:5]:
+        # LOGICA DI FILTRO: Teniamo solo la versione più recente per ogni "Major.Minor"
+        # Esempio: tra 26.0.1 e 26.0.2, teniamo solo 26.0.2
+        latest_per_minor = {}
+        for v in all_stable:
+            major_minor = ".".join(v.split('.')[:2]) # Prende "26.0" da "26.0.5"
+            if major_minor not in latest_patches:
+                latest_per_minor[major_minor] = v
+
+        # Trasformiamo il dizionario in una lista ordinata
+        filtered_versions = list(latest_per_minor.values())
+        filtered_versions.sort(key=lambda x: tuple(map(int, x.split('.'))), reverse=True)
+
+        print(f"✅ Filtrate {len(filtered_versions)} versioni uniche per release")
+        for v in filtered_versions[:5]:
             print(f"   - {v}")
-        return versions[:limit]
+
+        return filtered_versions[:limit]
 
     except Exception as e:
         print(f"❌ Errore nel recuperare versioni: {e}", file=sys.stderr)
-        import traceback
-        traceback.print_exc()
         return []
 
 def get_available_clienti():
