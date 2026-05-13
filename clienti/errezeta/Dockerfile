@@ -15,7 +15,8 @@ COPY --from=builder /opt/keycloak/lib/quarkus/ /opt/keycloak/lib/quarkus/
 COPY themes /opt/keycloak/themes
 
 # Copia configurazioni
-COPY config.env /opt/keycloak/.env
+COPY clienti/errezeta/config.env /opt/keycloak/.env
+COPY clienti/errezeta/themes /opt/keycloak/themes
 
 # Variabili d'ambiente per il tema
 ENV KC_THEME=errezeta-theme
