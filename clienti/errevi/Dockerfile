@@ -11,9 +11,6 @@ RUN /opt/keycloak/bin/kc.sh build
 FROM quay.io/keycloak/keycloak:${KEYCLOAK_VERSION}
 COPY --from=builder /opt/keycloak/lib/quarkus/ /opt/keycloak/lib/quarkus/
 
-# Copia il tema personalizzato del cliente
-COPY themes /opt/keycloak/themes
-
 # Copia configurazioni
 COPY clienti/errevi/config.env /opt/keycloak/.env
 COPY clienti/errevi/themes /opt/keycloak/themes
