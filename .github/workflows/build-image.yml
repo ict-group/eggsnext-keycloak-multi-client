@@ -90,6 +90,12 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Debug - lista file
+        run: |
+           echo "=== ROOT ===" && ls -la
+           echo "=== CLIENTI ===" && ls -la clienti/
+           echo "=== BASE ===" && ls -la base/ || echo "base/ non esiste!"
+
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
