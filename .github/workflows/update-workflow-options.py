@@ -34,11 +34,10 @@ def get_keycloak_versions(limit=20):
         all_stable.sort(key=lambda x: tuple(map(int, x.split('.'))), reverse=True)
 
         # LOGICA DI FILTRO: Teniamo solo la versione più recente per ogni "Major.Minor"
-        # Esempio: tra 26.0.1 e 26.0.2, teniamo solo 26.0.2
         latest_per_minor = {}
         for v in all_stable:
-            major_minor = ".".join(v.split('.')[:2]) # Prende "26.0" da "26.0.5"
-            if major_minor not in latest_patches:
+            major_minor = ".".join(v.split('.')[:2]) # Es: "26.0"
+            if major_minor not in latest_per_minor:
                 latest_per_minor[major_minor] = v
 
         # Trasformiamo il dizionario in una lista ordinata
@@ -54,7 +53,6 @@ def get_keycloak_versions(limit=20):
     except Exception as e:
         print(f"❌ Errore nel recuperare versioni: {e}", file=sys.stderr)
         return []
-
 def get_available_clienti():
     """Recupera i clienti disponibili dalla struttura clienti/"""
     try:
