@@ -1,4 +1,5 @@
 ARG KEYCLOAK_VERSION=24.0.0
+ARG CLIENT_ID
 FROM quay.io/keycloak/keycloak:${KEYCLOAK_VERSION} as builder
 
 # Copia extensions comuni (se necessario)
@@ -12,8 +13,8 @@ FROM quay.io/keycloak/keycloak:${KEYCLOAK_VERSION}
 COPY --from=builder /opt/keycloak/lib/quarkus/ /opt/keycloak/lib/quarkus/
 
 # Copia configurazioni
-COPY clienti/errevi/config.env /opt/keycloak/.env
-COPY clienti/errevi/themes /opt/keycloak/themes
+COPY clienti/${CLIENT_ID}/themes /opt/keycloak/themes
+COPY clienti/${CLIENT_ID}/config.env /opt/keycloak/.env
 
 # Variabili d'ambiente per il tema
 ENV KC_THEME=errevi-theme

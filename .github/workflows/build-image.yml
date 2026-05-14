@@ -106,6 +106,7 @@ jobs:
           push: true
           build-args: |
             KEYCLOAK_VERSION=${{ github.event.inputs.keycloak_version }}
+            CLIENT_ID=${{ matrix.client }}
           tags: |
             ${{ env.REGISTRY }}/${{ env.lowercase_repo }}/keycloak-${{ matrix.client }}:${{ github.event.inputs.keycloak_version }}
             ${{ env.REGISTRY }}/${{ env.lowercase_repo }}/keycloak-${{ matrix.client }}:latest
