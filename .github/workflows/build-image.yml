@@ -96,6 +96,11 @@ jobs:
            echo "=== CLIENTI ===" && ls -la clienti/
            echo "=== BASE ===" && ls -la base/ || echo "base/ non esiste!"
 
+      - name: Verify Files
+        run: |
+          ls -d base/extensions
+          ls -d clienti/${{ matrix.client }}    
+
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
