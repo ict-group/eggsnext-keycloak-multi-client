@@ -18,7 +18,7 @@ on:
           - papalini
           - poma
       keycloak_version:
-        description: 'Seleziona versione Keycloak'
+        description: 'Versione Keycloak (dropdown)'
         required: true
         type: choice
         options:
@@ -31,6 +31,10 @@ on:
           - 20.0.5
           - 19.0.3
           - 18.0.2
+      keycloak_version_manual:
+        description: 'Oppure inserisci versione manuale (es. 27.0.0) — ha priorità sul dropdown se compilata'
+        required: false
+        type: string
 
 env:
   REGISTRY: ghcr.io
@@ -64,8 +68,48 @@ jobs:
           fi
           echo "data={\"client\":$(echo $MATRIX | jq -c .)}" >> $GITHUB_OUTPUT
 
+  resolve-version:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.resolve.outputs.version }}
+    steps:
+      - name: Resolve and validate Keycloak version
+        id: resolve
+        run: |
+          MANUAL="${{ github.event.inputs.keycloak_version_manual }}"
+          DROPDOWN="${{ github.event.inputs.keycloak_version }}"
+
+          # Priorità: manuale se compilata, altrimenti dropdown
+          if [ -n "$MANUAL" ]; then
+            VERSION="$MANUAL"
+            echo "Usando versione manuale: $VERSION"
+          else
+            VERSION="$DROPDOWN"
+            echo "Usando versione da dropdown: $VERSION"
+          fi
+
+          # Validazione formato X.Y.Z (solo se versione manuale)
+          if [ -n "$MANUAL" ]; then
+            if ! echo "$VERSION" | grep -qE '^[0-9]+\.[0-9]+\.[0-9]+$'; then
+              echo "❌ Formato versione non valido: '$VERSION'. Usa il formato X.Y.Z (es. 27.0.1)"
+              exit 1
+            fi
+          fi
+
+          # Verifica esistenza del tag su GitHub Keycloak releases
+          HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
+            "https://api.github.com/repos/keycloak/keycloak/releases/tags/$VERSION")
+
+          if [ "$HTTP_STATUS" != "200" ]; then
+            echo "❌ Versione Keycloak '$VERSION' non trovata su GitHub (HTTP $HTTP_STATUS)"
+            exit 1
+          fi
+
+          echo "✅ Versione '$VERSION' verificata e valida"
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
   build:
-    needs: detect-clients
+    needs: [detect-clients, resolve-version]
     runs-on: ubuntu-latest
     strategy:
       matrix: ${{ fromJson(needs.detect-clients.outputs.matrix) }}
@@ -92,29 +136,27 @@ jobs:
 
       - name: Debug - lista file
         run: |
-           echo "=== ROOT ===" && ls -la
-           echo "=== CLIENTI ===" && ls -la clienti/
-           echo "=== BASE ===" && ls -la base/ || echo "base/ non esiste!"
+          echo "=== ROOT ===" && ls -la
+          echo "=== CLIENTI ===" && ls -la clienti/
+          echo "=== BASE ===" && ls -la base/ || echo "base/ non esiste!"
 
       - name: Verify Files
         run: |
           ls -d base/extensions
-          ls -d clienti/${{ matrix.client }}    
+          ls -d clienti/${{ matrix.client }}
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
-          # SOLUZIONE: Impostiamo il contesto alla ROOT del progetto
           context: .
-          # Indichiamo esplicitamente dove si trova il Dockerfile del cliente
           file: ./clienti/${{ matrix.client }}/Dockerfile
           push: true
           build-args: |
-            KEYCLOAK_VERSION=${{ github.event.inputs.keycloak_version }}
+            KEYCLOAK_VERSION=${{ needs.resolve-version.outputs.version }}
             CLIENT_ID=${{ matrix.client }}
           tags: |
-            ${{ env.REGISTRY }}/${{ env.lowercase_repo }}/keycloak-${{ matrix.client }}:${{ github.event.inputs.keycloak_version }}
+            ${{ env.REGISTRY }}/${{ env.lowercase_repo }}/keycloak-${{ matrix.client }}:${{ needs.resolve-version.outputs.version }}
             ${{ env.REGISTRY }}/${{ env.lowercase_repo }}/keycloak-${{ matrix.client }}:latest
           labels: |
             org.opencontainers.image.title=Keycloak-${{ matrix.client }}
-            org.opencontainers.image.version=${{ github.event.inputs.keycloak_version }}
+            org.opencontainers.image.version=${{ needs.resolve-version.outputs.version }}
