@@ -1,0 +1,76 @@
+body {
+    background-image: url('../img/errevi_background.jpg') !important;
+    background-size: cover !important;
+    background-position: center !important;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Nascondiamo l'header originale di Keycloak se non serve */
+#kc-header {
+    display: none;
+}
+
+.card-pf {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px !important;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3) !important;
+    padding: 40px !important;
+    max-width: 450px !important;
+    border: none !important;
+}
+
+.login-pf-header::before {
+    content: "";
+    display: block;
+    background-image: url('../img/errevi_logo.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 120px;
+    margin-bottom: 40px;
+}
+
+/* Nascondiamo il titolo "Sign in to your account" */
+#kc-page-title {
+    display: none;
+}
+
+
+.form-control {
+    border: none !important;
+    border-bottom: 1px solid #666 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    padding-left: 0 !important;
+    font-size: 16px !important;
+}
+
+.form-control:focus {
+    border-bottom: 2px solid #e3007b !important; /* Colore rosa Errevi */
+}
+
+label {
+    font-weight: normal !important;
+    color: #555555;
+}
+
+
+.btn-primary {
+    background-color: #e3007b !important;
+    background-image: none !important;
+    border: none !important;
+    border-radius: 30px !important;
+    padding: 15px !important;
+    font-size: 16px !important;
+    font-weight: bold !important;
+    text-transform: uppercase;
+    margin-top: 20px;
+}
+
+.btn-primary:hover {
+    background-color: #b50062 !important;
+}
