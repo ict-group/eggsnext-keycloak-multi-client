@@ -78,3 +78,34 @@ input#kc-login.btn-primary {
 #kc-login:hover {
     background-color: #b50062 !important;
 }
+
+
+/* Puntiamo agli ID degli input per superare PatternFly */
+input#username,
+input#password,
+.form-control {
+    border: none !important;
+    border-bottom: 1px solid #ccc !important; /* Linea grigia sottile */
+    border-radius: 0 !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
+    padding-left: 0 !important;
+    padding-bottom: 8px !important;
+    margin-bottom: 10px !important;
+    color: #333 !important;
+}
+
+input#username:focus,
+input#password:focus {
+    border-bottom: 2px solid #e3007b !important; /* Rosa Errevi al focus */
+    outline: none !important;
+}
+
+
+.control-label {
+    font-size: 12px !important;
+    color: #888 !important;
+    text-transform: capitalize !important;
+    margin-bottom: 2px !important;
+    font-weight: 400 !important;
+}
