@@ -23,12 +23,24 @@ COPY --from=builder /opt/keycloak/lib/quarkus/ /opt/keycloak/lib/quarkus/
 COPY clienti/${CLIENT_ID}/themes /opt/keycloak/themes
 COPY clienti/${CLIENT_ID}/config.env /opt/keycloak/.env
 
-# VARIABILI DI DEFAULT (IntelliJ le vedrà già impostate)
+# --- VARIABILI DI COMPATIBILITÀ UNIVERSALE ---
+
+# Vecchio set (per Keycloak v24 e precedenti)
+ENV KEYCLOAK_ADMIN=admin
+ENV KEYCLOAK_ADMIN_PASSWORD=admin
+
+# Nuovo set (per Keycloak v26+)
 ENV KC_BOOTSTRAP_ADMIN_USERNAME=admin
 ENV KC_BOOTSTRAP_ADMIN_PASSWORD=admin
+
+# Impostazioni di rete comuni
+ENV KC_HTTP_ENABLED=true
 ENV KC_HOSTNAME_STRICT=false
 ENV KC_HOSTNAME_STRICT_HTTPS=false
-ENV KC_HTTP_ENABLED=true
+
+# Sviluppo Temi (valido per quasi tutte le versioni recenti)
+ENV KC_THEME_CACHE_THEMES=false
+ENV KC_THEME_CACHE_TEMPLATES=false
 
 # Variabili per lo sviluppo (disabilitano la cache dei temi)
 ENV KC_THEME_CACHE_THEMES=false
