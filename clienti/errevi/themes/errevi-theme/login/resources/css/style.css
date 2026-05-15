@@ -1,12 +1,12 @@
-/* 1. LAYOUT E SFONDO BIANCO E NERO */
+/* 1. LAYOUT E SFONDO (Spostato su ::before per non rovinare i colori della card) */
 body {
     margin: 0;
     height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
-    position: relative;
-    background-color: #000 !important;
+    overflow: hidden;
+    background-color: #000; /* Sfondo nero di sicurezza */
 }
 
 body::before {
@@ -19,6 +19,7 @@ body::before {
     background-image: url('../img/errevi_background.jpg') !important;
     background-size: cover !important;
     background-position: center !important;
+    /* IL FILTRO AGISCE SOLO QUI */
     filter: grayscale(100%) brightness(0.6) contrast(1.2);
     z-index: -1;
 }
@@ -27,7 +28,7 @@ body::before {
     display: none !important;
 }
 
-/* 2. LA LOGIN CARD */
+/* 2. LA LOGIN CARD (Tornerà a colori) */
 .card-pf {
     background: rgba(255, 255, 255, 0.95);
     border-radius: 20px !important;
@@ -36,9 +37,11 @@ body::before {
     max-width: 450px !important;
     width: 100% !important;
     border: none !important;
+    position: relative;
+    z-index: 1;
 }
 
-/* 3. LOGO ERREVI */
+/* 3. LOGO ERREVI (Tornerà a colori) */
 .login-pf-header::before {
     content: "";
     display: block;
@@ -59,14 +62,14 @@ body::before {
     display: block !important;
 }
 
-/* 5. USERNAME - RIMOZIONE BORDI NERI AL FOCUS */
+/* 5. USERNAME */
 input#username {
     border: none !important;
     border-bottom: 1px solid #ccc !important;
     border-radius: 0 !important;
     background-color: transparent !important;
     box-shadow: none !important;
-    outline: none !important; /* Toglie il bordo nero */
+    outline: none !important;
     padding: 0 0 8px 0 !important;
     margin-bottom: 25px !important;
     width: 100% !important;
@@ -80,7 +83,7 @@ input#username:focus {
     box-shadow: none !important;
 }
 
-/* 6. PASSWORD - RIMOZIONE BORDI NERI AL FOCUS */
+/* 6. PASSWORD */
 .pf-c-input-group {
     background-color: transparent !important;
     border: none !important;
@@ -97,28 +100,25 @@ input#username:focus {
     border-bottom: 2px solid #e3007b !important;
 }
 
-/* PULIZIA TOTALE DELL'INPUT PASSWORD INTERNO */
 input#password,
 .pf-c-form-control {
     background-color: transparent !important;
     border: none !important;
-    box-shadow: none !important; /* Toglie l'ombra blu/nera di PatternFly */
-    outline: none !important;    /* Toglie il bordo nero del browser */
+    box-shadow: none !important;
+    outline: none !important;
     color: #333 !important;
     padding: 0 !important;
     height: auto !important;
 }
 
-/* Assicuriamoci che anche al focus l'input rimanga nudo */
 input#password:focus,
 .pf-c-form-control:focus {
     outline: none !important;
     box-shadow: none !important;
     border: none !important;
-    background-color: transparent !important;
 }
 
-/* 7. IL TASTO DELL'OCCHIO */
+/* 7. IL TASTO DELL'OCCHIO (Rosa) */
 .pf-c-button.pf-m-control {
     background-color: transparent !important;
     border: none !important;
@@ -128,14 +128,7 @@ input#password:focus,
     padding: 0 10px !important;
 }
 
-.pf-c-button.pf-m-control:hover,
-.pf-c-button.pf-m-control:focus {
-    background-color: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
-}
-
-/* 8. BOTTONE LOG IN ROSA */
+/* 8. BOTTONE LOG IN (Tornerà Rosa Errevi) */
 #kc-login, input#kc-login.btn-primary {
     background-color: #e3007b !important;
     background-image: none !important;
@@ -155,7 +148,6 @@ input#password:focus,
     background-color: #b50062 !important;
 }
 
-/* Pulizia icone extra e stili residui */
 .pf-c-form-control__icon {
     display: none !important;
 }
