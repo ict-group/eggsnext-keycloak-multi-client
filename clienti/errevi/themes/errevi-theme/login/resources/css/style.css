@@ -1,15 +1,15 @@
-/* 1. LAYOUT GENERALE E SFONDO */
+/* 1. LAYOUT E SFONDO BIANCO E NERO */
 body {
-    background-image: url('../img/errevi_background.jpg') !important;
-    background-size: cover !important;
-    background-position: center !important;
+    margin: 0;
     height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 0;
+    position: relative;
+    background-color: #000 !important;
 }
 
+/* Sfondo con filtro grayscale applicato solo all'immagine */
 body::before {
     content: "";
     position: fixed;
@@ -20,18 +20,16 @@ body::before {
     background-image: url('../img/errevi_background.jpg') !important;
     background-size: cover !important;
     background-position: center !important;
-    filter: grayscale(100%) brightness(0.6) contrast(1.2);
+    filter: grayscale(100%) brightness(0.6) contrast(1.2); /* Effetto foto */
     z-index: -1;
 }
 
-/* Nascondiamo header e titoli originali per un look pulito */
-#kc-header,
-#kc-page-title,
-.login-pf-header h1 {
+/* Nascondiamo header e titoli originali */
+#kc-header, #kc-page-title, .login-pf-header h1 {
     display: none !important;
 }
 
-/* 2. LA LOGIN CARD (Il box bianco) */
+/* 2. LA LOGIN CARD (Box bianco arrotondato) */
 .card-pf {
     background: rgba(255, 255, 255, 0.95);
     border-radius: 20px !important;
@@ -42,7 +40,7 @@ body::before {
     border: none !important;
 }
 
-/* 3. IL LOGO ERREVI */
+/* 3. LOGO ERREVI SOPRA IL FORM */
 .login-pf-header::before {
     content: "";
     display: block;
@@ -54,8 +52,8 @@ body::before {
     margin-bottom: 30px;
 }
 
-/* 4. ETICHETTE CAMPI (Username/Password) */
-.control-label {
+/* 4. ETICHETTE (Username/Password) */
+.pf-c-form__label, .control-label {
     font-size: 13px !important;
     color: #666 !important;
     font-weight: 500 !important;
@@ -63,10 +61,8 @@ body::before {
     display: block !important;
 }
 
-/* 5. INPUT USERNAME E GRUPPO PASSWORD */
-/* Applichiamo la linea di fondo al contenitore della password per includere l'occhio */
-input#username,
-.input-group {
+/* 5. INPUT USERNAME (Stile linea minimal) */
+input#username {
     border: none !important;
     border-bottom: 1px solid #ccc !important;
     border-radius: 0 !important;
@@ -76,46 +72,61 @@ input#username,
     margin-bottom: 25px !important;
     width: 100% !important;
     display: flex !important;
-    transition: border-color 0.3s ease;
+    color: #333 !important;
 }
 
-/* Fix specifico per il blocco password (input + tasto occhio) */
-#kc-form-login .input-group {
-    align-items: center !important;
-    background: transparent !important;
-}
-
-/* Rimuoviamo i bordi e lo sfondo dall'input password interno */
-#password.form-control {
-    border: none !important;
-    background: transparent !important;
-    box-shadow: none !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    height: auto !important;
-}
-
-/* FOCUS: la linea sotto diventa rosa Errevi */
-input#username:focus,
-.input-group:focus-within {
-    border-bottom: 2px solid #e3007b !important;
+input#username:focus {
+    border-bottom: 2px solid #e3007b !important; /* Rosa Errevi */
     outline: none !important;
 }
 
-/* 6. IL TASTO DELL'OCCHIO (Mostra Password) */
-#kc-form-login .input-group button,
-#kc-form-login .input-group .pf-c-button {
+/* 6. CAMPO PASSWORD (Fix per l'occhio e la riga "spaccata") */
+/* Puntiamo al gruppo che contiene input + tasto occhio */
+.pf-c-input-group {
+    background-color: transparent !important;
+    border: none !important;
+    border-bottom: 1px solid #ccc !important; /* Linea continua */
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    padding-bottom: 5px !important;
+    margin-bottom: 20px !important;
+    display: flex !important;
+    align-items: center !important;
+}
+
+/* Quando si clicca nella password, la linea diventa rosa */
+.pf-c-input-group:focus-within {
+    border-bottom: 2px solid #e3007b !important;
+}
+
+/* Pulizia input password interno */
+input#password, .pf-c-form-control {
     background-color: transparent !important;
     border: none !important;
     box-shadow: none !important;
-    color: #e3007b !important; /* Rosa Errevi */
-    padding: 0 5px !important;
-    cursor: pointer;
+    color: #333 !important;
+    padding: 0 !important;
+    height: auto !important;
 }
 
-/* 7. IL BOTTONE DI LOGIN */
-#kc-login,
-input#kc-login.btn-primary {
+/* 7. IL TASTO DELL'OCCHIO (Rimozione quadrato bianco) */
+.pf-c-button.pf-m-control {
+    background-color: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    color: #e3007b !important; /* Icona rosa */
+    padding: 0 10px !important;
+}
+
+/* Rimuoviamo gli hover grigi di PatternFly sul tasto */
+.pf-c-button.pf-m-control:hover, .pf-c-button.pf-m-control:focus {
+    background-color: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* 8. BOTTONE LOG IN ROSA */
+#kc-login, input#kc-login.btn-primary {
     background-color: #e3007b !important;
     background-image: none !important;
     border: none !important;
@@ -128,14 +139,13 @@ input#kc-login.btn-primary {
     width: 100% !important;
     margin-top: 15px !important;
     cursor: pointer;
-    transition: background 0.3s ease;
 }
 
 #kc-login:hover {
     background-color: #b50062 !important;
 }
 
-/* Nascondiamo eventuali icone di Keycloak dentro gli input */
+/* Pulizia icone extra di Keycloak */
 .pf-c-form-control__icon {
     display: none !important;
 }
