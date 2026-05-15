@@ -195,3 +195,27 @@ span[id="input-error"]:empty {
     from { opacity: 0; transform: translateY(-10px); }
     to   { opacity: 1; transform: translateY(0); }
 }
+
+
+/* FORGOT PASSWORD - Bottone Submit (PatternFly 4, Keycloak 24) */
+.pf-c-button.pf-m-primary,
+.pf-c-button.pf-m-block {
+    background-color: #e3007b !important;
+    background-image: none !important;
+    border: none !important;
+    border-radius: 30px !important;
+    padding: 12px !important;
+    font-size: 16px !important;
+    font-weight: bold !important;
+    text-transform: uppercase !important;
+    color: white !important;
+    width: 100% !important;
+    margin-top: 15px !important;
+    cursor: pointer !important;
+    box-shadow: none !important;
+}
+
+.pf-c-button.pf-m-primary:hover,
+.pf-c-button.pf-m-block:hover {
+    background-color: #b50062 !important;
+}
