@@ -9,7 +9,6 @@ body {
     background-color: #000 !important;
 }
 
-/* Sfondo con filtro grayscale applicato solo all'immagine */
 body::before {
     content: "";
     position: fixed;
@@ -20,16 +19,15 @@ body::before {
     background-image: url('../img/errevi_background.jpg') !important;
     background-size: cover !important;
     background-position: center !important;
-    filter: grayscale(100%) brightness(0.6) contrast(1.2); /* Effetto foto */
+    filter: grayscale(100%) brightness(0.6) contrast(1.2);
     z-index: -1;
 }
 
-/* Nascondiamo header e titoli originali */
 #kc-header, #kc-page-title, .login-pf-header h1 {
     display: none !important;
 }
 
-/* 2. LA LOGIN CARD (Box bianco arrotondato) */
+/* 2. LA LOGIN CARD */
 .card-pf {
     background: rgba(255, 255, 255, 0.95);
     border-radius: 20px !important;
@@ -40,7 +38,7 @@ body::before {
     border: none !important;
 }
 
-/* 3. LOGO ERREVI SOPRA IL FORM */
+/* 3. LOGO ERREVI */
 .login-pf-header::before {
     content: "";
     display: block;
@@ -52,7 +50,7 @@ body::before {
     margin-bottom: 30px;
 }
 
-/* 4. ETICHETTE (Username/Password) */
+/* 4. ETICHETTE */
 .pf-c-form__label, .control-label {
     font-size: 13px !important;
     color: #666 !important;
@@ -61,13 +59,14 @@ body::before {
     display: block !important;
 }
 
-/* 5. INPUT USERNAME (Stile linea minimal) */
+/* 5. USERNAME - RIMOZIONE BORDI NERI AL FOCUS */
 input#username {
     border: none !important;
     border-bottom: 1px solid #ccc !important;
     border-radius: 0 !important;
     background-color: transparent !important;
     box-shadow: none !important;
+    outline: none !important; /* Toglie il bordo nero */
     padding: 0 0 8px 0 !important;
     margin-bottom: 25px !important;
     width: 100% !important;
@@ -76,16 +75,16 @@ input#username {
 }
 
 input#username:focus {
-    border-bottom: 2px solid #e3007b !important; /* Rosa Errevi */
+    border-bottom: 2px solid #e3007b !important;
     outline: none !important;
+    box-shadow: none !important;
 }
 
-/* 6. CAMPO PASSWORD (Fix per l'occhio e la riga "spaccata") */
-/* Puntiamo al gruppo che contiene input + tasto occhio */
+/* 6. PASSWORD - RIMOZIONE BORDI NERI AL FOCUS */
 .pf-c-input-group {
     background-color: transparent !important;
     border: none !important;
-    border-bottom: 1px solid #ccc !important; /* Linea continua */
+    border-bottom: 1px solid #ccc !important;
     border-radius: 0 !important;
     box-shadow: none !important;
     padding-bottom: 5px !important;
@@ -94,32 +93,43 @@ input#username:focus {
     align-items: center !important;
 }
 
-/* Quando si clicca nella password, la linea diventa rosa */
 .pf-c-input-group:focus-within {
     border-bottom: 2px solid #e3007b !important;
 }
 
-/* Pulizia input password interno */
-input#password, .pf-c-form-control {
+/* PULIZIA TOTALE DELL'INPUT PASSWORD INTERNO */
+input#password,
+.pf-c-form-control {
     background-color: transparent !important;
     border: none !important;
-    box-shadow: none !important;
+    box-shadow: none !important; /* Toglie l'ombra blu/nera di PatternFly */
+    outline: none !important;    /* Toglie il bordo nero del browser */
     color: #333 !important;
     padding: 0 !important;
     height: auto !important;
 }
 
-/* 7. IL TASTO DELL'OCCHIO (Rimozione quadrato bianco) */
+/* Assicuriamoci che anche al focus l'input rimanga nudo */
+input#password:focus,
+.pf-c-form-control:focus {
+    outline: none !important;
+    box-shadow: none !important;
+    border: none !important;
+    background-color: transparent !important;
+}
+
+/* 7. IL TASTO DELL'OCCHIO */
 .pf-c-button.pf-m-control {
     background-color: transparent !important;
     border: none !important;
     box-shadow: none !important;
-    color: #e3007b !important; /* Icona rosa */
+    outline: none !important;
+    color: #e3007b !important;
     padding: 0 10px !important;
 }
 
-/* Rimuoviamo gli hover grigi di PatternFly sul tasto */
-.pf-c-button.pf-m-control:hover, .pf-c-button.pf-m-control:focus {
+.pf-c-button.pf-m-control:hover,
+.pf-c-button.pf-m-control:focus {
     background-color: transparent !important;
     border: none !important;
     box-shadow: none !important;
@@ -145,7 +155,7 @@ input#password, .pf-c-form-control {
     background-color: #b50062 !important;
 }
 
-/* Pulizia icone extra di Keycloak */
+/* Pulizia icone extra e stili residui */
 .pf-c-form-control__icon {
     display: none !important;
 }
