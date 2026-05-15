@@ -1,7 +1,9 @@
 body {
     background-image: url('../img/errevi_background.jpg') !important;
-    background-size: cover !important;
-    background-position: center !important;
+    background-size: cover;
+    font-family: 'Inter', sans-serif;
+    background-color: black;
+    background-blend-mode: luminosity;
     height: 100vh;
     display: flex;
     align-items: center;
