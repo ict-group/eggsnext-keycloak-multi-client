@@ -35,8 +35,8 @@ body::before {
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3) !important;
     padding: 40px !important;
     max-width: 450px !important;
-    min-height: 500px!important;
-    min-width: 370px!important;
+    min-height: 500px !important;
+    min-width: 370px !important;
     width: 100% !important;
     border: none !important;
     position: relative;
@@ -154,37 +154,44 @@ input#password:focus,
     display: none !important;
 }
 
-/* IL CONTENITORE DELL'ERRORE (Feedback area) */
-#kc-feedback {
-    position: relative;
-    padding: 0;
-    margin-bottom: 20px;
-    z-index: 100;
-}
-
-/* LO STILE DELL'ALERT DI ERRORE */
-.alert-error {
-    background-color: #c91010 !important; /* Rosso scuro per errore */
+/* 9. BARRA ERRORE IN CIMA ALLA CARD */
+.kc-feedback-text,
+span[id="input-error"] {
+    position: absolute !important;
+    top: 20px !important;
+    left: 0 !important;
+    right: 0 !important;
+    margin: 0 40px !important;
+    background-color: #c91010 !important;
     color: white !important;
-    border: none !important;
     border-radius: 8px !important;
     padding: 12px 15px !important;
     font-size: 14px !important;
-    text-align: center;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-
-    /* Per farlo apparire "sopra" il form ma dentro la card */
+    text-align: center !important;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2) !important;
+    z-index: 10 !important;
     display: block !important;
     animation: slideDown 0.3s ease-out;
 }
 
-/* ANIMAZIONE PER FARLO APPARIRE MEGLIO */
-@keyframes slideDown {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
+/* Nasconde la barra quando lo span e' vuoto (nessun errore) */
+.kc-feedback-text:empty,
+span[id="input-error"]:empty {
+    display: none !important;
 }
 
-/* Nascondiamo l'icona standard di Keycloak se disturba */
-.pf-c-alert__icon, .kc-feedback-text .pf-c-icon {
+/* Nasconde le icone e decorazioni PatternFly sull'errore */
+.pf-c-alert__icon,
+.pf-c-alert__title,
+.pf-c-alert__action,
+.kc-feedback-text .pf-c-icon {
     display: none !important;
+}
+
+/* Rimossi i vecchi blocchi #kc-feedback e .alert-error
+   che non corrispondevano all'HTML reale di Keycloak 24 */
+
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to   { opacity: 1; transform: translateY(0); }
 }
