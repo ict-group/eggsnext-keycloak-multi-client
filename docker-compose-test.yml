@@ -4,7 +4,7 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        KEYCLOAK_VERSION: ${KEYCLOAK_VERSION:-26.6.1}
+        KEYCLOAK_VERSION: ${KEYCLOAK_VERSION:-24.0.0}
         CLIENT_ID: ${CLIENT_ID:-errevi}
 
     container_name: keycloak-${CLIENT_ID:-errevi}
@@ -16,27 +16,33 @@ services:
       - ./clienti/${CLIENT_ID:-errevi}/config.env
 
     environment:
+      # Admin Keycloak
       KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN_USER:-admin}
       KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:-admin}
 
+      # Compatibilità Keycloak 26+
       KC_BOOTSTRAP_ADMIN_USERNAME: ${KEYCLOAK_ADMIN_USER:-admin}
       KC_BOOTSTRAP_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:-admin}
 
+      # Config locale: sovrascrive i valori del config.env cliente
       KC_HTTP_ENABLED: "true"
+      KC_HOSTNAME: localhost
       KC_HOSTNAME_STRICT: "false"
       KC_HOSTNAME_STRICT_HTTPS: "false"
 
-      # Sovrascrivo il vecchio KC_PROXY=reencrypt del config.env
-      KC_PROXY: ""
-      KC_PROXY_HEADERS: xforwarded
+      # Keycloak 24 accetta KC_PROXY. In locale usiamo none.
+      # Evita il reencrypt del config.env cliente.
+      KC_PROXY: none
 
-      # Sovrascrivo il DB per il locale
+      # Database locale PostgreSQL
+      # KC_DB deve essere postgres, non keycloak_errevi.
       KC_DB: postgres
       KC_DB_URL: jdbc:postgresql://postgres:5432/${KEYCLOAK_DB_NAME:-keycloak_errevi}
       KC_DB_USERNAME: ${KEYCLOAK_DB_USER:-keycloak}
       KC_DB_PASSWORD: ${KEYCLOAK_DB_PASSWORD:-change-me}
 
     volumes:
+      # Live reload dei temi del cliente selezionato
       - ./clienti/${CLIENT_ID:-errevi}/themes:/opt/keycloak/themes
 
     command:
@@ -82,3 +88,4 @@ services:
 
 volumes:
   postgres-data:
+    name: keycloak-postgres-${CLIENT_ID:-errevi}
