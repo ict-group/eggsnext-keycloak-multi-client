@@ -35,6 +35,8 @@ body::before {
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3) !important;
     padding: 40px !important;
     max-width: 450px !important;
+    min-height: 500px!important;
+    min-width: 370px!important;
     width: 100% !important;
     border: none !important;
     position: relative;
