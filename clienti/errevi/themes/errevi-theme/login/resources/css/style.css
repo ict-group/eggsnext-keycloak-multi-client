@@ -1,29 +1,48 @@
+/* 1. LAYOUT GENERALE E SFONDO */
 body {
     background-image: url('../img/errevi_background.jpg') !important;
-    background-size: cover;
-    font-family: 'Inter', sans-serif;
-    background-color: black;
-    background-blend-mode: luminosity;
+    background-size: cover !important;
+    background-position: center !important;
     height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
+    margin: 0;
 }
 
-/* Nascondiamo l'header originale di Keycloak se non serve */
-#kc-header {
-    display: none;
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('../img/errevi_background.jpg') !important;
+    background-size: cover !important;
+    background-position: center !important;
+    filter: grayscale(100%) brightness(0.6) contrast(1.2);
+    z-index: -1;
 }
 
+/* Nascondiamo header e titoli originali per un look pulito */
+#kc-header,
+#kc-page-title,
+.login-pf-header h1 {
+    display: none !important;
+}
+
+/* 2. LA LOGIN CARD (Il box bianco) */
 .card-pf {
     background: rgba(255, 255, 255, 0.95);
     border-radius: 20px !important;
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3) !important;
     padding: 40px !important;
     max-width: 450px !important;
+    width: 100% !important;
     border: none !important;
 }
 
+/* 3. IL LOGO ERREVI */
 .login-pf-header::before {
     content: "";
     display: block;
@@ -31,83 +50,92 @@ body {
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
-    height: 120px;
-    margin-bottom: 40px;
+    height: 100px;
+    margin-bottom: 30px;
 }
 
-/* Nascondiamo il titolo "Sign in to your account" */
-#kc-page-title {
-    display: none;
+/* 4. ETICHETTE CAMPI (Username/Password) */
+.control-label {
+    font-size: 13px !important;
+    color: #666 !important;
+    font-weight: 500 !important;
+    margin-bottom: 5px !important;
+    display: block !important;
 }
 
-
-.form-control {
+/* 5. INPUT USERNAME E GRUPPO PASSWORD */
+/* Applichiamo la linea di fondo al contenitore della password per includere l'occhio */
+input#username,
+.input-group {
     border: none !important;
-    border-bottom: 1px solid #666 !important;
+    border-bottom: 1px solid #ccc !important;
     border-radius: 0 !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
+    padding: 0 0 8px 0 !important;
+    margin-bottom: 25px !important;
+    width: 100% !important;
+    display: flex !important;
+    transition: border-color 0.3s ease;
+}
+
+/* Fix specifico per il blocco password (input + tasto occhio) */
+#kc-form-login .input-group {
+    align-items: center !important;
+    background: transparent !important;
+}
+
+/* Rimuoviamo i bordi e lo sfondo dall'input password interno */
+#password.form-control {
+    border: none !important;
     background: transparent !important;
     box-shadow: none !important;
-    padding-left: 0 !important;
-    font-size: 16px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    height: auto !important;
 }
 
-.form-control:focus {
-    border-bottom: 2px solid #e3007b !important; /* Colore rosa Errevi */
+/* FOCUS: la linea sotto diventa rosa Errevi */
+input#username:focus,
+.input-group:focus-within {
+    border-bottom: 2px solid #e3007b !important;
+    outline: none !important;
 }
 
-label {
-    font-weight: normal !important;
-    color: #555555;
+/* 6. IL TASTO DELL'OCCHIO (Mostra Password) */
+#kc-form-login .input-group button,
+#kc-form-login .input-group .pf-c-button {
+    background-color: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    color: #e3007b !important; /* Rosa Errevi */
+    padding: 0 5px !important;
+    cursor: pointer;
 }
 
-
+/* 7. IL BOTTONE DI LOGIN */
 #kc-login,
 input#kc-login.btn-primary {
     background-color: #e3007b !important;
     background-image: none !important;
     border: none !important;
     border-radius: 30px !important;
-    padding: 12px 20px !important;
-    height: auto !important;
+    padding: 12px !important;
     font-size: 16px !important;
     font-weight: bold !important;
     text-transform: uppercase !important;
     color: white !important;
-    box-shadow: none !important;
-    margin-top: 20px !important;
+    width: 100% !important;
+    margin-top: 15px !important;
+    cursor: pointer;
+    transition: background 0.3s ease;
 }
 
 #kc-login:hover {
     background-color: #b50062 !important;
 }
 
-
-/* Puntiamo agli ID degli input per superare PatternFly */
-input#username,
-input#password,
-.form-control {
-    border: none !important;
-    border-bottom: 1px solid #ccc !important; /* Linea grigia sottile */
-    border-radius: 0 !important;
-    background-color: transparent !important;
-    box-shadow: none !important;
-    padding-left: 0 !important;
-    padding-bottom: 8px !important;
-    margin-bottom: 10px !important;
-    color: #333 !important;
-}
-
-input#username:focus,
-input#password:focus {
-    border-bottom: 2px solid #e3007b !important; /* Rosa Errevi al focus */
-    outline: none !important;
-}
-
-
-.control-label {
-    font-size: 12px !important;
-    color: #888 !important;
-    text-transform: capitalize !important;
-    margin-bottom: 2px !important;
-    font-weight: 400 !important;
+/* Nascondiamo eventuali icone di Keycloak dentro gli input */
+.pf-c-form-control__icon {
+    display: none !important;
 }
