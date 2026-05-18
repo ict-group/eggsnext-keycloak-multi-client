@@ -1,0 +1,26 @@
+/* ============================================================
+   GRUPPO CONSOLI — OTP page override
+   ============================================================ */
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700;800&display=swap');
+:root{--consoli-blue:#15528a;--consoli-blue-dark:#0e3f70;--consoli-white:#fff;--consoli-line:rgba(255,255,255,.55);--consoli-font:'Open Sans',Arial,sans-serif;}
+body:has(#kc-totp-settings){overflow:hidden!important;font-family:var(--consoli-font)!important;}
+body:has(#kc-totp-settings) .login-pf-page{display:flex!important;align-items:center!important;justify-content:center!important;min-height:100vh!important;padding:16px!important;}
+body:has(#kc-totp-settings) .card-pf{max-width:430px!important;min-width:360px!important;max-height:calc(100vh - 32px)!important;min-height:auto!important;overflow-y:auto!important;overflow-x:hidden!important;scrollbar-width:none!important;-ms-overflow-style:none!important;padding:34px 48px 32px!important;background:rgba(22,82,138,.82)!important;border-radius:12px!important;backdrop-filter:blur(1.2px)!important;-webkit-backdrop-filter:blur(1.2px)!important;}
+body:has(#kc-totp-settings) .card-pf::-webkit-scrollbar{width:0!important;height:0!important;display:none!important;}
+body:has(#kc-totp-settings) .login-pf-header::before{width:210px!important;height:84px!important;margin:0 auto 20px!important;background-image:url('../img/consoli_logo.png')!important;background-size:contain!important;background-position:center!important;background-repeat:no-repeat!important;}
+body:has(#kc-totp-settings) #kc-page-title{display:none!important;}
+body:has(#kc-totp-settings) #kc-totp-settings{color:#fff!important;font-size:13px!important;line-height:1.45!important;}
+body:has(#kc-totp-settings) #kc-totp-settings ol{margin:0 0 14px!important;padding-left:18px!important;}
+body:has(#kc-totp-settings) #kc-totp-settings li{margin-bottom:8px!important;color:#fff!important;}
+body:has(#kc-totp-settings) #kc-totp-settings ul{list-style:none!important;margin:8px 0!important;padding:0!important;}
+body:has(#kc-totp-settings) #kc-totp-settings ul li{padding:7px 10px!important;border-left:3px solid #fff!important;background:rgba(255,255,255,.08)!important;border-radius:4px!important;}
+body:has(#kc-totp-settings) #kc-totp-qr,body:has(#kc-totp-settings) .kc-totp-qr{text-align:center!important;width:100%!important;display:block!important;}
+body:has(#kc-totp-settings) #kc-totp-qr img,body:has(#kc-totp-settings) .kc-totp-qr img,body:has(#kc-totp-settings) #kc-totp-settings li img{display:block!important;margin:12px auto!important;width:210px!important;height:210px!important;background:#fff!important;padding:8px!important;}
+body:has(#kc-totp-settings) a{color:#fff!important;font-weight:700!important;}
+body:has(#kc-totp-settings) #kc-totp-settings-form label{color:#fff!important;font-size:13px!important;font-weight:700!important;}
+body:has(#kc-totp-settings) #kc-totp-settings-form input[type="text"],body:has(#kc-totp-settings) #kc-totp-settings-form .form-control{height:42px!important;border:1px solid rgba(255,255,255,.45)!important;border-radius:8px!important;background:rgba(255,255,255,.1)!important;color:#fff!important;text-align:left!important;padding:0 12px!important;box-shadow:none!important;}
+body:has(#kc-totp-settings) #kc-totp-settings-form input#totp,body:has(#kc-totp-settings) #kc-totp-settings-form input[name="totp"]{text-align:center!important;letter-spacing:.16em!important;font-weight:700!important;}
+body:has(#kc-totp-settings) #kc-totp-settings-form input:focus{border-color:#fff!important;outline:none!important;box-shadow:none!important;}
+body:has(#kc-totp-settings) #kc-login,body:has(#kc-totp-settings) input[type="submit"]{background:#fff!important;color:#123f71!important;border-radius:999px!important;min-height:44px!important;font-weight:800!important;letter-spacing:.08em!important;}
+body:has(#kc-totp-settings) #kc-content-wrapper>.alert,body:has(#kc-totp-settings) #kc-content-wrapper>.pf-c-alert{background:#0e3f70!important;color:#fff!important;border:none!important;border-radius:8px!important;padding:9px 14px!important;text-align:center!important;margin:0 auto 14px!important;width:92%!important;}
+body:has(#kc-totp-settings) .kc-feedback-text{position:static!important;color:#fff!important;background:transparent!important;display:block!important;font-size:12px!important;font-weight:700!important;}

@@ -1,0 +1,16 @@
+/* ============================================================
+   GRUPPO CONSOLI — Register page override
+   ============================================================ */
+body:has(#kc-register-form){overflow-y:auto!important;align-items:flex-start!important;}
+body:has(#kc-register-form) .login-pf-page{min-height:100vh!important;padding:28px 24px!important;align-items:flex-start!important;}
+body:has(#kc-register-form) .card-pf{max-width:520px!important;min-width:420px!important;min-height:auto!important;max-height:calc(100vh - 56px)!important;padding:34px 58px 32px!important;overflow-y:auto!important;overflow-x:hidden!important;scrollbar-width:none!important;background:rgba(22,82,138,.82)!important;backdrop-filter:blur(1.2px)!important;-webkit-backdrop-filter:blur(1.2px)!important;}
+body:has(#kc-register-form) .card-pf::-webkit-scrollbar{width:0!important;height:0!important;display:none!important;}
+body:has(#kc-register-form) .login-pf-header::before{width:190px!important;height:78px!important;margin:0 auto 14px!important;}
+body:has(#kc-register-form) #kc-page-title{display:block!important;margin:0 0 22px!important;color:#fff!important;font-family:var(--consoli-font)!important;font-size:22px!important;font-weight:800!important;text-align:center!important;}
+body:has(#kc-register-form) #kc-register-form .form-group{margin-bottom:18px!important;}
+body:has(#kc-register-form) #kc-register-form label{color:#fff!important;font-size:13px!important;font-weight:700!important;margin-bottom:6px!important;}
+body:has(#kc-register-form) #kc-register-form input{height:34px!important;background:transparent!important;border:none!important;border-bottom:1px solid rgba(255,255,255,.5)!important;border-radius:0!important;box-shadow:none!important;color:#fff!important;font-size:14px!important;}
+body:has(#kc-register-form) #kc-register-form input:focus{border-bottom-color:#fff!important;outline:none!important;box-shadow:none!important;}
+body:has(#kc-register-form) #kc-form-options,body:has(#kc-register-form) #kc-info,body:has(#kc-register-form) #kc-registration{display:block!important;margin-top:20px!important;text-align:left!important;color:#fff!important;}
+body:has(#kc-register-form) a{color:#fff!important;font-weight:700!important;}
+@media(max-width:620px){body:has(#kc-register-form) .card-pf{min-width:0!important;max-width:calc(100vw - 32px)!important;max-height:none!important;padding:30px!important;}}

@@ -1,5 +1,5 @@
 # Stage 0: Argomenti globali
-ARG KEYCLOAK_VERSION=26.6.1
+ARG KEYCLOAK_VERSION
 
 # Stage 1: Builder
 FROM quay.io/keycloak/keycloak:${KEYCLOAK_VERSION} AS builder

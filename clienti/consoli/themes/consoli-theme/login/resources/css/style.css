@@ -1,0 +1,755 @@
+/* ============================================================
+   GRUPPO CONSOLI — Keycloak Login Theme
+   File: login/resources/css/style.css
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700;800&display=swap');
+
+:root {
+    --consoli-blue: #15528a;
+    --consoli-blue-2: #2167aa;
+    --consoli-blue-dark: #0e3f70;
+    --consoli-white: #ffffff;
+    --consoli-muted: rgba(255,255,255,0.78);
+    --consoli-line: rgba(255,255,255,0.55);
+    --consoli-line-focus: rgba(255,255,255,0.96);
+    --consoli-error: #b72034;
+    --consoli-success: #1f8a4c;
+    --consoli-radius: 12px;
+    --consoli-font: 'Open Sans', Arial, sans-serif;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    width: 100%;
+    min-height: 100%;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    overflow: hidden;
+
+    font-family: var(--consoli-font);
+    color: var(--consoli-white);
+    background: #e8ecef;
+
+    position: relative;
+}
+
+/* Background */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+
+    background-image: url('../img/background_consoli.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    z-index: 0;
+}
+
+/* Nasconde titolo Keycloak standard */
+#kc-header,
+#kc-page-title,
+.login-pf-header h1 {
+    display: none !important;
+}
+
+/* Layer sopra background */
+.login-pf-page,
+.login-pf-page .login-pf-page-header,
+#kc-container,
+#kc-container-wrapper,
+#kc-content,
+#kc-content-wrapper {
+    position: relative;
+    z-index: 1;
+}
+
+.login-pf-page {
+    width: 100%;
+    min-height: 100vh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 24px;
+}
+
+#kc-content,
+#kc-content-wrapper,
+#kc-form,
+#kc-form-wrapper,
+#kc-form-login {
+    width: 100% !important;
+}
+
+/* ============================================================
+   CARD
+   ============================================================ */
+
+.card-pf {
+    position: relative;
+    z-index: 1;
+
+    width: 100% !important;
+    max-width: 378px !important;
+    min-width: 340px !important;
+    min-height: 515px !important;
+
+    padding: 56px 54px 42px !important;
+
+    border: 1px solid rgba(255,255,255,0.06) !important;
+    border-radius: var(--consoli-radius) !important;
+
+    background: rgba(22, 82, 138, 0.82) !important;
+
+    backdrop-filter: blur(1.2px) !important;
+    -webkit-backdrop-filter: blur(1.2px) !important;
+
+    box-shadow: 0 20px 42px rgba(0, 0, 0, 0.20) !important;
+
+    overflow: hidden;
+}
+
+.login-pf-page .card-pf p {
+    color: #cfd2d7;
+}
+
+/* Logo */
+.login-pf-header::before {
+    content: "";
+    display: block;
+
+    width: 230px;
+    height: 96px;
+
+    margin: 0 auto 42px;
+
+    background-image: url('../img/consoli_logo.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+/* ============================================================
+   FORM BASE
+   ============================================================ */
+
+#kc-form .form-group,
+.form-group,
+.pf-c-form__group {
+    width: 100% !important;
+    margin: 0 0 24px 0 !important;
+    padding: 0 !important;
+}
+
+#kc-form .col-xs-12,
+#kc-form .col-sm-12,
+#kc-form .col-md-12,
+#kc-form div[class*="col-"],
+.col-xs-12,
+.col-sm-12,
+.col-md-12,
+div[class*="col-"] {
+    width: 100% !important;
+    max-width: 100% !important;
+
+    float: none !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Label */
+#kc-form label,
+#kc-form .control-label,
+.pf-c-form__label,
+.control-label,
+label {
+    display: block !important;
+
+    width: 100% !important;
+
+    margin: 0 0 9px 0 !important;
+    padding: 0 !important;
+
+    font-family: var(--consoli-font) !important;
+    font-size: 14px !important;
+    line-height: 1.2 !important;
+    font-weight: 600 !important;
+
+    color: var(--consoli-white) !important;
+
+    letter-spacing: 0 !important;
+    text-transform: none !important;
+    text-align: left !important;
+}
+
+/* ============================================================
+   INPUT UNDERLINE
+   ============================================================ */
+
+#kc-form input[type="text"],
+#kc-form input[type="password"],
+#kc-form input[type="email"],
+#kc-form input[type="number"],
+#kc-form .form-control,
+#kc-form .pf-c-form-control,
+input#username,
+input#password,
+.form-control,
+.pf-c-form-control {
+    display: block !important;
+
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 34px !important;
+
+    margin: 0 !important;
+    padding: 0 28px 7px 0 !important;
+
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+
+    border: none !important;
+    border-bottom: 1px solid var(--consoli-line) !important;
+    border-radius: 0 !important;
+
+    box-shadow: none !important;
+    outline: none !important;
+
+    appearance: none !important;
+    -webkit-appearance: none !important;
+
+    font-family: var(--consoli-font) !important;
+    font-size: 14px !important;
+    font-weight: 400 !important;
+    line-height: 34px !important;
+
+    color: var(--consoli-white) !important;
+    caret-color: var(--consoli-white) !important;
+
+    transition: border-color 0.2s ease !important;
+}
+
+#kc-form input:focus,
+#kc-form .form-control:focus,
+#kc-form .pf-c-form-control:focus,
+input#username:focus,
+input#password:focus {
+    border-bottom-color: var(--consoli-line-focus) !important;
+
+    background: transparent !important;
+    background-color: transparent !important;
+
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+#kc-form input::placeholder,
+input::placeholder {
+    color: rgba(255,255,255,0.58) !important;
+    opacity: 1 !important;
+}
+
+/* Chrome autofill fix */
+#kc-form input:-webkit-autofill,
+#kc-form input:-webkit-autofill:hover,
+#kc-form input:-webkit-autofill:focus,
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+    -webkit-text-fill-color: var(--consoli-white) !important;
+    caret-color: var(--consoli-white) !important;
+
+    box-shadow: 0 0 0 1000px transparent inset !important;
+    -webkit-box-shadow: 0 0 0 1000px transparent inset !important;
+
+    transition: background-color 9999s ease-out 0s !important;
+}
+
+/* ============================================================
+   PASSWORD GROUP / OCCHIO
+   ============================================================ */
+
+#kc-form .pf-c-input-group,
+#kc-form .input-group,
+.pf-c-input-group,
+.input-group {
+    display: flex !important;
+    align-items: center !important;
+
+    width: 100% !important;
+    height: 34px !important;
+
+    margin: 0 !important;
+    padding: 0 0 7px 0 !important;
+
+    background: transparent !important;
+    background-color: transparent !important;
+
+    border: none !important;
+    border-bottom: 1px solid var(--consoli-line) !important;
+    border-radius: 0 !important;
+
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+#kc-form .pf-c-input-group:focus-within,
+#kc-form .input-group:focus-within,
+.pf-c-input-group:focus-within,
+.input-group:focus-within {
+    border-bottom-color: var(--consoli-line-focus) !important;
+}
+
+#kc-form .pf-c-input-group input,
+#kc-form .input-group input,
+.pf-c-input-group input,
+.input-group input {
+    flex: 1 1 auto !important;
+
+    height: 27px !important;
+    min-height: 27px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    background: transparent !important;
+    background-color: transparent !important;
+
+    border: none !important;
+    border-bottom: none !important;
+
+    box-shadow: none !important;
+    outline: none !important;
+
+    color: var(--consoli-white) !important;
+
+    font-size: 14px !important;
+    line-height: 27px !important;
+}
+
+/* Bottone occhio */
+#kc-form .pf-c-input-group .pf-c-button,
+#kc-form .input-group .btn,
+#kc-form .input-group button,
+#kc-form .input-group-addon,
+.pf-c-input-group .pf-c-button,
+.input-group .btn,
+.input-group button,
+.input-group-addon,
+button[data-password-toggle],
+button[aria-controls="password"] {
+    flex: 0 0 22px !important;
+
+    width: 22px !important;
+    min-width: 22px !important;
+    max-width: 22px !important;
+
+    height: 22px !important;
+    min-height: 22px !important;
+    max-height: 22px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+
+    border: none !important;
+    border-color: transparent !important;
+    border-radius: 0 !important;
+
+    box-shadow: none !important;
+    outline: none !important;
+
+    appearance: none !important;
+    -webkit-appearance: none !important;
+
+    color: rgba(255,255,255,0.88) !important;
+
+    cursor: pointer !important;
+}
+
+#kc-form .pf-c-input-group .pf-c-button:hover,
+#kc-form .input-group button:hover,
+#kc-form .pf-c-input-group .pf-c-button:focus,
+#kc-form .input-group button:focus,
+#kc-form .pf-c-input-group .pf-c-button:active,
+#kc-form .input-group button:active,
+.pf-c-input-group .pf-c-button:hover,
+.pf-c-input-group .pf-c-button:focus,
+.pf-c-input-group .pf-c-button:active,
+.input-group button:hover,
+.input-group button:focus,
+.input-group button:active {
+    background: transparent !important;
+    background-color: transparent !important;
+
+    border: none !important;
+    border-color: transparent !important;
+
+    box-shadow: none !important;
+    outline: none !important;
+
+    color: #ffffff !important;
+}
+
+/* Icone */
+.pf-c-form-control__icon,
+#kc-form .pf-c-form-control__icon,
+#kc-form .fa,
+#kc-form .pficon,
+#kc-form .fa-eye,
+#kc-form .fa-eye-slash,
+#kc-form .pficon-visible,
+#kc-form .pficon-hidden {
+    color: rgba(255,255,255,0.88) !important;
+
+    font-size: 13px !important;
+    line-height: 1 !important;
+
+    background: transparent !important;
+
+    border: none !important;
+    box-shadow: none !important;
+
+    opacity: 1 !important;
+}
+
+#kc-form .pf-c-form-control::before,
+#kc-form .pf-c-form-control::after,
+#kc-form .pf-c-input-group::before,
+#kc-form .pf-c-input-group::after,
+#kc-form .pf-c-button::before,
+#kc-form .pf-c-button::after {
+    display: none !important;
+    content: none !important;
+}
+
+/* ============================================================
+   REMEMBER ME / FORGOT PASSWORD / REGISTER
+   ============================================================ */
+
+/* Riga Remember me + Forgot password */
+#kc-form-options,
+.login-pf-settings {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 12px !important;
+
+    width: 100% !important;
+
+    margin: -4px 0 26px 0 !important;
+    padding: 0 !important;
+
+    color: var(--consoli-muted) !important;
+
+    font-family: var(--consoli-font) !important;
+    font-size: 12px !important;
+}
+
+/* Checkbox remember me */
+#kc-form-options .checkbox,
+.login-pf-settings .checkbox,
+.checkbox {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Label remember me */
+#kc-form-options .checkbox label,
+.login-pf-settings .checkbox label,
+.checkbox label {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+
+    width: auto !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    color: var(--consoli-muted) !important;
+
+    font-family: var(--consoli-font) !important;
+    font-size: 12px !important;
+    font-weight: 400 !important;
+    line-height: 1.2 !important;
+}
+
+/* Checkbox */
+#rememberMe,
+#kc-form-options input[type="checkbox"],
+.login-pf-settings input[type="checkbox"] {
+    position: static !important;
+
+    flex: 0 0 13px !important;
+
+    width: 13px !important;
+    height: 13px !important;
+
+    margin: 0 7px 0 0 !important;
+    padding: 0 !important;
+
+    accent-color: var(--consoli-white) !important;
+
+    cursor: pointer !important;
+}
+
+/* Link forgot password */
+#kc-form-options a,
+.login-pf-settings a {
+    display: inline-block !important;
+
+    color: var(--consoli-white) !important;
+
+    font-family: var(--consoli-font) !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+
+    text-decoration: none !important;
+}
+
+#kc-form-options a:hover,
+.login-pf-settings a:hover {
+    text-decoration: underline !important;
+}
+
+/* Area register sotto il bottone */
+#kc-registration,
+#kc-info,
+.login-pf-signup {
+    display: block !important;
+
+    margin: 24px 0 0 0 !important;
+    padding: 0 !important;
+
+    border: none !important;
+
+    text-align: center !important;
+    color: var(--consoli-muted) !important;
+
+    font-family: var(--consoli-font) !important;
+    font-size: 13px !important;
+    font-weight: 400 !important;
+}
+
+/* Testo "New user?" */
+#kc-registration span,
+#kc-info span,
+.login-pf-signup span {
+    color: var(--consoli-muted) !important;
+}
+
+/* Link Register */
+#kc-registration a,
+#kc-info a,
+.login-pf-signup a {
+    display: inline-block !important;
+
+    margin-left: 8px !important;
+
+    color: var(--consoli-white) !important;
+
+    font-family: var(--consoli-font) !important;
+    font-size: 13px !important;
+    font-weight: 700 !important;
+
+    text-decoration: none !important;
+}
+
+#kc-registration a:hover,
+#kc-info a:hover,
+.login-pf-signup a:hover {
+    text-decoration: underline !important;
+}
+
+/* ============================================================
+   BUTTON
+   ============================================================ */
+
+#kc-form-buttons {
+    margin: 26px 0 0 0 !important;
+    padding: 0 !important;
+}
+
+#kc-login,
+input#kc-login.btn-primary,
+.pf-c-button.pf-m-primary,
+.pf-c-button.pf-m-block,
+input[type="submit"],
+.btn-primary {
+    display: block !important;
+
+    width: 100% !important;
+    min-height: 42px !important;
+
+    margin: 0 !important;
+    padding: 12px 18px !important;
+
+    border: none !important;
+    border-radius: 999px !important;
+
+    background: #f7f7f7 !important;
+    background-image: none !important;
+
+    box-shadow: none !important;
+    outline: none !important;
+
+    color: #123f71 !important;
+
+    font-family: var(--consoli-font) !important;
+    font-size: 13px !important;
+    font-weight: 800 !important;
+    line-height: 1.2 !important;
+
+    text-transform: uppercase !important;
+    letter-spacing: 0.08em !important;
+
+    cursor: pointer !important;
+
+    transition:
+            transform 0.18s ease,
+            box-shadow 0.18s ease,
+            background 0.18s ease,
+            opacity 0.18s ease !important;
+}
+
+#kc-login:hover,
+input#kc-login.btn-primary:hover,
+.pf-c-button.pf-m-primary:hover,
+.pf-c-button.pf-m-block:hover,
+input[type="submit"]:hover,
+.btn-primary:hover {
+    background: #ffffff !important;
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.12) !important;
+}
+
+/* ============================================================
+   ALERTS
+   ============================================================ */
+
+.alert,
+.pf-c-alert {
+    border: none !important;
+    border-radius: 8px !important;
+
+    padding: 10px 12px !important;
+    margin: 0 0 18px !important;
+
+    color: var(--consoli-white) !important;
+    background: var(--consoli-error) !important;
+
+    text-align: center !important;
+
+    font-family: var(--consoli-font) !important;
+    font-size: 12px !important;
+    line-height: 1.35 !important;
+}
+
+.alert-success,
+.pf-c-alert.pf-m-success {
+    background: var(--consoli-success) !important;
+}
+
+.alert-warning,
+.alert-info,
+.pf-c-alert.pf-m-warning,
+.pf-c-alert.pf-m-info {
+    background: var(--consoli-blue-dark) !important;
+}
+
+.kc-feedback-text,
+.pf-c-alert__title,
+.pf-c-alert__description,
+span[id="input-error"] {
+    display: block !important;
+    position: static !important;
+
+    color: var(--consoli-white) !important;
+    background: transparent !important;
+
+    border: none !important;
+
+    padding: 0 !important;
+    margin: 0 !important;
+
+    font-family: var(--consoli-font) !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    line-height: 1.35 !important;
+
+    text-align: center !important;
+}
+
+.pf-c-alert__icon,
+.pf-c-alert__action,
+.alert .pficon {
+    display: none !important;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 520px) {
+    body {
+        overflow-y: auto;
+    }
+
+    .login-pf-page {
+        padding: 16px;
+        align-items: flex-start;
+    }
+
+    .card-pf {
+        min-width: 0 !important;
+        max-width: calc(100vw - 32px) !important;
+        min-height: auto !important;
+        padding: 44px 36px 38px !important;
+    }
+
+    .login-pf-header::before {
+        width: 210px;
+        height: 86px;
+        margin-bottom: 34px;
+    }
+
+    #kc-form-options,
+    .login-pf-settings {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 10px !important;
+        margin-bottom: 24px !important;
+    }
+}

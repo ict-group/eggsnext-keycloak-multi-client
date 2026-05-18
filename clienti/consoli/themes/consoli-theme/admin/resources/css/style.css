@@ -1,0 +1,336 @@
+/* ============================================================
+   GRUPPO CONSOLI — Keycloak Login Theme
+   File: login/resources/css/style.css
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
+
+:root {
+    --adm-lime: #15528a;
+    --adm-lime-soft: #c7e35f;
+    --adm-lime-dark: #0e3f70;
+    --adm-dark: #272a29;
+    --adm-dark-2: #1f2221;
+    --adm-white: #ffffff;
+    --adm-muted: rgba(255, 255, 255, 0.72);
+    --adm-line: rgba(255, 255, 255, 0.58);
+    --adm-error: #c91010;
+    --adm-success: #2e8b57;
+    --adm-radius: 14px;
+    --adm-font: 'Montserrat', Arial, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+html,
+body {
+    width: 100%;
+    min-height: 100%;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    font-family: var(--adm-font);
+    color: var(--adm-white);
+    background-color: var(--adm-lime);
+    position: relative;
+}
+
+/* Sfondo Gruppo Consoli */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(166, 213, 28, 0.90), rgba(166, 213, 28, 0.90)),
+        url('../img/backgrd_consoli.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: 0;
+}
+
+/* Nasconde titolo Keycloak standard */
+#kc-header,
+#kc-page-title,
+.login-pf-header h1 {
+    display: none !important;
+}
+
+.login-pf-page,
+.login-pf-page .login-pf-page-header,
+#kc-container,
+#kc-container-wrapper,
+#kc-content,
+#kc-content-wrapper {
+    position: relative;
+    z-index: 1;
+}
+
+/* Card centrale */
+.card-pf {
+    position: relative;
+    z-index: 1;
+    width: 100% !important;
+    max-width: 430px !important;
+    min-width: 360px !important;
+    min-height: 530px !important;
+    padding: 54px 58px 46px !important;
+    border: none !important;
+    border-radius: var(--adm-radius) !important;
+    background:
+        linear-gradient(rgba(39, 42, 41, 0.94), rgba(39, 42, 41, 0.94)),
+        url('../img/backgrd_consoli.png') center / cover no-repeat !important;
+    box-shadow: 0 20px 42px rgba(0, 0, 0, 0.30) !important;
+    overflow: hidden;
+}
+
+/* Logo */
+.login-pf-header::before {
+    content: "";
+    display: block;
+    width: 240px;
+    height: 178px;
+    margin: 0 auto 34px;
+    background-image: url('../img/consoli_logo.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+/* Form spacing */
+#kc-form,
+#kc-form-wrapper,
+#kc-form-login {
+    width: 100%;
+}
+
+.form-group,
+.pf-c-form__group {
+    margin-bottom: 26px !important;
+}
+
+/* Label */
+.pf-c-form__label,
+.control-label,
+label {
+    display: block !important;
+    margin: 0 0 8px 0 !important;
+    font-family: var(--adm-font) !important;
+    font-size: 15px !important;
+    line-height: 1.2 !important;
+    font-weight: 600 !important;
+    color: var(--adm-white) !important;
+    letter-spacing: 0 !important;
+}
+
+/* Input underline */
+input#username,
+input#password,
+.pf-c-form-control,
+input[type="text"],
+input[type="password"],
+input[type="email"] {
+    width: 100% !important;
+    height: 34px !important;
+    padding: 0 34px 8px 0 !important;
+    border: none !important;
+    border-bottom: 1px solid var(--adm-line) !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    outline: none !important;
+    font-family: var(--adm-font) !important;
+    font-size: 15px !important;
+    font-weight: 500 !important;
+    color: var(--adm-white) !important;
+    caret-color: var(--adm-lime) !important;
+}
+
+input#username:focus,
+input#password:focus,
+.pf-c-form-control:focus,
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="email"]:focus {
+    border-bottom-color: var(--adm-lime) !important;
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+input::placeholder {
+    color: rgba(255, 255, 255, 0.52) !important;
+}
+
+/* Icona input username / password */
+.pf-c-form-control__icon {
+    color: var(--adm-white) !important;
+}
+
+/* Wrapper password + occhio */
+.pf-c-input-group {
+    display: flex !important;
+    align-items: center !important;
+    border: none !important;
+    border-bottom: 1px solid var(--adm-line) !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    padding: 0 0 8px 0 !important;
+}
+
+.pf-c-input-group:focus-within {
+    border-bottom-color: var(--adm-lime) !important;
+}
+
+.pf-c-input-group input#password,
+.pf-c-input-group .pf-c-form-control {
+    border-bottom: none !important;
+    padding-bottom: 0 !important;
+    height: 26px !important;
+}
+
+.pf-c-button.pf-m-control {
+    background: transparent !important;
+    border: none !important;
+    color: var(--adm-white) !important;
+    box-shadow: none !important;
+    padding: 0 4px 0 8px !important;
+}
+
+/* Remember me / forgot */
+#kc-form-options,
+#kc-form-options .checkbox,
+.login-pf-settings {
+    color: var(--adm-muted) !important;
+    font-size: 13px !important;
+}
+
+#kc-form-options label,
+.checkbox label {
+    color: var(--adm-muted) !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+}
+
+input[type="checkbox"] {
+    accent-color: var(--adm-lime);
+}
+
+a,
+#kc-form-options a,
+#kc-registration a,
+.login-pf-signup a {
+    color: var(--adm-lime) !important;
+    font-weight: 600 !important;
+    text-decoration: none !important;
+}
+
+a:hover { color: var(--adm-lime-soft) !important; }
+
+/* Bottone */
+#kc-login,
+input#kc-login.btn-primary,
+.pf-c-button.pf-m-primary,
+.pf-c-button.pf-m-block,
+input[type="submit"] {
+    display: block !important;
+    width: 100% !important;
+    min-height: 48px !important;
+    margin-top: 34px !important;
+    padding: 13px 18px !important;
+    border: none !important;
+    border-radius: 999px !important;
+    background: var(--adm-white) !important;
+    background-image: none !important;
+    box-shadow: none !important;
+    color: #17345a !important;
+    font-family: var(--adm-font) !important;
+    font-size: 13px !important;
+    font-weight: 800 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.10em !important;
+    cursor: pointer !important;
+    transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+}
+
+#kc-login:hover,
+input#kc-login.btn-primary:hover,
+.pf-c-button.pf-m-primary:hover,
+.pf-c-button.pf-m-block:hover,
+input[type="submit"]:hover {
+    background: #f2f2f2 !important;
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18) !important;
+}
+
+/* Alert messaggi */
+.alert,
+.pf-c-alert {
+    border: none !important;
+    border-radius: 10px !important;
+    padding: 11px 14px !important;
+    margin: 0 0 20px !important;
+    color: var(--adm-white) !important;
+    background: var(--adm-error) !important;
+    text-align: center !important;
+    font-size: 13px !important;
+    line-height: 1.35 !important;
+}
+
+.alert-success,
+.pf-c-alert.pf-m-success { background: var(--adm-success) !important; }
+.alert-warning,
+.alert-info,
+.pf-c-alert.pf-m-warning,
+.pf-c-alert.pf-m-info { background: var(--adm-lime-dark) !important; }
+
+.kc-feedback-text,
+.pf-c-alert__title,
+.pf-c-alert__description,
+span[id="input-error"] {
+    display: block !important;
+    position: static !important;
+    color: var(--adm-white) !important;
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    line-height: 1.35 !important;
+    text-align: center !important;
+}
+
+.pf-c-alert__icon,
+.pf-c-alert__action,
+.alert .pficon { display: none !important; }
+
+/* Register */
+#kc-registration,
+.login-pf-signup {
+    color: var(--adm-muted) !important;
+    text-align: center !important;
+    margin-top: 24px !important;
+}
+
+/* Responsive */
+@media (max-width: 520px) {
+    body { overflow-y: auto; }
+    .card-pf {
+        min-width: 0 !important;
+        max-width: calc(100vw - 32px) !important;
+        min-height: auto !important;
+        padding: 42px 34px 38px !important;
+    }
+    .login-pf-header::before {
+        width: 210px;
+        height: 154px;
+        margin-bottom: 28px;
+    }
+}
