@@ -4,46 +4,38 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        KEYCLOAK_VERSION: ${KEYCLOAK_VERSION:-24.0.0}
-        CLIENT_ID: ${CLIENT_ID:-errevi}
+        # Passa correttamente la versione al Dockerfile
+        KEYCLOAK_VERSION: ${KEYCLOAK_VERSION:-26.6.1}
 
-    container_name: keycloak-${CLIENT_ID:-errevi}
+    container_name: keycloak-${CLIENT_ID}
 
     ports:
       - "${KEYCLOAK_PORT:-8080}:8080"
 
     env_file:
-      - ./clienti/${CLIENT_ID:-errevi}/config.env
+      - ./clienti/${CLIENT_ID}/config.env
 
     environment:
-      # Admin Keycloak
       KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN_USER:-admin}
       KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:-admin}
-
-      # Compatibilità Keycloak 26+
       KC_BOOTSTRAP_ADMIN_USERNAME: ${KEYCLOAK_ADMIN_USER:-admin}
       KC_BOOTSTRAP_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:-admin}
 
-      # Config locale: sovrascrive i valori del config.env cliente
       KC_HTTP_ENABLED: "true"
       KC_HOSTNAME: localhost
       KC_HOSTNAME_STRICT: "false"
       KC_HOSTNAME_STRICT_HTTPS: "false"
-
-      # Keycloak 24 accetta KC_PROXY. In locale usiamo none.
-      # Evita il reencrypt del config.env cliente.
       KC_PROXY: none
 
-      # Database locale PostgreSQL
-      # KC_DB deve essere postgres, non keycloak_errevi.
       KC_DB: postgres
-      KC_DB_URL: jdbc:postgresql://postgres:5432/${KEYCLOAK_DB_NAME:-keycloak_errevi}
+      # Il database ora si chiama dinamicamente come il cliente (es. keycloak_errezeta)
+      KC_DB_URL: jdbc:postgresql://postgres:5432/${KEYCLOAK_DB_NAME:-keycloak_${CLIENT_ID}}
       KC_DB_USERNAME: ${KEYCLOAK_DB_USER:-keycloak}
       KC_DB_PASSWORD: ${KEYCLOAK_DB_PASSWORD:-change-me}
 
     volumes:
-      # Live reload dei temi del cliente selezionato
-      - ./clienti/${CLIENT_ID:-errevi}/themes:/opt/keycloak/themes
+      # Puntamento dinamico alla cartella del tema del cliente X
+      - ./clienti/${CLIENT_ID}/themes:/opt/keycloak/themes
 
     command:
       - start-dev
@@ -59,10 +51,10 @@ services:
 
   postgres:
     image: postgres:16
-    container_name: postgres-${CLIENT_ID:-errevi}
+    container_name: postgres-${CLIENT_ID}
 
     environment:
-      POSTGRES_DB: ${KEYCLOAK_DB_NAME:-keycloak_errevi}
+      POSTGRES_DB: ${KEYCLOAK_DB_NAME:-keycloak_${CLIENT_ID}}
       POSTGRES_USER: ${KEYCLOAK_DB_USER:-keycloak}
       POSTGRES_PASSWORD: ${KEYCLOAK_DB_PASSWORD:-change-me}
 
@@ -73,14 +65,14 @@ services:
       - postgres-data:/var/lib/postgresql/data
 
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${KEYCLOAK_DB_USER:-keycloak} -d ${KEYCLOAK_DB_NAME:-keycloak_errevi}"]
+      test: ["CMD-SHELL", "pg_isready -U ${KEYCLOAK_DB_USER:-keycloak} -d ${KEYCLOAK_DB_NAME:-keycloak_${CLIENT_ID}}"]
       interval: 5s
       timeout: 5s
       retries: 20
 
   mailpit:
     image: axllent/mailpit:latest
-    container_name: mailpit-${CLIENT_ID:-errevi}
+    container_name: mailpit-${CLIENT_ID}
 
     ports:
       - "${MAILPIT_SMTP_PORT:-1025}:1025"
@@ -88,4 +80,5 @@ services:
 
 volumes:
   postgres-data:
-    name: keycloak-postgres-${CLIENT_ID:-errevi}
+    # Isola i dati del database per ciascun cliente!
+    name: keycloak-postgres-${CLIENT_ID}

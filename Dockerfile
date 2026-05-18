@@ -4,12 +4,16 @@ ARG KEYCLOAK_VERSION=26.6.1
 # Stage 1: Builder
 FROM quay.io/keycloak/keycloak:${KEYCLOAK_VERSION} AS builder
 
+ARG KEYCLOAK_VERSION
+
 COPY base/extensions /opt/keycloak/providers
 
 RUN /opt/keycloak/bin/kc.sh build
 
 # Stage 2: Runtime
 FROM quay.io/keycloak/keycloak:${KEYCLOAK_VERSION}
+
+ARG KEYCLOAK_VERSION
 
 COPY --from=builder /opt/keycloak/ /opt/keycloak/
 

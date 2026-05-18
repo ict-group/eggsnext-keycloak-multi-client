@@ -578,3 +578,448 @@ body:has(#kc-totp-settings) .login-pf-settings-separator {
         height: 120px !important;
     }
 }
+/* ============================================================
+   ALERT / HELP OTP
+   ============================================================ */
+
+body:has(#kc-totp-settings) .kc-totp-type,
+body:has(#kc-totp-settings) small,
+body:has(#kc-totp-settings) .help-block {
+    font-size: 0.74rem;
+    color: var(--errevi-gray-400);
+    display: block;
+    margin-top: 0.2rem;
+}
+
+body:has(#kc-totp-settings) hr,
+body:has(#kc-totp-settings) .login-pf-settings-separator {
+    border: none;
+    border-top: 1px solid var(--errevi-gray-200);
+    margin: 0.9rem 0;
+}
+
+/* ============================================================
+   OTP ALERT FINALE — barra visibile, testo visibile, niente box interno
+   ============================================================ */
+
+/* Contenitore alert */
+body:has(#kc-totp-settings) #kc-content-wrapper > .alert,
+body:has(#kc-totp-settings) #kc-content-wrapper > .pf-c-alert {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    width: 86% !important;
+    max-width: 320px !important;
+    min-height: 34px !important;
+
+    margin: 0 auto 14px auto !important;
+    padding: 8px 18px !important;
+
+    border: none !important;
+    border-radius: 8px !important;
+    box-shadow: none !important;
+    outline: none !important;
+
+    background: var(--errevi-magenta) !important;
+    color: #ffffff !important;
+
+    overflow: visible !important;
+}
+
+/* Testo reale: reset completo perché style.css lo mette fixed */
+body:has(#kc-totp-settings) #kc-content-wrapper > .alert .kc-feedback-text,
+body:has(#kc-totp-settings) #kc-content-wrapper > .pf-c-alert .kc-feedback-text,
+body:has(#kc-totp-settings) #kc-content-wrapper > .alert .pf-c-alert__title,
+body:has(#kc-totp-settings) #kc-content-wrapper > .pf-c-alert .pf-c-alert__title {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+
+    position: static !important;
+    top: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    left: auto !important;
+    transform: none !important;
+    z-index: auto !important;
+
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+
+    height: auto !important;
+    min-height: 0 !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    outline: none !important;
+
+    background: transparent !important;
+    background-color: transparent !important;
+    color: #ffffff !important;
+
+    font-family: var(--font-body) !important;
+    font-size: 0.72rem !important;
+    font-weight: 700 !important;
+    line-height: 1.25 !important;
+    text-align: center !important;
+    letter-spacing: 0.01em !important;
+
+    white-space: normal !important;
+    text-indent: 0 !important;
+    overflow: visible !important;
+    clip: auto !important;
+    clip-path: none !important;
+}
+
+/* Nasconde solo icona e azioni, non il testo */
+body:has(#kc-totp-settings) #kc-content-wrapper > .alert .pf-c-alert__icon,
+body:has(#kc-totp-settings) #kc-content-wrapper > .pf-c-alert .pf-c-alert__icon,
+body:has(#kc-totp-settings) #kc-content-wrapper > .alert > .pficon,
+body:has(#kc-totp-settings) #kc-content-wrapper > .pf-c-alert .pficon,
+body:has(#kc-totp-settings) #kc-content-wrapper > .pf-c-alert__action,
+body:has(#kc-totp-settings) #kc-content-wrapper > .pf-c-alert__action-group,
+body:has(#kc-totp-settings) #kc-content-wrapper > .alert .close {
+    display: none !important;
+}
+
+/* Colori in base al tipo messaggio */
+body:has(#kc-totp-settings) #kc-content-wrapper > .alert-warning,
+body:has(#kc-totp-settings) #kc-content-wrapper > .alert-info,
+body:has(#kc-totp-settings) #kc-content-wrapper > .pf-c-alert.pf-m-warning,
+body:has(#kc-totp-settings) #kc-content-wrapper > .pf-c-alert.pf-m-info {
+    background: var(--errevi-magenta) !important;
+}
+
+body:has(#kc-totp-settings) #kc-content-wrapper > .alert-success,
+body:has(#kc-totp-settings) #kc-content-wrapper > .pf-c-alert.pf-m-success {
+    background: #1F8A4C !important;
+}
+
+body:has(#kc-totp-settings) #kc-content-wrapper > .alert-error,
+body:has(#kc-totp-settings) #kc-content-wrapper > .alert-danger,
+body:has(#kc-totp-settings) #kc-content-wrapper > .pf-c-alert.pf-m-danger {
+    background: #9E003F !important;
+}
+
+/* ============================================================
+   RESPONSIVE OTP — SCHERMI BASSI
+   ============================================================ */
+
+@media (max-height: 760px) {
+    body:has(#kc-totp-settings) .card-pf,
+    body:has(#kc-totp-settings) #kc-container-wrapper,
+    body:has(#kc-totp-settings) #kc-form-wrapper {
+        max-width: 420px;
+        max-height: calc(100vh - 20px);
+        margin: 10px auto;
+    }
+
+    body:has(#kc-totp-settings) #kc-header,
+    body:has(#kc-totp-settings) .login-pf-header {
+        padding: 12px 24px 8px !important;
+    }
+
+    body:has(#kc-totp-settings) #kc-header-wrapper img,
+    body:has(#kc-totp-settings) .login-pf-brand img {
+        max-height: 58px;
+    }
+
+    body:has(#kc-totp-settings) #kc-content,
+    body:has(#kc-totp-settings) #kc-content-wrapper {
+        padding: 12px 24px 16px !important;
+    }
+
+    body:has(#kc-totp-settings) #kc-page-title {
+        font-size: 0.98rem;
+        margin-bottom: 0.65rem;
+    }
+
+    body:has(#kc-totp-settings) #kc-totp-qr img,
+    body:has(#kc-totp-settings) .kc-totp-qr img {
+        width: 112px !important;
+        height: 112px !important;
+    }
+
+    body:has(#kc-totp-settings) #kc-totp-settings ol {
+        gap: 0.45rem;
+        margin-bottom: 0.6rem;
+    }
+
+    body:has(#kc-totp-settings) #kc-totp-settings ol > li {
+        font-size: 0.74rem;
+        line-height: 1.28;
+    }
+
+    body:has(#kc-totp-settings) #kc-totp-settings ol > li::before {
+        width: 18px;
+        height: 18px;
+        font-size: 0.62rem;
+    }
+
+    body:has(#kc-totp-settings) #kc-totp-settings ul li {
+        font-size: 0.74rem;
+        padding: 0.22rem 0.55rem;
+    }
+
+    body:has(#kc-totp-settings) #kc-totp-settings p {
+        font-size: 0.74rem;
+        margin-bottom: 0.35rem;
+    }
+
+    body:has(#kc-totp-settings) label,
+    body:has(#kc-totp-settings) .control-label {
+        font-size: 0.7rem;
+    }
+
+    body:has(#kc-totp-settings) input[type="text"],
+    body:has(#kc-totp-settings) input[type="password"],
+    body:has(#kc-totp-settings) input[type="number"],
+    body:has(#kc-totp-settings) .form-control {
+        height: 34px;
+        font-size: 0.78rem;
+    }
+
+    body:has(#kc-totp-settings) #otp,
+    body:has(#kc-totp-settings) input[id="totp"],
+    body:has(#kc-totp-settings) input[autocomplete="one-time-code"] {
+        font-size: 0.92rem;
+    }
+
+    body:has(#kc-totp-settings) #kc-login,
+    body:has(#kc-totp-settings) input[type="submit"],
+    body:has(#kc-totp-settings) button[type="submit"],
+    body:has(#kc-totp-settings) .btn-primary {
+        height: 38px;
+        font-size: 0.78rem;
+        margin-top: 0.55rem;
+    }
+
+    body:has(#kc-totp-settings) .checkbox,
+    body:has(#kc-totp-settings) .form-check {
+        margin: 0.45rem 0;
+    }
+
+    body:has(#kc-totp-settings) #kc-content-wrapper > .alert,
+    body:has(#kc-totp-settings) #kc-content-wrapper > .pf-c-alert {
+        min-height: 28px !important;
+        padding: 6px 12px !important;
+        margin-bottom: 10px !important;
+    }
+
+    body:has(#kc-totp-settings) #kc-content-wrapper > .alert .kc-feedback-text,
+    body:has(#kc-totp-settings) #kc-content-wrapper > .pf-c-alert .kc-feedback-text,
+    body:has(#kc-totp-settings) #kc-content-wrapper > .alert .pf-c-alert__title,
+    body:has(#kc-totp-settings) #kc-content-wrapper > .pf-c-alert .pf-c-alert__title {
+        font-size: 0.64rem !important;
+    }
+}
+
+/* ============================================================
+   RESPONSIVE OTP — MOBILE
+   ============================================================ */
+
+@media (max-width: 520px) {
+    body:has(#kc-totp-settings),
+    body:has(#kc-totp-settings) .login-pf,
+    body:has(#kc-totp-settings) .login-pf-page {
+        overflow-y: auto;
+    }
+
+    body:has(#kc-totp-settings) .card-pf,
+    body:has(#kc-totp-settings) #kc-container-wrapper,
+    body:has(#kc-totp-settings) #kc-form-wrapper {
+        max-width: 100%;
+        max-height: none;
+        min-height: 100vh;
+        margin: 0;
+        border-radius: 0;
+        border: none;
+        box-shadow: none;
+    }
+
+    body:has(#kc-totp-settings) #kc-header,
+    body:has(#kc-totp-settings) .login-pf-header {
+        padding: 16px 18px 10px !important;
+    }
+
+    body:has(#kc-totp-settings) #kc-content,
+    body:has(#kc-totp-settings) #kc-content-wrapper {
+        padding: 16px 18px 20px !important;
+    }
+
+    body:has(#kc-totp-settings) #kc-totp-qr img,
+    body:has(#kc-totp-settings) .kc-totp-qr img {
+        width: 120px !important;
+        height: 120px !important;
+    }
+}
+
+
+/* ============================================================
+   OTP FORM FIELDS — migliora visibilità campi codice e device name
+   ============================================================ */
+
+/* Contenitore form OTP */
+body:has(#kc-totp-settings) #kc-totp-settings-form {
+    margin-top: 0.8rem !important;
+}
+
+/* Ogni gruppo campo */
+body:has(#kc-totp-settings) #kc-totp-settings-form .form-group {
+    margin-bottom: 1rem !important;
+    width: 100% !important;
+}
+
+/* Label dei campi */
+body:has(#kc-totp-settings) #kc-totp-settings-form label,
+body:has(#kc-totp-settings) #kc-totp-settings-form .control-label {
+    display: block !important;
+    width: 100% !important;
+    text-align: left !important;
+
+    margin: 0 0 0.38rem 0 !important;
+    padding: 0 !important;
+
+    font-family: var(--font-body) !important;
+    font-size: 0.82rem !important;
+    font-weight: 600 !important;
+    line-height: 1.25 !important;
+    color: var(--errevi-gray-700) !important;
+    letter-spacing: 0.01em !important;
+}
+
+/* Eventuale asterisco required */
+body:has(#kc-totp-settings) #kc-totp-settings-form .required,
+body:has(#kc-totp-settings) #kc-totp-settings-form .kc-required,
+body:has(#kc-totp-settings) #kc-totp-settings-form span[id="input-error"] {
+    color: var(--errevi-magenta) !important;
+    font-weight: 700 !important;
+    position: static !important;
+}
+
+/* Wrapper interno dei campi */
+body:has(#kc-totp-settings) #kc-totp-settings-form .col-xs-12,
+body:has(#kc-totp-settings) #kc-totp-settings-form .col-sm-12,
+body:has(#kc-totp-settings) #kc-totp-settings-form .col-md-12,
+body:has(#kc-totp-settings) #kc-totp-settings-form div[class*="col-"] {
+    width: 100% !important;
+    float: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+/* Input del form OTP */
+body:has(#kc-totp-settings) #kc-totp-settings-form input[type="text"],
+body:has(#kc-totp-settings) #kc-totp-settings-form input[type="password"],
+body:has(#kc-totp-settings) #kc-totp-settings-form input[type="number"],
+body:has(#kc-totp-settings) #kc-totp-settings-form .form-control {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+
+    height: 46px !important;
+    padding: 0 14px !important;
+    margin: 0 !important;
+
+    border: 1.8px solid rgba(212, 0, 90, 0.32) !important;
+    border-radius: 12px !important;
+    background: rgba(255, 255, 255, 0.96) !important;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.04) !important;
+    outline: none !important;
+
+    font-family: var(--font-body) !important;
+    font-size: 0.92rem !important;
+    font-weight: 500 !important;
+    color: var(--errevi-black) !important;
+
+    transition: border-color var(--transition), box-shadow var(--transition), background var(--transition) !important;
+}
+
+/* Hover */
+body:has(#kc-totp-settings) #kc-totp-settings-form input[type="text"]:hover,
+body:has(#kc-totp-settings) #kc-totp-settings-form input[type="password"]:hover,
+body:has(#kc-totp-settings) #kc-totp-settings-form input[type="number"]:hover,
+body:has(#kc-totp-settings) #kc-totp-settings-form .form-control:hover {
+    border-color: rgba(212, 0, 90, 0.55) !important;
+    background: #ffffff !important;
+}
+
+/* Focus */
+body:has(#kc-totp-settings) #kc-totp-settings-form input[type="text"]:focus,
+body:has(#kc-totp-settings) #kc-totp-settings-form input[type="password"]:focus,
+body:has(#kc-totp-settings) #kc-totp-settings-form input[type="number"]:focus,
+body:has(#kc-totp-settings) #kc-totp-settings-form .form-control:focus {
+    border-color: var(--errevi-magenta) !important;
+    background: #ffffff !important;
+    box-shadow: 0 0 0 3px rgba(212, 0, 90, 0.14) !important;
+}
+
+/* Placeholder */
+body:has(#kc-totp-settings) #kc-totp-settings-form input::placeholder {
+    color: #9b9b9b !important;
+    opacity: 1 !important;
+}
+
+/* Campo One-time code: più evidente */
+body:has(#kc-totp-settings) #kc-totp-settings-form input#totp,
+body:has(#kc-totp-settings) #kc-totp-settings-form input[name="totp"],
+body:has(#kc-totp-settings) #kc-totp-settings-form input[autocomplete="one-time-code"] {
+    height: 50px !important;
+    font-family: var(--font-mono) !important;
+    font-size: 1.05rem !important;
+    font-weight: 500 !important;
+    letter-spacing: 0.16em !important;
+    text-align: center !important;
+}
+
+/* Campo Device Name */
+body:has(#kc-totp-settings) #kc-totp-settings-form input#userLabel,
+body:has(#kc-totp-settings) #kc-totp-settings-form input[name="userLabel"] {
+    font-size: 0.92rem !important;
+}
+
+/* Checkbox allineato meglio */
+body:has(#kc-totp-settings) #kc-totp-settings-form .checkbox,
+body:has(#kc-totp-settings) #kc-totp-settings-form .form-check {
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.55rem !important;
+    margin: 0.9rem 0 0.6rem 0 !important;
+}
+
+body:has(#kc-totp-settings) #kc-totp-settings-form .checkbox label,
+body:has(#kc-totp-settings) #kc-totp-settings-form .form-check label {
+    margin: 0 !important;
+    font-size: 0.82rem !important;
+    font-weight: 500 !important;
+    color: var(--errevi-gray-700) !important;
+}
+
+/* Schermi bassi */
+@media (max-height: 760px) {
+    body:has(#kc-totp-settings) #kc-totp-settings-form label,
+    body:has(#kc-totp-settings) #kc-totp-settings-form .control-label {
+        font-size: 0.76rem !important;
+    }
+
+    body:has(#kc-totp-settings) #kc-totp-settings-form input[type="text"],
+    body:has(#kc-totp-settings) #kc-totp-settings-form input[type="password"],
+    body:has(#kc-totp-settings) #kc-totp-settings-form input[type="number"],
+    body:has(#kc-totp-settings) #kc-totp-settings-form .form-control {
+        height: 42px !important;
+        font-size: 0.86rem !important;
+    }
+
+    body:has(#kc-totp-settings) #kc-totp-settings-form input#totp,
+    body:has(#kc-totp-settings) #kc-totp-settings-form input[name="totp"],
+    body:has(#kc-totp-settings) #kc-totp-settings-form input[autocomplete="one-time-code"] {
+        height: 46px !important;
+        font-size: 0.98rem !important;
+    }
+}
