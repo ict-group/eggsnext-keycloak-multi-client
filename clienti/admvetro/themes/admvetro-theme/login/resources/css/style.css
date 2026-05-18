@@ -1,0 +1,968 @@
+/* ============================================================
+   ADM VETRO — Keycloak Login Theme
+   File: login/resources/css/style.css
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700;800&display=swap');
+
+:root {
+    --adm-lime: #a6d51c;
+    --adm-lime-soft: #c7e35f;
+    --adm-lime-dark: #7aa313;
+
+    --adm-dark: #272a29;
+    --adm-dark-2: #1f2221;
+
+    --adm-white: #ffffff;
+    --adm-muted: rgba(255, 255, 255, 0.72);
+    --adm-muted-strong: rgba(255, 255, 255, 0.86);
+    --adm-line: rgba(255, 255, 255, 0.58);
+    --adm-line-focus: rgba(255, 255, 255, 0.95);
+
+    --adm-error: #c91010;
+    --adm-success: #2e8b57;
+
+    --adm-radius: 14px;
+    --adm-font: 'Open Sans', Arial, sans-serif;}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    width: 100%;
+    min-height: 100%;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    overflow: hidden;
+
+    font-family: var(--adm-font);
+    color: var(--adm-white);
+    background-color: var(--adm-lime);
+
+    position: relative;
+}
+
+/* Sfondo ADM Vetro */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+
+    background-image: url('../img/backgrd_admvetro.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    z-index: 0;
+}
+
+/* Nasconde titolo Keycloak standard */
+#kc-header,
+#kc-page-title,
+.login-pf-header h1 {
+    display: none !important;
+}
+
+/* Layer sopra background */
+.login-pf-page,
+.login-pf-page .login-pf-page-header,
+#kc-container,
+#kc-container-wrapper,
+#kc-content,
+#kc-content-wrapper {
+    position: relative;
+    z-index: 1;
+}
+
+/* Reset contenitori Keycloak */
+.login-pf-page {
+    width: 100%;
+    min-height: 100vh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 24px;
+}
+
+#kc-content,
+#kc-content-wrapper {
+    width: 100%;
+}
+
+/* ============================================================
+   CARD CENTRALE
+   ============================================================ */
+
+.card-pf {
+    position: relative;
+    z-index: 1;
+
+    width: 100% !important;
+    max-width: 380px !important;
+    min-width: 340px !important;
+    min-height: 560px !important;
+
+    padding: 44px 50px 38px !important;
+
+    border: none !important;
+    border-radius: 16px !important;
+
+    background-image: url('../img/sfondo.png');
+    backdrop-filter: blur(1.5px) !important;
+    -webkit-backdrop-filter: blur(1.5px) !important;
+
+    box-shadow: 0 14px 28px rgb(16 16 16 / 0.22) !important;
+    overflow: hidden;
+}
+/* Logo */
+.login-pf-header::before {
+    content: "";
+    display: block;
+
+    width: 210px;
+    height: 150px;
+
+    margin: 0 auto 26px;
+
+    background-image: url('../img/admvetro_logo.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+/* ============================================================
+   FORM BASE
+   ============================================================ */
+
+#kc-form,
+#kc-form-wrapper,
+#kc-form-login {
+    width: 100% !important;
+}
+
+#kc-form-wrapper {
+    margin-top: 0 !important;
+}
+
+/* Gruppi form */
+#kc-form .form-group,
+.form-group,
+.pf-c-form__group {
+    width: 100% !important;
+    margin: 0 0 25px 0 !important;
+    padding: 0 !important;
+}
+
+/* Colonne Bootstrap / Keycloak */
+#kc-form .col-xs-12,
+#kc-form .col-sm-12,
+#kc-form .col-md-12,
+#kc-form div[class*="col-"],
+.col-xs-12,
+.col-sm-12,
+.col-md-12,
+div[class*="col-"] {
+    width: 100% !important;
+    max-width: 100% !important;
+    float: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Label */
+#kc-form label,
+#kc-form .control-label,
+.pf-c-form__label,
+.control-label,
+label {
+    display: block !important;
+    width: 100% !important;
+    margin: 0 0 8px 0 !important;
+    padding: 0 !important;
+
+    font-family: var(--adm-font) !important;
+    font-size: 11px !important;
+    line-height: 1.2 !important;
+    font-weight: 700 !important;
+
+    color: #ffffff !important;
+
+    letter-spacing: 0 !important;
+    text-transform: none !important;
+    text-align: left !important;
+}
+
+/* ============================================================
+   INPUT UNDERLINE — COME MOCK ORIGINALE
+   ============================================================ */
+
+/* Input base */
+#kc-form input[type="text"],
+#kc-form input[type="password"],
+#kc-form input[type="email"],
+#kc-form input[type="number"],
+#kc-form .form-control,
+#kc-form .pf-c-form-control,
+input#username,
+input#password,
+.form-control,
+.pf-c-form-control {
+    display: block !important;
+
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 32px !important;
+
+    margin: 0 !important;
+    padding: 0 26px 6px 0 !important;
+
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+
+    border: none !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.38) !important;
+    border-radius: 0 !important;
+
+    box-shadow: none !important;
+    outline: none !important;
+    appearance: none !important;
+    -webkit-appearance: none !important;
+
+    font-family: var(--adm-font) !important;
+    font-size: 11px !important;
+    font-weight: 400 !important;
+    line-height: 32px !important;
+
+    color: #ffffff !important;
+    caret-color: var(--adm-lime) !important;
+
+    transition: border-color 0.2s ease !important;
+}
+/* Hover */
+#kc-form input[type="text"]:hover,
+#kc-form input[type="password"]:hover,
+#kc-form input[type="email"]:hover,
+#kc-form input[type="number"]:hover,
+#kc-form .form-control:hover,
+#kc-form .pf-c-form-control:hover,
+input#username:hover,
+input#password:hover,
+input[type="text"]:hover,
+input[type="password"]:hover,
+input[type="email"]:hover,
+input[type="number"]:hover,
+.form-control:hover,
+.pf-c-form-control:hover {
+    border-bottom-color: rgba(255, 255, 255, 0.75) !important;
+}
+
+/* Focus */
+#kc-form input[type="text"]:focus,
+#kc-form input[type="password"]:focus,
+#kc-form input[type="email"]:focus,
+#kc-form input[type="number"]:focus,
+#kc-form .form-control:focus,
+#kc-form .pf-c-form-control:focus,
+input#username:focus,
+input#password:focus {
+    border-bottom-color: rgba(255, 255, 255, 0.72) !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+/* Placeholder */
+#kc-form input::placeholder,
+input::placeholder {
+    color: rgba(255,255,255,0.58) !important;
+    opacity: 1 !important;
+}
+
+#kc-form input,
+#kc-form .form-control,
+#kc-form .pf-c-form-control {
+    box-shadow: none !important;
+    -webkit-box-shadow: none !important;
+    text-shadow: none !important;
+}
+
+/* Autofill Chrome: evita box bianco/giallo */
+#kc-form input:-webkit-autofill,
+#kc-form input:-webkit-autofill:hover,
+#kc-form input:-webkit-autofill:focus,
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+    -webkit-text-fill-color: #ffffff !important;
+    caret-color: var(--adm-lime) !important;
+    box-shadow: 0 0 0 1000px transparent inset !important;
+    -webkit-box-shadow: 0 0 0 1000px transparent inset !important;
+    transition: background-color 9999s ease-out 0s !important;
+}
+
+/* Evita sfondo chiaro quando il browser compila i campi */
+#kc-form input:-internal-autofill-selected {
+    background-color: transparent !important;
+    color: #ffffff !important;
+}
+
+/* ============================================================
+   PASSWORD GROUP / OCCHIO
+   ============================================================ */
+
+/* Keycloak può usare .pf-c-input-group oppure .input-group */
+#kc-form .pf-c-input-group,
+#kc-form .input-group,
+.pf-c-input-group,
+.input-group {
+    display: flex !important;
+    align-items: center !important;
+
+    width: 100% !important;
+    height: 34px !important;
+
+    margin: 0 !important;
+    padding: 0 0 7px 0 !important;
+
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+
+    border: none !important;
+    border-bottom: 1px solid var(--adm-line) !important;
+    border-radius: 0 !important;
+
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+/* Focus password group */
+#kc-form .pf-c-input-group:focus-within,
+#kc-form .input-group:focus-within,
+.pf-c-input-group:focus-within,
+.input-group:focus-within {
+    border-bottom-color: var(--adm-line-focus) !important;
+}
+
+/* Input dentro password group: niente seconda linea */
+#kc-form .pf-c-input-group input,
+#kc-form .input-group input,
+.pf-c-input-group input,
+.input-group input,
+#kc-form .pf-c-input-group .pf-c-form-control,
+#kc-form .input-group .form-control {
+    flex: 1 1 auto !important;
+
+    height: 27px !important;
+    min-height: 27px !important;
+
+    padding: 0 !important;
+    margin: 0 !important;
+
+    border: none !important;
+    border-bottom: none !important;
+    background: transparent !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
+
+    line-height: 27px !important;
+}
+
+/* Bottone occhio password */
+#kc-form .pf-c-input-group .pf-c-button,
+#kc-form .input-group .btn,
+#kc-form .input-group button,
+#kc-form .input-group-addon,
+.pf-c-input-group .pf-c-button,
+.input-group .btn,
+.input-group button,
+.input-group-addon,
+button[data-password-toggle],
+button[aria-controls="password"] {
+    flex: 0 0 auto !important;
+
+    width: 24px !important;
+    height: 27px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+
+    border: none !important;
+    border-radius: 0 !important;
+
+    box-shadow: none !important;
+    outline: none !important;
+
+    color: rgba(255, 255, 255, 0.82) !important;
+    cursor: pointer !important;
+}
+
+/* Icone */
+#kc-form .pf-c-input-group .fa,
+#kc-form .pf-c-input-group .pficon,
+#kc-form .input-group .fa,
+#kc-form .input-group .pficon,
+#kc-form .fa,
+#kc-form .pficon,
+.pf-c-input-group .fa,
+.pf-c-input-group .pficon,
+.input-group .fa,
+.input-group .pficon {
+    color: rgba(255, 255, 255, 0.86) !important;
+    font-size: 13px !important;
+    line-height: 1 !important;
+}
+
+/* Icone decorative input */
+.pf-c-form-control__icon {
+    color: var(--adm-white) !important;
+    opacity: 0.9 !important;
+}
+
+/* ============================================================
+   REMEMBER ME / FORGOT PASSWORD
+   ============================================================ */
+
+#kc-form-options,
+.login-pf-settings {
+    width: 100% !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 12px !important;
+
+    margin: -3px 0 30px 0 !important;
+    padding: 0 !important;
+
+    color: var(--adm-muted) !important;
+    font-size: 13px !important;
+}
+
+/* Checkbox wrapper */
+#kc-form-options .checkbox,
+.login-pf-settings .checkbox,
+.checkbox {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Label remember */
+#kc-form-options label,
+.login-pf-settings label,
+.checkbox label {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    color: var(--adm-muted) !important;
+
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    line-height: 1.2 !important;
+}
+
+/* Checkbox */
+#rememberMe,
+input[type="checkbox"] {
+    width: 14px !important;
+    height: 14px !important;
+    margin: 0 !important;
+    margin-right:10px !important;
+    accent-color: var(--adm-lime);
+    cursor: pointer;
+}
+
+/* Link */
+a,
+#kc-form-options a,
+#kc-registration a,
+.login-pf-signup a,
+#kc-info a {
+    color: var(--adm-lime) !important;
+    font-weight: 600 !important;
+    text-decoration: none !important;
+}
+
+a:hover,
+#kc-form-options a:hover,
+#kc-registration a:hover,
+.login-pf-signup a:hover,
+#kc-info a:hover {
+    color: var(--adm-lime-soft) !important;
+    text-decoration: none !important;
+}
+
+/* ============================================================
+   BOTTONE LOGIN
+   ============================================================ */
+
+#kc-form-buttons {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+#kc-login,
+input#kc-login.btn-primary,
+.pf-c-button.pf-m-primary,
+.pf-c-button.pf-m-block,
+input[type="submit"],
+.btn-primary {
+    display: block !important;
+
+    width: 100% !important;
+    min-height: 48px !important;
+
+    margin: 0 !important;
+    padding: 13px 18px !important;
+
+    border: none !important;
+    border-radius: 999px !important;
+
+    background: var(--adm-white) !important;
+    background-image: none !important;
+
+    box-shadow: none !important;
+    outline: none !important;
+
+    color: #17345a !important;
+
+    font-family: var(--adm-font) !important;
+    font-size: 13px !important;
+    font-weight: 800 !important;
+    line-height: 1.2 !important;
+
+    text-transform: uppercase !important;
+    letter-spacing: 0.10em !important;
+
+    cursor: pointer !important;
+
+    transition:
+            transform 0.18s ease,
+            box-shadow 0.18s ease,
+            background 0.18s ease,
+            opacity 0.18s ease !important;
+}
+
+#kc-login:hover,
+input#kc-login.btn-primary:hover,
+.pf-c-button.pf-m-primary:hover,
+.pf-c-button.pf-m-block:hover,
+input[type="submit"]:hover,
+.btn-primary:hover {
+    background: #f2f2f2 !important;
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18) !important;
+}
+
+#kc-login:active,
+input#kc-login.btn-primary:active,
+.pf-c-button.pf-m-primary:active,
+.pf-c-button.pf-m-block:active,
+input[type="submit"]:active,
+.btn-primary:active {
+    transform: translateY(0);
+    box-shadow: none !important;
+}
+
+/* ============================================================
+   ALERT / FEEDBACK
+   ============================================================ */
+
+.alert,
+.pf-c-alert {
+    border: none !important;
+    border-radius: 10px !important;
+
+    padding: 11px 14px !important;
+    margin: 0 0 20px !important;
+
+    color: var(--adm-white) !important;
+    background: var(--adm-error) !important;
+
+    text-align: center !important;
+
+    font-family: var(--adm-font) !important;
+    font-size: 13px !important;
+    line-height: 1.35 !important;
+}
+
+.alert-success,
+.pf-c-alert.pf-m-success {
+    background: var(--adm-success) !important;
+}
+
+.alert-warning,
+.alert-info,
+.pf-c-alert.pf-m-warning,
+.pf-c-alert.pf-m-info {
+    background: var(--adm-lime-dark) !important;
+}
+
+.kc-feedback-text,
+.pf-c-alert__title,
+.pf-c-alert__description,
+span[id="input-error"] {
+    display: block !important;
+    position: static !important;
+
+    color: var(--adm-white) !important;
+    background: transparent !important;
+
+    border: none !important;
+    border-radius: 0 !important;
+
+    padding: 0 !important;
+    margin: 0 !important;
+
+    font-family: var(--adm-font) !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    line-height: 1.35 !important;
+    text-align: center !important;
+}
+
+.pf-c-alert__icon,
+.pf-c-alert__action,
+.alert .pficon {
+    display: none !important;
+}
+
+/* Errori sotto input */
+#kc-form span[id="input-error"],
+#kc-form .kc-feedback-text {
+    margin-top: 6px !important;
+    font-size: 12px !important;
+    text-align: left !important;
+    color: #ffdddd !important;
+}
+
+/* ============================================================
+   REGISTER / FOOTER
+   ============================================================ */
+
+#kc-registration,
+.login-pf-signup,
+#kc-info {
+    color: var(--adm-muted) !important;
+    text-align: center !important;
+
+    margin-top: 24px !important;
+    padding: 0 !important;
+
+    border: none !important;
+
+    font-size: 13px !important;
+    font-weight: 500 !important;
+}
+
+#kc-registration span,
+.login-pf-signup span,
+#kc-info span {
+    color: var(--adm-muted) !important;
+}
+
+/* ============================================================
+   RESET PASSWORD / REQUIRED ACTIONS GENERICHE
+   ============================================================ */
+
+#kc-reset-password-form,
+#kc-passwd-update-form,
+#kc-register-form {
+    width: 100% !important;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 520px) {
+    body {
+        overflow-y: auto;
+    }
+
+    .login-pf-page {
+        padding: 16px;
+        align-items: flex-start;
+    }
+
+    .card-pf {
+        position: relative;
+        z-index: 1;
+
+        width: 100% !important;
+        max-width: 430px !important;
+        min-width: 360px !important;
+        min-height: 530px !important;
+
+        padding: 54px 58px 46px !important;
+
+        border: 1px solid rgba(255, 255, 255, 0.08) !important;
+        border-radius: 14px !important;
+
+        /* SOLO grigio semi-trasparente */
+        background: rgba(45, 47, 48, 0.78) !important;
+
+        /* Effetto vetro leggero */
+        backdrop-filter: blur(2px) !important;
+        -webkit-backdrop-filter: blur(2px) !important;
+
+        box-shadow: 0 20px 42px rgba(0, 0, 0, 0.22) !important;
+        overflow: hidden;
+    }
+
+    .login-pf-header::before {
+        width: 210px;
+        height: 154px;
+        margin-bottom: 28px;
+    }
+
+    #kc-form .form-group,
+    .form-group,
+    .pf-c-form__group {
+        margin-bottom: 22px !important;
+    }
+
+    #kc-form-options,
+    .login-pf-settings {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 10px !important;
+        margin-bottom: 26px !important;
+    }
+}
+
+@media (max-height: 760px) and (min-width: 521px) {
+    .card-pf {
+        max-width: 400px !important;
+        min-height: 500px !important;
+        padding: 42px 52px 38px !important;
+    }
+
+    .login-pf-header::before {
+        width: 220px;
+        height: 158px;
+        margin-bottom: 26px;
+    }
+
+    #kc-form .form-group,
+    .form-group,
+    .pf-c-form__group {
+        margin-bottom: 21px !important;
+    }
+
+    #kc-form-options,
+    .login-pf-settings {
+        margin-bottom: 26px !important;
+    }
+}
+
+
+/* ============================================================
+   ADM VETRO — Remember me spacing fix
+   ============================================================ */
+
+#kc-form-options .checkbox,
+.login-pf-settings .checkbox,
+.checkbox {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+}
+
+#kc-form-options .checkbox label,
+.login-pf-settings .checkbox label,
+.checkbox label {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+
+    padding-left: 0 !important;
+    margin: 0 !important;
+
+    color: var(--adm-muted) !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    line-height: 1.2 !important;
+}
+
+/* Checkbox dentro la label */
+#kc-form-options .checkbox label input[type="checkbox"],
+.login-pf-settings .checkbox label input[type="checkbox"],
+.checkbox label input[type="checkbox"],
+#rememberMe {
+    position: static !important;
+
+    flex: 0 0 14px !important;
+    width: 14px !important;
+    height: 14px !important;
+
+    margin: 0 10px 0 0 !important;
+    padding: 0 !important;
+
+    transform: none !important;
+    vertical-align: middle !important;
+
+    accent-color: var(--adm-lime) !important;
+}
+
+/* ============================================================
+   ADM VETRO — password eye clean + green underline focus
+   ============================================================ */
+
+/* Linea verde quando clicchi/focus sugli input normali */
+#kc-form input[type="text"]:focus,
+#kc-form input[type="password"]:focus,
+#kc-form input[type="email"]:focus,
+#kc-form input[type="number"]:focus,
+#kc-form .form-control:focus,
+#kc-form .pf-c-form-control:focus,
+input#username:focus,
+input#password:focus {
+    border-bottom-color: var(--adm-lime) !important;
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+/* Linea verde quando clicchi/focus nel gruppo password */
+#kc-form .pf-c-input-group:focus-within,
+#kc-form .input-group:focus-within,
+.pf-c-input-group:focus-within,
+.input-group:focus-within {
+    border-bottom-color: var(--adm-lime) !important;
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+/* Toglie riquadro, bordo e sfondo dal bottone occhio */
+#kc-form .pf-c-input-group .pf-c-button,
+#kc-form .input-group .btn,
+#kc-form .input-group button,
+#kc-form .input-group-addon,
+.pf-c-input-group .pf-c-button,
+.input-group .btn,
+.input-group button,
+.input-group-addon,
+button[data-password-toggle],
+button[aria-controls="password"],
+button[aria-label*="password"],
+button[aria-label*="Password"] {
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+
+    border: none !important;
+    border-color: transparent !important;
+    border-radius: 0 !important;
+
+    outline: none !important;
+    box-shadow: none !important;
+
+    appearance: none !important;
+    -webkit-appearance: none !important;
+
+    color: rgba(255, 255, 255, 0.88) !important;
+}
+
+/* Stati hover/focus/active dell'occhio */
+#kc-form .pf-c-input-group .pf-c-button:hover,
+#kc-form .pf-c-input-group .pf-c-button:focus,
+#kc-form .pf-c-input-group .pf-c-button:active,
+#kc-form .input-group .btn:hover,
+#kc-form .input-group .btn:focus,
+#kc-form .input-group .btn:active,
+#kc-form .input-group button:hover,
+#kc-form .input-group button:focus,
+#kc-form .input-group button:active,
+.pf-c-input-group .pf-c-button:hover,
+.pf-c-input-group .pf-c-button:focus,
+.pf-c-input-group .pf-c-button:active,
+.input-group .btn:hover,
+.input-group .btn:focus,
+.input-group .btn:active,
+.input-group button:hover,
+.input-group button:focus,
+.input-group button:active,
+button[data-password-toggle]:hover,
+button[data-password-toggle]:focus,
+button[data-password-toggle]:active,
+button[aria-controls="password"]:hover,
+button[aria-controls="password"]:focus,
+button[aria-controls="password"]:active {
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+
+    border: none !important;
+    border-color: transparent !important;
+
+    outline: none !important;
+    box-shadow: none !important;
+
+    color: var(--adm-lime) !important;
+}
+
+/* Toglie eventuali pseudo-elementi PatternFly che creano il contorno */
+#kc-form .pf-c-input-group .pf-c-button::before,
+#kc-form .pf-c-input-group .pf-c-button::after,
+#kc-form .input-group button::before,
+#kc-form .input-group button::after,
+.pf-c-input-group .pf-c-button::before,
+.pf-c-input-group .pf-c-button::after,
+.input-group button::before,
+.input-group button::after,
+button[data-password-toggle]::before,
+button[data-password-toggle]::after,
+button[aria-controls="password"]::before,
+button[aria-controls="password"]::after {
+    content: none !important;
+    display: none !important;
+
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+/* Icona occhio pulita */
+#kc-form .pf-c-input-group .pf-c-button i,
+#kc-form .input-group button i,
+#kc-form .fa-eye,
+#kc-form .fa-eye-slash,
+#kc-form .pficon-visible,
+#kc-form .pficon-hidden {
+    color: inherit !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}

@@ -1,0 +1,240 @@
+/* ============================================================
+   ADM VETRO — Register page override
+   Si applica solo alla pagina con #kc-register-form
+   ============================================================ */
+
+/* La pagina register deve poter scrollare */
+body:has(#kc-register-form) {
+    overflow-y: auto !important;
+    align-items: flex-start !important;
+}
+
+/* Container pagina */
+body:has(#kc-register-form) .login-pf-page {
+    min-height: 100vh !important;
+    padding: 28px 24px !important;
+    align-items: flex-start !important;
+}
+
+/* Card register: più larga, scroll interna se serve */
+body:has(#kc-register-form) .card-pf {
+    max-width: 520px !important;
+    min-width: 420px !important;
+    min-height: auto !important;
+    max-height: calc(100vh - 56px) !important;
+
+    padding: 34px 58px 32px !important;
+
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+
+    background: rgba(49, 50, 52, 0.82) !important;
+    backdrop-filter: blur(1.5px) !important;
+    -webkit-backdrop-filter: blur(1.5px) !important;
+}
+
+/* Scroll discreto nella card */
+body:has(#kc-register-form) .card-pf::-webkit-scrollbar {
+    width: 6px;
+}
+
+body:has(#kc-register-form) .card-pf::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.22);
+    border-radius: 999px;
+}
+
+/* Logo più piccolo nel register */
+body:has(#kc-register-form) .login-pf-header::before {
+    width: 180px !important;
+    height: 120px !important;
+    margin: 0 auto 14px !important;
+}
+
+/* Titolo Register */
+body:has(#kc-register-form) #kc-page-title,
+body:has(#kc-register-form) .login-pf-header h1 {
+    display: block !important;
+    margin: 0 0 22px !important;
+
+    color: #ffffff !important;
+    font-family: var(--adm-font) !important;
+    font-size: 22px !important;
+    font-weight: 800 !important;
+    line-height: 1.2 !important;
+    text-align: center !important;
+}
+
+/* Testo required */
+body:has(#kc-register-form) .instruction,
+body:has(#kc-register-form) .required,
+body:has(#kc-register-form) .kc-required {
+    color: rgba(255,255,255,0.86) !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+}
+
+/* Form register */
+body:has(#kc-register-form) #kc-register-form {
+    width: 100% !important;
+}
+
+/* Campi più compatti */
+body:has(#kc-register-form) #kc-register-form .form-group,
+body:has(#kc-register-form) #kc-register-form .pf-c-form__group {
+    margin-bottom: 18px !important;
+}
+
+/* Label */
+body:has(#kc-register-form) #kc-register-form label,
+body:has(#kc-register-form) #kc-register-form .control-label,
+body:has(#kc-register-form) #kc-register-form .pf-c-form__label {
+    color: #ffffff !important;
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    margin-bottom: 6px !important;
+    text-align: left !important;
+}
+
+/* Input register puliti */
+body:has(#kc-register-form) #kc-register-form input[type="text"],
+body:has(#kc-register-form) #kc-register-form input[type="password"],
+body:has(#kc-register-form) #kc-register-form input[type="email"],
+body:has(#kc-register-form) #kc-register-form .form-control,
+body:has(#kc-register-form) #kc-register-form .pf-c-form-control {
+    height: 34px !important;
+    padding: 0 28px 6px 0 !important;
+
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+
+    border: none !important;
+    border-bottom: 1px solid rgba(255,255,255,0.42) !important;
+    border-radius: 0 !important;
+
+    box-shadow: none !important;
+    outline: none !important;
+
+    color: #ffffff !important;
+    font-family: var(--adm-font) !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+}
+
+/* Focus verde */
+body:has(#kc-register-form) #kc-register-form input[type="text"]:focus,
+body:has(#kc-register-form) #kc-register-form input[type="password"]:focus,
+body:has(#kc-register-form) #kc-register-form input[type="email"]:focus,
+body:has(#kc-register-form) #kc-register-form .form-control:focus,
+body:has(#kc-register-form) #kc-register-form .pf-c-form-control:focus {
+    border-bottom-color: var(--adm-lime) !important;
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+/* Password group register */
+body:has(#kc-register-form) #kc-register-form .pf-c-input-group,
+body:has(#kc-register-form) #kc-register-form .input-group {
+    height: 34px !important;
+    padding: 0 0 6px 0 !important;
+
+    background: transparent !important;
+    border: none !important;
+    border-bottom: 1px solid rgba(255,255,255,0.42) !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+}
+
+/* Focus password group */
+body:has(#kc-register-form) #kc-register-form .pf-c-input-group:focus-within,
+body:has(#kc-register-form) #kc-register-form .input-group:focus-within {
+    border-bottom-color: var(--adm-lime) !important;
+}
+
+/* Input dentro password group */
+body:has(#kc-register-form) #kc-register-form .pf-c-input-group input,
+body:has(#kc-register-form) #kc-register-form .input-group input {
+    border: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    height: 28px !important;
+}
+
+/* Occhio password pulito */
+body:has(#kc-register-form) #kc-register-form .pf-c-input-group .pf-c-button,
+body:has(#kc-register-form) #kc-register-form .input-group button,
+body:has(#kc-register-form) #kc-register-form .input-group .btn {
+    width: 22px !important;
+    min-width: 22px !important;
+    height: 28px !important;
+
+    padding: 0 !important;
+    margin: 0 !important;
+
+    background: transparent !important;
+    border: none !important;
+    border-color: transparent !important;
+    border-radius: 0 !important;
+
+    box-shadow: none !important;
+    outline: none !important;
+
+    color: rgba(255,255,255,0.86) !important;
+}
+
+/* Hover/focus occhio */
+body:has(#kc-register-form) #kc-register-form .pf-c-input-group .pf-c-button:hover,
+body:has(#kc-register-form) #kc-register-form .pf-c-input-group .pf-c-button:focus,
+body:has(#kc-register-form) #kc-register-form .input-group button:hover,
+body:has(#kc-register-form) #kc-register-form .input-group button:focus {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    outline: none !important;
+    color: var(--adm-lime) !important;
+}
+
+/* Pseudo elementi PatternFly */
+body:has(#kc-register-form) #kc-register-form .pf-c-button::before,
+body:has(#kc-register-form) #kc-register-form .pf-c-button::after,
+body:has(#kc-register-form) #kc-register-form .pf-c-input-group::before,
+body:has(#kc-register-form) #kc-register-form .pf-c-input-group::after {
+    display: none !important;
+    content: none !important;
+}
+
+/* Link back login */
+body:has(#kc-register-form) #kc-form-options,
+body:has(#kc-register-form) #kc-info,
+body:has(#kc-register-form) #kc-registration {
+    margin-top: 20px !important;
+    text-align: left !important;
+}
+
+/* Bottone register */
+body:has(#kc-register-form) #kc-register-form input[type="submit"],
+body:has(#kc-register-form) #kc-register-form .btn-primary,
+body:has(#kc-register-form) #kc-register-form .pf-c-button.pf-m-primary {
+    margin-top: 14px !important;
+    min-height: 44px !important;
+}
+
+/* Mobile */
+@media (max-width: 620px) {
+    body:has(#kc-register-form) .login-pf-page {
+        padding: 16px !important;
+    }
+
+    body:has(#kc-register-form) .card-pf {
+        min-width: 0 !important;
+        max-width: calc(100vw - 32px) !important;
+        max-height: none !important;
+        padding: 30px 30px 32px !important;
+    }
+
+    body:has(#kc-register-form) .login-pf-header::before {
+        width: 160px !important;
+        height: 106px !important;
+    }
+}
