@@ -106,25 +106,18 @@ body::before {
 .card-pf {
     position: relative;
     z-index: 1;
-
     width: 100% !important;
     max-width: 378px !important;
     min-width: 340px !important;
     min-height: 515px !important;
-
     padding: 56px 54px 42px !important;
-
     border: 1px solid rgba(255,255,255,0.06) !important;
     border-radius: var(--consoli-radius) !important;
-
     background: rgba(22, 82, 138, 0.82) !important;
-
     backdrop-filter: blur(1.2px) !important;
     -webkit-backdrop-filter: blur(1.2px) !important;
-
     box-shadow: 0 20px 42px rgba(0, 0, 0, 0.20) !important;
-
-    overflow: hidden;
+    overflow: visible!important;
 }
 
 .login-pf-page .card-pf p {
@@ -529,13 +522,10 @@ button[aria-controls="password"] {
 #kc-form-options a,
 .login-pf-settings a {
     display: inline-block !important;
-
     color: var(--consoli-white) !important;
-
     font-family: var(--consoli-font) !important;
     font-size: 12px !important;
     font-weight: 600 !important;
-
     text-decoration: none !important;
 }
 
@@ -752,4 +742,161 @@ span[id="input-error"] {
         gap: 10px !important;
         margin-bottom: 24px !important;
     }
+}
+
+
+/* ============================================================
+   REMEMBER ME + FORGOT PASSWORD (Keycloak 24 / keycloak.v2)
+   ============================================================ */
+
+/* Wrapper riga opzioni */
+.form-group.login-pf-settings {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 12px !important;
+    width: 100% !important;
+    margin: -4px 0 26px 0 !important;
+    padding: 0 !important;
+}
+
+/* Blocco remember me */
+#kc-form-options {
+    display: flex !important;
+    align-items: center !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+#kc-form-options .checkbox {
+    display: flex !important;
+    align-items: center !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+#kc-form-options .checkbox label {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    width: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    color: var(--consoli-muted) !important;
+    font-size: 12px !important;
+    font-weight: 400 !important;
+}
+
+#kc-form-options input[type="checkbox"],
+#rememberMe {
+    position: static !important;
+    width: 13px !important;
+    height: 13px !important;
+    margin: 0 6px 0 0 !important;
+    padding: 0 !important;
+    accent-color: var(--consoli-white) !important;
+    cursor: pointer !important;
+    /* annulla qualsiasi clip/overflow ereditato */
+    clip: auto !important;
+    clip-path: none !important
+}
+
+
+
+div#kc-form-options {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    overflow: visible !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+div#kc-form-options div.checkbox {
+    display: flex !important;
+    align-items: center !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+div#kc-form-options div.checkbox label {
+    display: inline-flex !important;
+    align-items: center !important;
+    flex-direction: row !important;
+    width: auto !important;
+    min-width: 0 !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    gap: 6px !important;
+    color: var(--consoli-muted) !important;
+    font-size: 12px !important;
+    font-weight: 400 !important;
+    line-height: 1.2 !important;
+    cursor: pointer !important;
+}
+
+div#kc-form-options div.checkbox label input#rememberMe {
+    display: inline-block !important;
+    position: static !important;
+    float: none !important;
+    width: 13px !important;
+    min-width: 13px !important;
+    max-width: 13px !important;
+    height: 13px !important;
+    min-height: 13px !important;
+    max-height: 13px !important;
+    flex: 0 0 13px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    clip: auto !important;
+    clip-path: none !important;
+    overflow: visible !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    accent-color: var(--consoli-white) !important;
+    cursor: pointer !important;
+}
+
+
+/* ============================================================
+   FIX REGISTER - fuori dalla card in Keycloak 24
+   ============================================================ */
+
+#kc-info.login-pf-signup {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+
+    margin: 16px auto 0 !important;
+    padding: 0 !important;
+
+    max-width: 378px !important;
+    width: 100% !important;
+
+    text-align: center !important;
+    color: var(--consoli-muted) !important;
+    font-family: var(--consoli-font) !important;
+    font-size: 13px !important;
+}
+
+#kc-info.login-pf-signup span,
+#kc-info.login-pf-signup #kc-registration span {
+    color: var(--consoli-muted) !important;
+    font-size: 13px !important;
+    font-weight: 400 !important;
+}
+
+#kc-info.login-pf-signup a,
+#kc-info.login-pf-signup #kc-registration a {
+    color: var(--consoli-white) !important;
+    font-weight: 700 !important;
+    font-size: 13px !important;
+    text-decoration: none !important;
+    margin-left: 4px !important;
+}
+
+#kc-info.login-pf-signup a:hover {
+    text-decoration: underline !important;
 }
