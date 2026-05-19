@@ -1,0 +1,642 @@
+/* ============================================================
+   PAPALINI — OTP Page
+   File: login/resources/css/otp.css
+   ============================================================ */
+
+body:has(#kc-totp-settings) {
+    overflow-y: auto !important;
+}
+
+body:has(#kc-totp-settings) .login-pf-page {
+    align-items: flex-start !important;
+    padding: 22px !important;
+}
+
+body:has(#kc-totp-settings) .card-pf {
+    max-width: 430px !important;
+    min-width: 360px !important;
+    min-height: auto !important;
+    max-height: calc(100vh - 44px) !important;
+
+    padding: 34px 46px 32px !important;
+
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+}
+
+body:has(#kc-totp-settings) .card-pf::-webkit-scrollbar {
+    width: 0 !important;
+    height: 0 !important;
+    display: none !important;
+}
+
+body:has(#kc-totp-settings) .login-pf-header::before {
+    width: 205px !important;
+    height: 78px !important;
+    margin: 0 auto 18px !important;
+}
+
+body:has(#kc-totp-settings) #kc-page-title {
+    display: block !important;
+
+    margin: 0 0 14px !important;
+
+    color: var(--papalini-blue) !important;
+
+    font-size: 20px !important;
+    font-weight: 800 !important;
+
+    text-align: center !important;
+}
+
+/* Alert */
+body:has(#kc-totp-settings) #kc-content-wrapper > .alert,
+body:has(#kc-totp-settings) #kc-content-wrapper > .pf-c-alert {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    width: 88% !important;
+    max-width: 320px !important;
+    min-height: 34px !important;
+
+    margin: 0 auto 14px auto !important;
+    padding: 8px 14px !important;
+
+    border: none !important;
+    border-radius: 8px !important;
+
+    background: var(--papalini-blue) !important;
+    color: var(--papalini-white) !important;
+
+    box-shadow: none !important;
+}
+
+body:has(#kc-totp-settings) #kc-content-wrapper > .alert .kc-feedback-text,
+body:has(#kc-totp-settings) #kc-content-wrapper > .pf-c-alert .kc-feedback-text,
+body:has(#kc-totp-settings) #kc-content-wrapper > .alert .pf-c-alert__title,
+body:has(#kc-totp-settings) #kc-content-wrapper > .pf-c-alert .pf-c-alert__title {
+    display: block !important;
+    position: static !important;
+
+    color: var(--papalini-white) !important;
+    background: transparent !important;
+
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    line-height: 1.25 !important;
+
+    text-align: center !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+body:has(#kc-totp-settings) .pf-c-alert__icon,
+body:has(#kc-totp-settings) .pf-c-alert__action,
+body:has(#kc-totp-settings) .pficon {
+    display: none !important;
+}
+
+/* Testi istruzioni */
+body:has(#kc-totp-settings) #kc-totp-settings {
+    color: var(--papalini-text) !important;
+    font-family: var(--papalini-font) !important;
+}
+
+body:has(#kc-totp-settings) #kc-totp-settings p,
+body:has(#kc-totp-settings) #kc-totp-settings li {
+    color: var(--papalini-text) !important;
+
+    font-size: 13px !important;
+    line-height: 1.45 !important;
+}
+
+body:has(#kc-totp-settings) #kc-totp-settings ol {
+    padding-left: 18px !important;
+    margin: 0 0 12px !important;
+}
+
+body:has(#kc-totp-settings) #kc-totp-settings ul {
+    list-style: none !important;
+
+    padding: 0 !important;
+    margin: 8px 0 10px !important;
+}
+
+body:has(#kc-totp-settings) #kc-totp-settings ul li {
+    padding: 8px 12px !important;
+    margin-bottom: 6px !important;
+
+    background: rgba(232, 238, 248, 0.92) !important;
+
+    border-left: 3px solid var(--papalini-blue) !important;
+    border-radius: 4px !important;
+}
+
+/* QR centrato */
+body:has(#kc-totp-settings) #kc-totp-qr,
+body:has(#kc-totp-settings) .kc-totp-qr {
+    width: 100% !important;
+    text-align: center !important;
+}
+
+body:has(#kc-totp-settings) #kc-totp-qr img,
+body:has(#kc-totp-settings) .kc-totp-qr img,
+body:has(#kc-totp-settings) #kc-totp-settings li img {
+    display: block !important;
+
+    width: 180px !important;
+    height: 180px !important;
+
+    margin: 12px auto !important;
+
+    border: 6px solid var(--papalini-white) !important;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.12) !important;
+}
+
+/* Link unable to scan */
+body:has(#kc-totp-settings) a {
+    color: var(--papalini-blue) !important;
+    font-weight: 700 !important;
+    text-decoration: none !important;
+}
+
+body:has(#kc-totp-settings) a:hover {
+    text-decoration: underline !important;
+}
+
+/* Form OTP */
+body:has(#kc-totp-settings) #kc-totp-settings-form {
+    margin-top: 12px !important;
+}
+
+body:has(#kc-totp-settings) #kc-totp-settings-form .form-group {
+    margin-bottom: 16px !important;
+}
+
+body:has(#kc-totp-settings) #kc-totp-settings-form label,
+body:has(#kc-totp-settings) #kc-totp-settings-form .control-label {
+    display: block !important;
+
+    color: var(--papalini-blue) !important;
+
+    font-size: 12px !important;
+    font-weight: 700 !important;
+
+    margin-bottom: 6px !important;
+
+    text-align: left !important;
+}
+
+body:has(#kc-totp-settings) #kc-totp-settings-form input[type="text"],
+body:has(#kc-totp-settings) #kc-totp-settings-form input[type="password"],
+body:has(#kc-totp-settings) #kc-totp-settings-form .form-control {
+    height: 44px !important;
+    padding: 0 14px !important;
+
+    background: rgba(232, 238, 248, 0.92) !important;
+
+    border: none !important;
+    border-bottom: 1px solid var(--papalini-line) !important;
+    border-radius: 0 !important;
+
+    color: var(--papalini-text) !important;
+
+    box-shadow: none !important;
+    outline: none !important;
+
+    font-size: 14px !important;
+}
+
+body:has(#kc-totp-settings) #kc-totp-settings-form input:focus,
+body:has(#kc-totp-settings) #kc-totp-settings-form .form-control:focus {
+    border-bottom-color: var(--papalini-blue) !important;
+}
+
+body:has(#kc-totp-settings) #kc-totp-settings-form input#totp,
+body:has(#kc-totp-settings) #kc-totp-settings-form input[name="totp"] {
+    text-align: center !important;
+    letter-spacing: 0.14em !important;
+    font-weight: 700 !important;
+}
+
+body:has(#kc-totp-settings) #kc-totp-settings-form .checkbox label {
+    display: inline-flex !important;
+    align-items: center !important;
+    color: var(--papalini-muted) !important;
+}
+
+/* Mobile */
+@media (max-width: 520px) {
+    body:has(#kc-totp-settings) .login-pf-page {
+        padding: 16px !important;
+    }
+
+    body:has(#kc-totp-settings) .card-pf {
+        min-width: 0 !important;
+        max-width: calc(100vw - 32px) !important;
+        max-height: none !important;
+        padding: 30px 28px 32px !important;
+    }
+
+    body:has(#kc-totp-settings) #kc-totp-qr img,
+    body:has(#kc-totp-settings) .kc-totp-qr img,
+    body:has(#kc-totp-settings) #kc-totp-settings li img {
+        width: 150px !important;
+        height: 150px !important;
+    }
+}
+
+
+/* ============================================================
+   PAPALINI — OTP Login Challenge
+   Compatibile con Keycloak 24 / 25 / 26
+   Pagina: richiesta codice OTP dopo username/password
+   ============================================================ */
+
+/* La pagina OTP login challenge */
+body:has(#kc-otp-login-form),
+body:has(input[name="otp"]) {
+    overflow-y: auto !important;
+}
+
+/* Card OTP: stessa estetica della login, ma più compatta */
+body:has(#kc-otp-login-form) .card-pf,
+body:has(input[name="otp"]) .card-pf {
+    max-width: 365px !important;
+    min-width: 330px !important;
+    min-height: 405px !important;
+
+    padding: 50px 46px 40px !important;
+
+    background: rgba(255, 255, 255, 0.88) !important;
+    border: 1px solid rgba(255, 255, 255, 0.72) !important;
+    border-radius: 10px !important;
+
+    backdrop-filter: blur(2px) !important;
+    -webkit-backdrop-filter: blur(2px) !important;
+
+    box-shadow: 0 18px 38px rgba(0, 0, 0, 0.18) !important;
+}
+
+/* Logo */
+body:has(#kc-otp-login-form) .login-pf-header::before,
+body:has(input[name="otp"]) .login-pf-header::before {
+    width: 220px !important;
+    height: 84px !important;
+    margin: 0 auto 24px !important;
+
+    background-image: url('../img/logo_papalini.png') !important;
+    background-size: contain !important;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+}
+
+/* Rende visibile il titolo OTP, se Keycloak lo genera */
+body:has(#kc-otp-login-form) #kc-page-title,
+body:has(input[name="otp"]) #kc-page-title,
+body:has(#kc-otp-login-form) .login-pf-header h1,
+body:has(input[name="otp"]) .login-pf-header h1 {
+    display: block !important;
+
+    margin: 0 0 22px !important;
+
+    color: var(--papalini-blue, #253466) !important;
+
+    font-family: var(--papalini-font, 'Open Sans', Arial, sans-serif) !important;
+    font-size: 22px !important;
+    font-weight: 800 !important;
+    line-height: 1.2 !important;
+
+    text-align: center !important;
+}
+
+/* Se il titolo non è utile, puoi nasconderlo lasciando solo label e input */
+/*
+body:has(#kc-otp-login-form) #kc-page-title,
+body:has(input[name="otp"]) #kc-page-title {
+    display: none !important;
+}
+*/
+
+/* Form OTP */
+body:has(#kc-otp-login-form) #kc-otp-login-form,
+body:has(input[name="otp"]) #kc-otp-login-form,
+body:has(input[name="otp"]) form {
+    width: 100% !important;
+}
+
+/* Form group */
+body:has(#kc-otp-login-form) .form-group,
+body:has(input[name="otp"]) .form-group,
+body:has(#kc-otp-login-form) .pf-c-form__group,
+body:has(input[name="otp"]) .pf-c-form__group {
+    width: 100% !important;
+    margin: 0 0 20px 0 !important;
+    padding: 0 !important;
+}
+
+/* Colonne Bootstrap/PatternFly: evita layout compresso */
+body:has(#kc-otp-login-form) .col-xs-12,
+body:has(#kc-otp-login-form) .col-sm-12,
+body:has(#kc-otp-login-form) .col-md-12,
+body:has(#kc-otp-login-form) div[class*="col-"],
+body:has(input[name="otp"]) .col-xs-12,
+body:has(input[name="otp"]) .col-sm-12,
+body:has(input[name="otp"]) .col-md-12,
+body:has(input[name="otp"]) div[class*="col-"] {
+    width: 100% !important;
+    max-width: 100% !important;
+    float: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Label "One-time code" visibile */
+body:has(#kc-otp-login-form) label,
+body:has(input[name="otp"]) label,
+body:has(#kc-otp-login-form) .control-label,
+body:has(input[name="otp"]) .control-label,
+body:has(#kc-otp-login-form) .pf-c-form__label,
+body:has(input[name="otp"]) .pf-c-form__label {
+    display: block !important;
+
+    width: 100% !important;
+
+    margin: 0 0 8px 0 !important;
+    padding: 0 !important;
+
+    color: var(--papalini-blue, #253466) !important;
+
+    font-family: var(--papalini-font, 'Open Sans', Arial, sans-serif) !important;
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    line-height: 1.2 !important;
+
+    text-align: left !important;
+    text-transform: none !important;
+    letter-spacing: 0 !important;
+}
+
+/* Input OTP */
+body:has(#kc-otp-login-form) input[name="otp"],
+body:has(input[name="otp"]) input[name="otp"],
+body:has(#kc-otp-login-form) input#otp,
+body:has(input[name="otp"]) input#otp,
+body:has(#kc-otp-login-form) input[autocomplete="one-time-code"],
+body:has(input[name="otp"]) input[autocomplete="one-time-code"] {
+    display: block !important;
+
+    width: 100% !important;
+    max-width: 100% !important;
+
+    height: 48px !important;
+
+    margin: 0 !important;
+    padding: 0 14px !important;
+
+    background: rgba(232, 238, 248, 0.94) !important;
+    background-color: rgba(232, 238, 248, 0.94) !important;
+    background-image: none !important;
+
+    border: none !important;
+    border-bottom: 1px solid rgba(37, 52, 102, 0.38) !important;
+    border-radius: 0 !important;
+
+    box-shadow: none !important;
+    outline: none !important;
+
+    color: var(--papalini-blue, #253466) !important;
+    caret-color: var(--papalini-blue, #253466) !important;
+
+    font-family: var(--papalini-font, 'Open Sans', Arial, sans-serif) !important;
+    font-size: 17px !important;
+    font-weight: 700 !important;
+    line-height: 48px !important;
+
+    text-align: center !important;
+    letter-spacing: 0.18em !important;
+
+    appearance: none !important;
+    -webkit-appearance: none !important;
+
+    transition:
+            border-color 0.2s ease,
+            background 0.2s ease !important;
+}
+
+/* Focus OTP */
+body:has(#kc-otp-login-form) input[name="otp"]:focus,
+body:has(input[name="otp"]) input[name="otp"]:focus,
+body:has(#kc-otp-login-form) input#otp:focus,
+body:has(input[name="otp"]) input#otp:focus,
+body:has(#kc-otp-login-form) input[autocomplete="one-time-code"]:focus,
+body:has(input[name="otp"]) input[autocomplete="one-time-code"]:focus {
+    border-bottom-color: var(--papalini-blue, #253466) !important;
+    background: rgba(232, 238, 248, 1) !important;
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+/* Placeholder */
+body:has(#kc-otp-login-form) input[name="otp"]::placeholder,
+body:has(input[name="otp"]) input[name="otp"]::placeholder,
+body:has(#kc-otp-login-form) input#otp::placeholder,
+body:has(input[name="otp"]) input#otp::placeholder {
+    color: rgba(37, 52, 102, 0.46) !important;
+    opacity: 1 !important;
+    letter-spacing: 0.05em !important;
+}
+
+/* Testi di aiuto / errori */
+body:has(#kc-otp-login-form) .instruction,
+body:has(input[name="otp"]) .instruction,
+body:has(#kc-otp-login-form) .help-block,
+body:has(input[name="otp"]) .help-block,
+body:has(#kc-otp-login-form) small,
+body:has(input[name="otp"]) small {
+    display: block !important;
+
+    margin: 8px 0 0 !important;
+
+    color: rgba(37, 52, 102, 0.68) !important;
+
+    font-family: var(--papalini-font, 'Open Sans', Arial, sans-serif) !important;
+    font-size: 12px !important;
+    line-height: 1.35 !important;
+}
+
+/* Messaggi errore sotto input */
+body:has(#kc-otp-login-form) span[id="input-error"],
+body:has(input[name="otp"]) span[id="input-error"],
+body:has(#kc-otp-login-form) .kc-feedback-text,
+body:has(input[name="otp"]) .kc-feedback-text {
+    display: block !important;
+    position: static !important;
+
+    margin: 8px 0 0 !important;
+    padding: 0 !important;
+
+    color: var(--papalini-error, #b72034) !important;
+    background: transparent !important;
+
+    border: none !important;
+    box-shadow: none !important;
+
+    font-family: var(--papalini-font, 'Open Sans', Arial, sans-serif) !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    line-height: 1.35 !important;
+
+    text-align: left !important;
+}
+
+/* Pulsanti */
+body:has(#kc-otp-login-form) #kc-login,
+body:has(input[name="otp"]) #kc-login,
+body:has(#kc-otp-login-form) input[type="submit"],
+body:has(input[name="otp"]) input[type="submit"],
+body:has(#kc-otp-login-form) button[type="submit"],
+body:has(input[name="otp"]) button[type="submit"],
+body:has(#kc-otp-login-form) .btn-primary,
+body:has(input[name="otp"]) .btn-primary,
+body:has(#kc-otp-login-form) .pf-c-button.pf-m-primary,
+body:has(input[name="otp"]) .pf-c-button.pf-m-primary {
+    display: block !important;
+
+    width: 100% !important;
+    min-height: 42px !important;
+
+    margin: 8px 0 0 0 !important;
+    padding: 12px 18px !important;
+
+    border: none !important;
+    border-radius: 9px !important;
+
+    background: var(--papalini-blue, #253466) !important;
+    background-image: none !important;
+
+    color: #ffffff !important;
+
+    box-shadow: none !important;
+    outline: none !important;
+
+    font-family: var(--papalini-font, 'Open Sans', Arial, sans-serif) !important;
+    font-size: 12px !important;
+    font-weight: 800 !important;
+    line-height: 1.2 !important;
+
+    text-transform: uppercase !important;
+    letter-spacing: 0.08em !important;
+
+    cursor: pointer !important;
+
+    transition:
+            background 0.18s ease,
+            transform 0.18s ease,
+            box-shadow 0.18s ease !important;
+}
+
+body:has(#kc-otp-login-form) #kc-login:hover,
+body:has(input[name="otp"]) #kc-login:hover,
+body:has(#kc-otp-login-form) input[type="submit"]:hover,
+body:has(input[name="otp"]) input[type="submit"]:hover,
+body:has(#kc-otp-login-form) button[type="submit"]:hover,
+body:has(input[name="otp"]) button[type="submit"]:hover,
+body:has(#kc-otp-login-form) .btn-primary:hover,
+body:has(input[name="otp"]) .btn-primary:hover,
+body:has(#kc-otp-login-form) .pf-c-button.pf-m-primary:hover,
+body:has(input[name="otp"]) .pf-c-button.pf-m-primary:hover {
+    background: var(--papalini-blue-dark, #1d294f) !important;
+    transform: translateY(-1px);
+    box-shadow: 0 8px 18px rgba(37, 52, 102, 0.20) !important;
+}
+
+/* Restart login link, se presente */
+body:has(#kc-otp-login-form) #kc-info,
+body:has(input[name="otp"]) #kc-info,
+body:has(#kc-otp-login-form) #kc-form-options,
+body:has(input[name="otp"]) #kc-form-options {
+    display: block !important;
+
+    margin-top: 18px !important;
+
+    color: rgba(37, 52, 102, 0.68) !important;
+
+    text-align: center !important;
+}
+
+body:has(#kc-otp-login-form) #kc-info a,
+body:has(input[name="otp"]) #kc-info a,
+body:has(#kc-otp-login-form) #kc-form-options a,
+body:has(input[name="otp"]) #kc-form-options a {
+    color: var(--papalini-blue, #253466) !important;
+    font-weight: 700 !important;
+    text-decoration: none !important;
+}
+
+body:has(#kc-otp-login-form) #kc-info a:hover,
+body:has(input[name="otp"]) #kc-info a:hover,
+body:has(#kc-otp-login-form) #kc-form-options a:hover,
+body:has(input[name="otp"]) #kc-form-options a:hover {
+    text-decoration: underline !important;
+}
+
+/* Alert generale */
+body:has(#kc-otp-login-form) .alert,
+body:has(input[name="otp"]) .alert,
+body:has(#kc-otp-login-form) .pf-c-alert,
+body:has(input[name="otp"]) .pf-c-alert {
+    border: none !important;
+    border-radius: 8px !important;
+
+    padding: 10px 12px !important;
+    margin: 0 0 18px !important;
+
+    background: var(--papalini-error, #b72034) !important;
+    color: #ffffff !important;
+
+    text-align: center !important;
+
+    font-family: var(--papalini-font, 'Open Sans', Arial, sans-serif) !important;
+    font-size: 12px !important;
+    line-height: 1.35 !important;
+}
+
+body:has(#kc-otp-login-form) .pf-c-alert__icon,
+body:has(input[name="otp"]) .pf-c-alert__icon,
+body:has(#kc-otp-login-form) .pf-c-alert__action,
+body:has(input[name="otp"]) .pf-c-alert__action,
+body:has(#kc-otp-login-form) .alert .pficon,
+body:has(input[name="otp"]) .alert .pficon {
+    display: none !important;
+}
+
+/* Responsive */
+@media (max-width: 520px) {
+    body:has(#kc-otp-login-form) .login-pf-page,
+    body:has(input[name="otp"]) .login-pf-page {
+        padding: 16px !important;
+        align-items: flex-start !important;
+    }
+
+    body:has(#kc-otp-login-form) .card-pf,
+    body:has(input[name="otp"]) .card-pf {
+        min-width: 0 !important;
+        max-width: calc(100vw - 32px) !important;
+        min-height: auto !important;
+
+        padding: 42px 32px 36px !important;
+    }
+
+    body:has(#kc-otp-login-form) .login-pf-header::before,
+    body:has(input[name="otp"]) .login-pf-header::before {
+        width: 200px !important;
+        height: 76px !important;
+        margin-bottom: 24px !important;
+    }
+}

@@ -1,0 +1,219 @@
+/* ============================================================
+   PAPALINI — Register Page
+   File: login/resources/css/register.css
+   ============================================================ */
+
+body:has(#kc-register-form) {
+    overflow-y: auto !important;
+    align-items: flex-start !important;
+}
+
+body:has(#kc-register-form) .login-pf-page {
+    min-height: 100vh !important;
+    padding: 28px 24px !important;
+    align-items: flex-start !important;
+}
+
+body:has(#kc-register-form) .card-pf {
+    max-width: 460px !important;
+    min-width: 390px !important;
+    min-height: auto !important;
+    max-height: calc(100vh - 56px) !important;
+
+    padding: 34px 52px 32px !important;
+
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+}
+
+body:has(#kc-register-form) .card-pf::-webkit-scrollbar {
+    width: 0 !important;
+    height: 0 !important;
+    display: none !important;
+}
+
+body:has(#kc-register-form) .login-pf-header::before {
+    width: 210px !important;
+    height: 80px !important;
+    margin: 0 auto 18px !important;
+}
+
+body:has(#kc-register-form) #kc-page-title,
+body:has(#kc-register-form) .login-pf-header h1 {
+    display: block !important;
+
+    margin: 0 0 22px !important;
+
+    color: var(--papalini-blue) !important;
+
+    font-family: var(--papalini-font) !important;
+    font-size: 24px !important;
+    font-weight: 800 !important;
+    line-height: 1.2 !important;
+
+    text-align: center !important;
+}
+
+body:has(#kc-register-form) .instruction,
+body:has(#kc-register-form) .required,
+body:has(#kc-register-form) .kc-required {
+    color: var(--papalini-muted) !important;
+
+    font-size: 13px !important;
+    font-weight: 500 !important;
+}
+
+body:has(#kc-register-form) #kc-register-form {
+    width: 100% !important;
+}
+
+body:has(#kc-register-form) #kc-register-form .form-group,
+body:has(#kc-register-form) #kc-register-form .pf-c-form__group {
+    margin-bottom: 16px !important;
+}
+
+body:has(#kc-register-form) #kc-register-form label,
+body:has(#kc-register-form) #kc-register-form .control-label,
+body:has(#kc-register-form) #kc-register-form .pf-c-form__label {
+    display: block !important;
+
+    color: var(--papalini-blue) !important;
+
+    font-size: 12px !important;
+    font-weight: 700 !important;
+
+    margin-bottom: 6px !important;
+
+    text-align: left !important;
+}
+
+/* Input register */
+body:has(#kc-register-form) #kc-register-form input[type="text"],
+body:has(#kc-register-form) #kc-register-form input[type="password"],
+body:has(#kc-register-form) #kc-register-form input[type="email"],
+body:has(#kc-register-form) #kc-register-form .form-control,
+body:has(#kc-register-form) #kc-register-form .pf-c-form-control {
+    height: 42px !important;
+    padding: 0 40px 0 14px !important;
+
+    background: rgba(232, 238, 248, 0.92) !important;
+
+    border: none !important;
+    border-bottom: 1px solid var(--papalini-line) !important;
+    border-radius: 0 !important;
+
+    box-shadow: none !important;
+    outline: none !important;
+
+    color: var(--papalini-text) !important;
+
+    font-family: var(--papalini-font) !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+}
+
+body:has(#kc-register-form) #kc-register-form input[type="text"]:focus,
+body:has(#kc-register-form) #kc-register-form input[type="password"]:focus,
+body:has(#kc-register-form) #kc-register-form input[type="email"]:focus,
+body:has(#kc-register-form) #kc-register-form .form-control:focus,
+body:has(#kc-register-form) #kc-register-form .pf-c-form-control:focus {
+    border-bottom-color: var(--papalini-blue) !important;
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+/* Password group */
+body:has(#kc-register-form) #kc-register-form .pf-c-input-group,
+body:has(#kc-register-form) #kc-register-form .input-group {
+    height: 42px !important;
+
+    background: rgba(232, 238, 248, 0.92) !important;
+
+    border: none !important;
+    border-bottom: 1px solid var(--papalini-line) !important;
+    border-radius: 0 !important;
+
+    box-shadow: none !important;
+}
+
+body:has(#kc-register-form) #kc-register-form .pf-c-input-group:focus-within,
+body:has(#kc-register-form) #kc-register-form .input-group:focus-within {
+    border-bottom-color: var(--papalini-blue) !important;
+}
+
+body:has(#kc-register-form) #kc-register-form .pf-c-input-group input,
+body:has(#kc-register-form) #kc-register-form .input-group input {
+    height: 42px !important;
+    padding: 0 8px 0 14px !important;
+
+    border: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+/* Occhio */
+body:has(#kc-register-form) #kc-register-form .pf-c-input-group .pf-c-button,
+body:has(#kc-register-form) #kc-register-form .input-group button,
+body:has(#kc-register-form) #kc-register-form .input-group .btn {
+    width: 36px !important;
+    min-width: 36px !important;
+    height: 42px !important;
+
+    padding: 0 !important;
+    margin: 0 !important;
+
+    background: transparent !important;
+    border: none !important;
+    border-color: transparent !important;
+    border-radius: 0 !important;
+
+    box-shadow: none !important;
+    outline: none !important;
+
+    color: var(--papalini-blue) !important;
+}
+
+body:has(#kc-register-form) #kc-register-form .pf-c-button::before,
+body:has(#kc-register-form) #kc-register-form .pf-c-button::after,
+body:has(#kc-register-form) #kc-register-form .pf-c-input-group::before,
+body:has(#kc-register-form) #kc-register-form .pf-c-input-group::after {
+    display: none !important;
+    content: none !important;
+}
+
+body:has(#kc-register-form) #kc-form-options,
+body:has(#kc-register-form) #kc-info,
+body:has(#kc-register-form) #kc-registration {
+    margin-top: 20px !important;
+    text-align: left !important;
+}
+
+body:has(#kc-register-form) #kc-register-form input[type="submit"],
+body:has(#kc-register-form) #kc-register-form .btn-primary,
+body:has(#kc-register-form) #kc-register-form .pf-c-button.pf-m-primary {
+    margin-top: 14px !important;
+    min-height: 42px !important;
+}
+
+/* Mobile */
+@media (max-width: 620px) {
+    body:has(#kc-register-form) .login-pf-page {
+        padding: 16px !important;
+    }
+
+    body:has(#kc-register-form) .card-pf {
+        min-width: 0 !important;
+        max-width: calc(100vw - 32px) !important;
+        max-height: none !important;
+
+        padding: 30px 30px 32px !important;
+    }
+
+    body:has(#kc-register-form) .login-pf-header::before {
+        width: 190px !important;
+        height: 72px !important;
+    }
+}
