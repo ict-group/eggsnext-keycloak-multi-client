@@ -1,0 +1,702 @@
+/* ============================================================
+   POMA — Keycloak Login Theme
+   File: login/resources/css/style.css
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700;800&display=swap');
+
+:root {
+    --poma-blue: #1f2d5c;
+    --poma-blue-dark: #172347;
+    --poma-yellow: #ffc400;
+    --poma-yellow-dark: #e5af00;
+
+    --poma-white: #ffffff;
+    --poma-card: rgba(255, 255, 255, 0.96);
+
+    --poma-text: #1f2d5c;
+    --poma-muted: rgba(31, 45, 92, 0.70);
+
+    --poma-input-bg: #eef4fb;
+    --poma-input-border: rgba(31, 45, 92, 0.45);
+    --poma-input-focus: var(--poma-yellow);
+
+    --poma-error: #b72034;
+    --poma-success: #1f8a4c;
+
+    --poma-radius: 3px;
+    --poma-font: 'Open Sans', Arial, sans-serif;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    width: 100%;
+    min-height: 100%;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    overflow: hidden;
+
+    font-family: var(--poma-font);
+    color: var(--poma-text);
+    background: #111;
+
+    position: relative;
+}
+
+/* Background bianco/nero */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+
+    background-image: url('../img/banner.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    filter: grayscale(100%);
+    z-index: 0;
+}
+
+/* Overlay scuro come screenshot */
+body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+
+    background: rgba(0, 0, 0, 0.28);
+
+    z-index: 0;
+    pointer-events: none;
+}
+
+#kc-header,
+#kc-page-title,
+.login-pf-header h1 {
+    display: none !important;
+}
+
+.login-pf-page,
+.login-pf-page .login-pf-page-header,
+#kc-container,
+#kc-container-wrapper,
+#kc-content,
+#kc-content-wrapper {
+    position: relative;
+    z-index: 1;
+}
+
+.login-pf-page {
+    width: 100%;
+    min-height: 100vh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 24px;
+}
+
+#kc-content,
+#kc-content-wrapper,
+#kc-form,
+#kc-form-wrapper,
+#kc-form-login {
+    width: 100% !important;
+}
+
+/* ============================================================
+   CARD LOGIN
+   ============================================================ */
+
+.card-pf {
+    position: relative;
+    z-index: 1;
+
+    width: 100% !important;
+    max-width: 430px !important;
+    min-width: 360px !important;
+    min-height: 405px !important;
+
+    padding: 44px 58px 36px !important;
+
+    background: var(--poma-card) !important;
+
+    border: none !important;
+    border-left: 8px solid var(--poma-yellow) !important;
+    border-radius: var(--poma-radius) !important;
+
+    box-shadow: 0 18px 44px rgba(0, 0, 0, 0.28) !important;
+
+    overflow: hidden;
+}
+
+/* Logo */
+.login-pf-header::before {
+    content: "";
+    display: block;
+
+    width: 260px;
+    height: 86px;
+
+    margin: 0 auto 30px;
+
+    background-image: url('../img/logo.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+/* ============================================================
+   FORM BASE
+   ============================================================ */
+
+#kc-form .form-group,
+.form-group,
+.pf-c-form__group {
+    width: 100% !important;
+    margin: 0 0 16px 0 !important;
+    padding: 0 !important;
+}
+
+#kc-form .col-xs-12,
+#kc-form .col-sm-12,
+#kc-form .col-md-12,
+#kc-form div[class*="col-"],
+.col-xs-12,
+.col-sm-12,
+.col-md-12,
+div[class*="col-"] {
+    width: 100% !important;
+    max-width: 100% !important;
+    float: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Label visibili come nello screenshot */
+#kc-form label,
+#kc-form .control-label,
+.pf-c-form__label,
+.control-label,
+label {
+    display: block !important;
+
+    width: 100% !important;
+
+    margin: 0 0 7px 0 !important;
+    padding: 0 !important;
+
+    font-family: var(--poma-font) !important;
+    font-size: 14px !important;
+    line-height: 1.2 !important;
+    font-weight: 700 !important;
+
+    color: var(--poma-blue) !important;
+
+    letter-spacing: 0 !important;
+    text-transform: none !important;
+    text-align: left !important;
+}
+
+/* ============================================================
+   INPUT
+   ============================================================ */
+
+#kc-form input[type="text"],
+#kc-form input[type="password"],
+#kc-form input[type="email"],
+#kc-form input[type="number"],
+#kc-form .form-control,
+#kc-form .pf-c-form-control,
+input#username,
+input#password,
+.form-control,
+.pf-c-form-control {
+    display: block !important;
+
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 36px !important;
+
+    margin: 0 !important;
+    padding: 0 12px !important;
+
+    background: var(--poma-input-bg) !important;
+    background-color: var(--poma-input-bg) !important;
+    background-image: none !important;
+
+    border: 1px solid var(--poma-input-border) !important;
+    border-radius: 2px !important;
+
+    box-shadow: none !important;
+    outline: none !important;
+
+    appearance: none !important;
+    -webkit-appearance: none !important;
+
+    font-family: var(--poma-font) !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    line-height: 36px !important;
+
+    color: var(--poma-text) !important;
+    caret-color: var(--poma-yellow) !important;
+
+    transition:
+            border-color 0.2s ease,
+            background 0.2s ease !important;
+}
+
+#kc-form input:focus,
+#kc-form .form-control:focus,
+#kc-form .pf-c-form-control:focus,
+input#username:focus,
+input#password:focus {
+    border-color: var(--poma-yellow) !important;
+    background: #f5f8fc !important;
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+#kc-form input::placeholder,
+input::placeholder {
+    color: rgba(31, 45, 92, 0.48) !important;
+    opacity: 1 !important;
+}
+
+/* Chrome autofill */
+#kc-form input:-webkit-autofill,
+#kc-form input:-webkit-autofill:hover,
+#kc-form input:-webkit-autofill:focus,
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+    -webkit-text-fill-color: var(--poma-text) !important;
+    caret-color: var(--poma-yellow) !important;
+    box-shadow: 0 0 0 1000px var(--poma-input-bg) inset !important;
+    -webkit-box-shadow: 0 0 0 1000px var(--poma-input-bg) inset !important;
+    transition: background-color 9999s ease-out 0s !important;
+}
+
+/* ============================================================
+   PASSWORD GROUP / OCCHIO
+   ============================================================ */
+
+#kc-form .pf-c-input-group,
+#kc-form .input-group,
+.pf-c-input-group,
+.input-group {
+    display: flex !important;
+    align-items: center !important;
+
+    width: 100% !important;
+    height: 36px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    background: var(--poma-input-bg) !important;
+
+    border: 1px solid var(--poma-input-border) !important;
+    border-radius: 2px !important;
+
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+#kc-form .pf-c-input-group:focus-within,
+#kc-form .input-group:focus-within,
+.pf-c-input-group:focus-within,
+.input-group:focus-within {
+    border-color: var(--poma-yellow) !important;
+    background: #f5f8fc !important;
+}
+
+#kc-form .pf-c-input-group input,
+#kc-form .input-group input,
+.pf-c-input-group input,
+.input-group input {
+    flex: 1 1 auto !important;
+
+    height: 34px !important;
+    min-height: 34px !important;
+
+    margin: 0 !important;
+    padding: 0 8px 0 12px !important;
+
+    background: transparent !important;
+
+    border: none !important;
+    box-shadow: none !important;
+    outline: none !important;
+
+    color: var(--poma-text) !important;
+
+    font-size: 13px !important;
+    line-height: 34px !important;
+}
+
+#kc-form .pf-c-input-group .pf-c-button,
+#kc-form .input-group .btn,
+#kc-form .input-group button,
+#kc-form .input-group-addon,
+.pf-c-input-group .pf-c-button,
+.input-group .btn,
+.input-group button,
+.input-group-addon,
+button[data-password-toggle],
+button[aria-controls="password"] {
+    flex: 0 0 36px !important;
+
+    width: 36px !important;
+    height: 34px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    outline: none !important;
+
+    color: var(--poma-blue) !important;
+
+    cursor: pointer !important;
+}
+
+#kc-form .pf-c-input-group .pf-c-button:hover,
+#kc-form .input-group button:hover,
+#kc-form .pf-c-input-group .pf-c-button:focus,
+#kc-form .input-group button:focus {
+    color: var(--poma-yellow-dark) !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+#kc-form .fa,
+#kc-form .pficon,
+#kc-form .fa-eye,
+#kc-form .fa-eye-slash,
+#kc-form .pficon-visible,
+#kc-form .pficon-hidden,
+#kc-form .pf-c-form-control__icon {
+    color: var(--poma-blue) !important;
+    font-size: 12px !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    opacity: 1 !important;
+}
+
+#kc-form .pf-c-form-control::before,
+#kc-form .pf-c-form-control::after,
+#kc-form .pf-c-input-group::before,
+#kc-form .pf-c-input-group::after,
+#kc-form .pf-c-button::before,
+#kc-form .pf-c-button::after {
+    display: none !important;
+    content: none !important;
+}
+
+/* ============================================================
+   REMEMBER / FORGOT / REGISTER
+   ============================================================ */
+
+#kc-form-options,
+.login-pf-settings {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 12px !important;
+
+    width: 100% !important;
+
+    margin: 6px 0 20px 0 !important;
+    padding: 0 !important;
+
+    color: var(--poma-muted) !important;
+
+    font-family: var(--poma-font) !important;
+    font-size: 12px !important;
+}
+
+#kc-form-options .checkbox,
+.login-pf-settings .checkbox,
+.checkbox {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+#kc-form-options .checkbox label,
+.login-pf-settings .checkbox label,
+.checkbox label {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+
+    width: auto !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    color: var(--poma-muted) !important;
+
+    font-size: 12px !important;
+    font-weight: 500 !important;
+}
+
+#rememberMe,
+#kc-form-options input[type="checkbox"],
+.login-pf-settings input[type="checkbox"] {
+    position: static !important;
+
+    width: 13px !important;
+    height: 13px !important;
+
+    margin: 0 7px 0 0 !important;
+    padding: 0 !important;
+
+    accent-color: var(--poma-yellow) !important;
+    cursor: pointer !important;
+}
+
+#kc-form-options a,
+.login-pf-settings a {
+    color: var(--poma-blue) !important;
+
+    font-size: 12px !important;
+    font-weight: 700 !important;
+
+    text-decoration: none !important;
+}
+
+#kc-form-options a:hover,
+.login-pf-settings a:hover {
+    text-decoration: underline !important;
+}
+
+/* Register sotto */
+#kc-registration,
+#kc-info,
+.login-pf-signup {
+    display: block !important;
+
+    margin: 20px 0 0 0 !important;
+    padding: 0 !important;
+
+    border: none !important;
+
+    text-align: center !important;
+    color: var(--poma-muted) !important;
+
+    font-size: 13px !important;
+    font-weight: 400 !important;
+}
+
+#kc-registration a,
+#kc-info a,
+.login-pf-signup a {
+    margin-left: 8px !important;
+
+    color: var(--poma-blue) !important;
+
+    font-size: 13px !important;
+    font-weight: 800 !important;
+
+    text-decoration: none !important;
+}
+
+#kc-registration a:hover,
+#kc-info a:hover,
+.login-pf-signup a:hover {
+    text-decoration: underline !important;
+}
+
+/* ============================================================
+   BUTTON
+   ============================================================ */
+
+#kc-form-buttons {
+    margin: 24px 0 0 0 !important;
+    padding: 0 !important;
+}
+
+#kc-login,
+input#kc-login.btn-primary,
+.pf-c-button.pf-m-primary,
+.pf-c-button.pf-m-block,
+input[type="submit"],
+.btn-primary {
+    display: block !important;
+
+    width: 100% !important;
+    min-height: 41px !important;
+
+    margin: 0 !important;
+    padding: 12px 18px !important;
+
+    border: none !important;
+    border-radius: 4px !important;
+
+    background: var(--poma-yellow) !important;
+    background-image: none !important;
+
+    color: var(--poma-white) !important;
+
+    font-family: var(--poma-font) !important;
+    font-size: 13px !important;
+    font-weight: 800 !important;
+    line-height: 1.2 !important;
+
+    text-transform: uppercase !important;
+    letter-spacing: 0.08em !important;
+
+    cursor: pointer !important;
+
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+#kc-login:hover,
+input#kc-login.btn-primary:hover,
+.pf-c-button.pf-m-primary:hover,
+.pf-c-button.pf-m-block:hover,
+input[type="submit"]:hover,
+.btn-primary:hover {
+    background: var(--poma-yellow-dark) !important;
+}
+
+/* ============================================================
+   ALERTS
+   ============================================================ */
+
+.alert,
+.pf-c-alert {
+    border: none !important;
+    border-radius: 4px !important;
+
+    padding: 10px 12px !important;
+    margin: 0 0 18px !important;
+
+    color: var(--poma-white) !important;
+    background: var(--poma-error) !important;
+
+    text-align: center !important;
+
+    font-size: 12px !important;
+    line-height: 1.35 !important;
+}
+
+.alert-success,
+.pf-c-alert.pf-m-success {
+    background: var(--poma-success) !important;
+}
+
+.alert-warning,
+.alert-info,
+.pf-c-alert.pf-m-warning,
+.pf-c-alert.pf-m-info {
+    background: var(--poma-blue) !important;
+}
+
+.kc-feedback-text,
+.pf-c-alert__title,
+.pf-c-alert__description,
+span[id="input-error"] {
+    display: block !important;
+    position: static !important;
+
+    color: var(--poma-white) !important;
+    background: transparent !important;
+
+    border: none !important;
+
+    padding: 0 !important;
+    margin: 0 !important;
+
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    line-height: 1.35 !important;
+
+    text-align: center !important;
+}
+
+.pf-c-alert__icon,
+.pf-c-alert__action,
+.alert .pficon {
+    display: none !important;
+}
+
+/* ============================================================
+   LANGUAGE SELECTOR — nascosto
+   ============================================================ */
+
+#kc-locale,
+#kc-locale-wrapper,
+#kc-locale-dropdown,
+#kc-current-locale-link,
+.kc-dropdown,
+.kc-dropdown ul,
+.kc-dropdown li {
+    display: none !important;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 520px) {
+    body {
+        overflow-y: auto;
+    }
+
+    .login-pf-page {
+        padding: 16px;
+        align-items: flex-start;
+    }
+
+    .card-pf {
+        min-width: 0 !important;
+        max-width: calc(100vw - 32px) !important;
+        min-height: auto !important;
+        padding: 38px 32px 34px !important;
+    }
+
+    .login-pf-header::before {
+        width: 230px;
+        height: 78px;
+        margin-bottom: 28px;
+    }
+
+    #kc-form-options,
+    .login-pf-settings {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 10px !important;
+        margin-bottom: 22px !important;
+    }
+}
