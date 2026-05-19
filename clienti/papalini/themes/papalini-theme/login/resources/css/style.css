@@ -857,3 +857,129 @@ span[id="input-error"] {
 .kc-dropdown li a:hover {
     background: #e8eef8 !important;
 }
+
+
+/* ============================================================
+   ICTGROUP - Input cleanup (rimuove alone azzurrino PatternFly/browser)
+   ============================================================ */
+
+/* wrapper campo */
+#kc-form .form-group,
+#kc-form .pf-c-form__group {
+    margin-bottom: 18px !important;
+}
+
+/* label */
+#kc-form label,
+#kc-form .control-label,
+#kc-form .pf-c-form__label-text {
+    color: #3f4652 !important;
+    font-weight: 700 !important;
+    font-size: 14px !important;
+    margin-bottom: 8px !important;
+    display: block !important;
+}
+
+/* input base - compatibile con più versioni Keycloak / PatternFly */
+#kc-form input[type="text"],
+#kc-form input[type="password"],
+#kc-form input[type="email"],
+#kc-form input[type="number"],
+#kc-form .form-control,
+#kc-form .pf-c-form-control,
+input#username,
+input#password {
+    width: 100% !important;
+    height: 36px !important;
+    padding: 0 12px !important;
+
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+    background-image: none !important;
+
+    color: #222 !important;
+    border: 1px solid #d7dbe2 !important;
+    border-radius: 6px !important;
+
+    box-shadow: none !important;
+    outline: none !important;
+
+    -webkit-appearance: none !important;
+    appearance: none !important;
+}
+
+/* focus */
+#kc-form input[type="text"]:focus,
+#kc-form input[type="password"]:focus,
+#kc-form input[type="email"]:focus,
+#kc-form input[type="number"]:focus,
+#kc-form .form-control:focus,
+#kc-form .pf-c-form-control:focus,
+input#username:focus,
+input#password:focus {
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+    border-color: #4b50e6 !important;
+    box-shadow: 0 0 0 2px rgba(75, 80, 230, 0.12) !important;
+    outline: none !important;
+}
+
+/* placeholder */
+#kc-form input::placeholder,
+#kc-form .form-control::placeholder,
+#kc-form .pf-c-form-control::placeholder {
+    color: #8b93a3 !important;
+    opacity: 1 !important;
+}
+
+/* rimuove overlay/ombre PatternFly */
+#kc-form .pf-c-form-control,
+#kc-form .pf-c-input-group,
+#kc-form .input-group {
+    box-shadow: none !important;
+    background-image: none !important;
+}
+
+/* autofill Chrome */
+#kc-form input:-webkit-autofill,
+#kc-form input:-webkit-autofill:hover,
+#kc-form input:-webkit-autofill:focus,
+#kc-form textarea:-webkit-autofill,
+#kc-form select:-webkit-autofill {
+    -webkit-text-fill-color: #222 !important;
+    caret-color: #222 !important;
+    -webkit-box-shadow: 0 0 0 1000px #ffffff inset !important;
+    box-shadow: 0 0 0 1000px #ffffff inset !important;
+    border: 1px solid #d7dbe2 !important;
+    transition: background-color 9999s ease-in-out 0s !important;
+}
+
+/* se password è dentro input-group */
+#kc-form .pf-c-input-group,
+#kc-form .input-group {
+    display: flex !important;
+    align-items: center !important;
+    border: 1px solid #d7dbe2 !important;
+    border-radius: 6px !important;
+    background: #ffffff !important;
+    overflow: hidden !important;
+}
+
+/* input dentro input-group */
+#kc-form .pf-c-input-group input,
+#kc-form .input-group input {
+    flex: 1 1 auto !important;
+    border: none !important;
+    border-radius: 0 !important;
+    background: #ffffff !important;
+    box-shadow: none !important;
+    padding: 0 12px !important;
+    height: 36px !important;
+}
+
+/* focus dell'intero gruppo */
+#kc-form .pf-c-input-group:focus-within,
+#kc-form .input-group:focus-within {
+    border-color: #4b50e6 !important;
+    box-shadow: 0 0 0 2px rgba(75, 80, 230, 0.12) !important;
+}

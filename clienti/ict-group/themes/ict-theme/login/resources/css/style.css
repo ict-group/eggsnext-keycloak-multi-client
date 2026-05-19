@@ -1,0 +1,1480 @@
+/* ============================================================
+   ICTGROUP — Keycloak Login Theme
+   File: login/resources/css/style.css
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700;800&display=swap');
+
+:root {
+    --brand-blue: #4547d9;
+    --brand-blue-dark: #3436bc;
+    --brand-cyan: #54b7d1;
+    --brand-lime: #c8f400;
+    --brand-coral: #ff8580;
+
+    --brand-text: #2f3442;
+    --brand-muted: #6f7480;
+
+    --card-bg: rgba(255, 255, 255, 0.86);
+    --input-bg: #eaf1fb;
+    --input-border: rgba(47, 52, 66, 0.18);
+    --input-focus: #4547d9;
+
+    --error: #b72034;
+    --success: #1f8a4c;
+
+    --radius-card: 18px;
+    --radius-input: 0;
+    --font-main: 'Open Sans', Arial, sans-serif;
+}
+
+/* ============================================================
+   RESET
+   ============================================================ */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    width: 100%;
+    min-height: 100%;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    overflow: hidden;
+
+    font-family: var(--font-main);
+    color: var(--brand-text);
+    background: #f4f7fb;
+
+    position: relative;
+}
+
+/* ============================================================
+   BACKGROUND
+   Usa il tuo file:
+   login/resources/img/banner.jpg
+   ============================================================ */
+
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+
+    background-image: url('../img/banner.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    z-index: 0;
+}
+
+/* Overlay chiaro per effetto pulito come screenshot */
+body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+
+    background:
+            radial-gradient(circle at 10% 20%, rgba(255,255,255,0.50) 0 40px, transparent 42px),
+            radial-gradient(circle at 7% 42%, rgba(255,255,255,0.45) 0 48px, transparent 50px),
+            radial-gradient(circle at 20% 18%, rgba(255,255,255,0.40) 0 44px, transparent 46px),
+            rgba(255, 255, 255, 0.18);
+
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* ============================================================
+   KEYCLOAK LAYOUT
+   ============================================================ */
+
+#kc-header,
+#kc-page-title,
+.login-pf-header h1 {
+    display: none !important;
+}
+
+.login-pf-page,
+.login-pf-page .login-pf-page-header,
+#kc-container,
+#kc-container-wrapper,
+#kc-content,
+#kc-content-wrapper {
+    position: relative;
+    z-index: 1;
+}
+
+.login-pf-page {
+    width: 100%;
+    min-height: 100vh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 24px;
+}
+
+#kc-content,
+#kc-content-wrapper,
+#kc-form,
+#kc-form-wrapper,
+#kc-form-login {
+    width: 100% !important;
+}
+
+/* ============================================================
+   CARD LOGIN
+   ============================================================ */
+
+.card-pf {
+    position: relative;
+    z-index: 1;
+
+    width: 100% !important;
+    max-width: 392px !important;
+    min-width: 360px !important;
+    min-height: 580px !important;
+
+    padding: 70px 46px 44px !important;
+
+    background: var(--card-bg) !important;
+
+    border: none !important;
+    border-radius: var(--radius-card) !important;
+
+    box-shadow:
+            0 20px 55px rgba(31, 45, 92, 0.10),
+            0 2px 10px rgba(31, 45, 92, 0.06) !important;
+
+    backdrop-filter: blur(2px) !important;
+    -webkit-backdrop-filter: blur(2px) !important;
+
+    overflow: hidden;
+}
+
+/* Logo */
+.login-pf-header::before {
+    content: "";
+    display: block;
+
+    width: 280px;
+    height: 100px;
+
+    margin: 0 auto 52px;
+
+    background-image: url('../img/logo.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+/* ============================================================
+   LANGUAGE SELECTOR
+   ============================================================ */
+
+#kc-locale,
+#kc-locale-wrapper,
+#kc-locale-dropdown,
+.kc-dropdown {
+    position: absolute !important;
+    top: 28px !important;
+    right: 28px !important;
+    z-index: 20 !important;
+
+    width: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+
+    font-family: var(--font-main) !important;
+}
+
+#kc-current-locale-link,
+.kc-dropdown > a {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+
+    color: #50545e !important;
+    background: transparent !important;
+
+    border: none !important;
+    box-shadow: none !important;
+
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    text-decoration: none !important;
+}
+
+#kc-current-locale-link::before,
+.kc-dropdown > a::before {
+    content: "◉";
+    font-size: 9px;
+    color: #50545e;
+}
+
+/* Dropdown chiuso di default */
+#kc-locale ul,
+#kc-locale-dropdown ul,
+.kc-dropdown ul {
+    display: none !important;
+
+    position: absolute !important;
+    top: 24px !important;
+    right: 0 !important;
+
+    width: 145px !important;
+
+    margin: 0 !important;
+    padding: 6px 0 !important;
+
+    list-style: none !important;
+
+    background: #ffffff !important;
+    border: 1px solid rgba(47, 52, 66, 0.14) !important;
+    border-radius: 6px !important;
+
+    box-shadow: 0 8px 20px rgba(47,52,66,0.12) !important;
+}
+
+#kc-locale:hover ul,
+#kc-locale:focus-within ul,
+#kc-locale-dropdown:hover ul,
+#kc-locale-dropdown:focus-within ul,
+.kc-dropdown:hover ul,
+.kc-dropdown:focus-within ul {
+    display: block !important;
+}
+
+#kc-locale li,
+#kc-locale-dropdown li,
+.kc-dropdown li {
+    display: block !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+#kc-locale li a,
+#kc-locale-dropdown li a,
+.kc-dropdown li a {
+    display: block !important;
+
+    padding: 8px 12px !important;
+
+    color: var(--brand-text) !important;
+    background: #ffffff !important;
+
+    font-size: 12px !important;
+    font-weight: 600 !important;
+
+    text-decoration: none !important;
+}
+
+#kc-locale li a:hover,
+#kc-locale-dropdown li a:hover,
+.kc-dropdown li a:hover {
+    background: var(--input-bg) !important;
+}
+
+/* ============================================================
+   FORM BASE
+   ============================================================ */
+
+#kc-form .form-group,
+.form-group,
+.pf-c-form__group {
+    width: 100% !important;
+    margin: 0 0 22px 0 !important;
+    padding: 0 !important;
+}
+
+#kc-form .col-xs-12,
+#kc-form .col-sm-12,
+#kc-form .col-md-12,
+#kc-form div[class*="col-"],
+.col-xs-12,
+.col-sm-12,
+.col-md-12,
+div[class*="col-"] {
+    width: 100% !important;
+    max-width: 100% !important;
+
+    float: none !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Label */
+#kc-form label,
+#kc-form .control-label,
+.pf-c-form__label,
+.control-label,
+label {
+    display: block !important;
+
+    width: 100% !important;
+
+    margin: 0 0 4px 0 !important;
+    padding: 0 !important;
+
+    font-family: var(--font-main) !important;
+    font-size: 12px !important;
+    line-height: 1.2 !important;
+    font-weight: 800 !important;
+
+    color: var(--brand-text) !important;
+
+    letter-spacing: 0 !important;
+    text-transform: none !important;
+    text-align: left !important;
+}
+
+/* ============================================================
+   INPUT
+   ============================================================ */
+
+#kc-form input[type="text"],
+#kc-form input[type="password"],
+#kc-form input[type="email"],
+#kc-form input[type="number"],
+#kc-form .form-control,
+#kc-form .pf-c-form-control,
+input#username,
+input#password,
+.form-control,
+.pf-c-form-control {
+    display: block !important;
+
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 34px !important;
+
+    margin: 0 !important;
+    padding: 0 42px 0 0 !important;
+
+    background: var(--input-bg) !important;
+    background-color: var(--input-bg) !important;
+    background-image: none !important;
+
+    border: none !important;
+    border-bottom: 1px solid rgba(47,52,66,0.45) !important;
+    border-radius: var(--radius-input) !important;
+
+    box-shadow: none !important;
+    outline: none !important;
+
+    appearance: none !important;
+    -webkit-appearance: none !important;
+
+    font-family: var(--font-main) !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    line-height: 34px !important;
+
+    color: #111827 !important;
+    caret-color: var(--brand-blue) !important;
+
+    transition:
+            border-color 0.18s ease,
+            background 0.18s ease !important;
+}
+
+#kc-form input:focus,
+#kc-form .form-control:focus,
+#kc-form .pf-c-form-control:focus,
+input#username:focus,
+input#password:focus {
+    border-bottom-color: var(--brand-blue) !important;
+    background: #edf3fc !important;
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+#kc-form input::placeholder,
+input::placeholder {
+    color: rgba(47, 52, 66, 0.48) !important;
+    opacity: 1 !important;
+}
+
+/* Chrome autofill */
+#kc-form input:-webkit-autofill,
+#kc-form input:-webkit-autofill:hover,
+#kc-form input:-webkit-autofill:focus,
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+    -webkit-text-fill-color: #111827 !important;
+    caret-color: var(--brand-blue) !important;
+
+    box-shadow: 0 0 0 1000px var(--input-bg) inset !important;
+    -webkit-box-shadow: 0 0 0 1000px var(--input-bg) inset !important;
+
+    transition: background-color 9999s ease-out 0s !important;
+}
+
+/* ============================================================
+   USER ICON
+   ============================================================ */
+
+#kc-form .pf-c-form-control__icon,
+.pf-c-form-control__icon {
+    color: #b89b1a !important;
+    opacity: 1 !important;
+    font-size: 14px !important;
+
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* ============================================================
+   PASSWORD GROUP / OCCHIO
+   ============================================================ */
+
+#kc-form .pf-c-input-group,
+#kc-form .input-group,
+.pf-c-input-group,
+.input-group {
+    display: flex !important;
+    align-items: center !important;
+
+    width: 100% !important;
+    height: 34px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    background: transparent !important;
+    background-color: transparent !important;
+
+    border: none !important;
+    border-bottom: 1px solid rgba(47,52,66,0.45) !important;
+    border-radius: 0 !important;
+
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+#kc-form .pf-c-input-group:focus-within,
+#kc-form .input-group:focus-within,
+.pf-c-input-group:focus-within,
+.input-group:focus-within {
+    border-bottom-color: var(--brand-blue) !important;
+}
+
+#kc-form .pf-c-input-group input,
+#kc-form .input-group input,
+.pf-c-input-group input,
+.input-group input {
+    flex: 1 1 auto !important;
+
+    height: 34px !important;
+    min-height: 34px !important;
+
+    margin: 0 !important;
+    padding: 0 8px 0 0 !important;
+
+    background: var(--input-bg) !important;
+    background-color: var(--input-bg) !important;
+
+    border: none !important;
+    border-bottom: none !important;
+
+    box-shadow: none !important;
+    outline: none !important;
+
+    color: #111827 !important;
+
+    font-size: 13px !important;
+    line-height: 34px !important;
+}
+
+#kc-form .pf-c-input-group .pf-c-button,
+#kc-form .input-group .btn,
+#kc-form .input-group button,
+#kc-form .input-group-addon,
+.pf-c-input-group .pf-c-button,
+.input-group .btn,
+.input-group button,
+.input-group-addon,
+button[data-password-toggle],
+button[aria-controls="password"] {
+    flex: 0 0 44px !important;
+
+    width: 44px !important;
+    min-width: 44px !important;
+    max-width: 44px !important;
+
+    height: 34px !important;
+    min-height: 34px !important;
+    max-height: 34px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+    background-image: none !important;
+
+    border: none !important;
+    border-left: 1px solid rgba(47,52,66,0.06) !important;
+    border-radius: 0 !important;
+
+    box-shadow: none !important;
+    outline: none !important;
+
+    appearance: none !important;
+    -webkit-appearance: none !important;
+
+    color: #111827 !important;
+
+    cursor: pointer !important;
+}
+
+#kc-form .pf-c-input-group .pf-c-button:hover,
+#kc-form .input-group button:hover,
+#kc-form .pf-c-input-group .pf-c-button:focus,
+#kc-form .input-group button:focus,
+#kc-form .pf-c-input-group .pf-c-button:active,
+#kc-form .input-group button:active {
+    background: #ffffff !important;
+    border-left-color: rgba(47,52,66,0.10) !important;
+    box-shadow: none !important;
+    outline: none !important;
+    color: var(--brand-blue) !important;
+}
+
+/* Icone */
+#kc-form .fa,
+#kc-form .pficon,
+#kc-form .fa-eye,
+#kc-form .fa-eye-slash,
+#kc-form .pficon-visible,
+#kc-form .pficon-hidden {
+    color: inherit !important;
+
+    font-size: 13px !important;
+    line-height: 1 !important;
+
+    background: transparent !important;
+
+    border: none !important;
+    box-shadow: none !important;
+
+    opacity: 1 !important;
+}
+
+#kc-form .pf-c-form-control::before,
+#kc-form .pf-c-form-control::after,
+#kc-form .pf-c-input-group::before,
+#kc-form .pf-c-input-group::after,
+#kc-form .pf-c-button::before,
+#kc-form .pf-c-button::after {
+    display: none !important;
+    content: none !important;
+}
+
+/* ============================================================
+   REMEMBER / FORGOT
+   ============================================================ */
+
+#kc-form-options,
+.login-pf-settings {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 12px !important;
+
+    width: 100% !important;
+
+    margin: -4px 0 34px 0 !important;
+    padding: 0 !important;
+
+    color: var(--brand-muted) !important;
+
+    font-family: var(--font-main) !important;
+    font-size: 12px !important;
+}
+
+#kc-form-options .checkbox,
+.login-pf-settings .checkbox,
+.checkbox {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+#kc-form-options .checkbox label,
+.login-pf-settings .checkbox label,
+.checkbox label {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+
+    width: auto !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    color: var(--brand-muted) !important;
+
+    font-size: 12px !important;
+    font-weight: 500 !important;
+}
+
+#rememberMe,
+#kc-form-options input[type="checkbox"],
+.login-pf-settings input[type="checkbox"] {
+    position: static !important;
+
+    width: 13px !important;
+    height: 13px !important;
+
+    margin: 0 7px 0 0 !important;
+    padding: 0 !important;
+
+    accent-color: var(--brand-blue) !important;
+
+    cursor: pointer !important;
+}
+
+#kc-form-options a,
+.login-pf-settings a {
+    color: #111827 !important;
+
+    font-size: 12px !important;
+    font-weight: 500 !important;
+
+    text-decoration: underline !important;
+    text-underline-offset: 2px !important;
+}
+
+#kc-form-options a:hover,
+.login-pf-settings a:hover {
+    color: var(--brand-blue) !important;
+}
+
+/* ============================================================
+   BUTTON LOGIN
+   ============================================================ */
+
+#kc-form-buttons {
+    margin: 0 0 0 0 !important;
+    padding: 0 !important;
+}
+
+#kc-login,
+input#kc-login.btn-primary,
+.pf-c-button.pf-m-primary,
+.pf-c-button.pf-m-block,
+input[type="submit"],
+.btn-primary {
+    display: block !important;
+
+    width: 100% !important;
+    min-height: 39px !important;
+
+    margin: 0 !important;
+    padding: 11px 18px !important;
+
+    border: none !important;
+    border-radius: 12px !important;
+
+    background: var(--brand-blue) !important;
+    background-image: none !important;
+
+    box-shadow: none !important;
+    outline: none !important;
+
+    color: #ffffff !important;
+
+    font-family: var(--font-main) !important;
+    font-size: 13px !important;
+    font-weight: 800 !important;
+    line-height: 1.2 !important;
+
+    text-transform: uppercase !important;
+    letter-spacing: 0.08em !important;
+
+    cursor: pointer !important;
+
+    transition:
+            transform 0.18s ease,
+            box-shadow 0.18s ease,
+            background 0.18s ease,
+            opacity 0.18s ease !important;
+}
+
+#kc-login:hover,
+input#kc-login.btn-primary:hover,
+.pf-c-button.pf-m-primary:hover,
+.pf-c-button.pf-m-block:hover,
+input[type="submit"]:hover,
+.btn-primary:hover {
+    background: var(--brand-blue-dark) !important;
+    transform: translateY(-1px);
+    box-shadow: 0 8px 18px rgba(69, 71, 217, 0.22) !important;
+}
+
+/* ============================================================
+   SOCIAL LOGIN / GOOGLE
+   ============================================================ */
+
+#kc-social-providers,
+.kc-social-providers,
+#kc-social-providers ul {
+    width: 100% !important;
+    margin: 22px 0 0 0 !important;
+    padding: 0 !important;
+}
+
+#kc-social-providers h2,
+#kc-social-providers hr {
+    display: none !important;
+}
+
+/* Separatore OPPURE */
+#kc-social-providers::before,
+.kc-social-providers::before {
+    content: "OPPURE";
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    margin: 0 0 18px 0;
+
+    color: #111827;
+
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1;
+}
+
+#kc-social-providers::after,
+.kc-social-providers::after {
+    content: "";
+    display: block;
+    clear: both;
+}
+
+#kc-social-providers ul,
+.kc-social-providers ul {
+    list-style: none !important;
+}
+
+#kc-social-providers li,
+.kc-social-providers li {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+#kc-social-providers a,
+.kc-social-providers a,
+a.zocial {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+
+    width: 100% !important;
+    min-height: 34px !important;
+
+    margin: 0 !important;
+    padding: 8px 12px !important;
+
+    background: #ffffff !important;
+    background-image: none !important;
+
+    border: 1px solid rgba(47,52,66,0.14) !important;
+    border-radius: 0 !important;
+
+    color: #111827 !important;
+
+    font-family: var(--font-main) !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+
+    text-decoration: none !important;
+
+    box-shadow: none !important;
+}
+
+#kc-social-providers a:hover,
+.kc-social-providers a:hover,
+a.zocial:hover {
+    background: #f7f9fc !important;
+    border-color: rgba(47,52,66,0.24) !important;
+}
+
+/* ============================================================
+   REGISTER
+   ============================================================ */
+
+#kc-registration,
+#kc-info,
+.login-pf-signup {
+    display: block !important;
+
+    margin: 18px 0 0 0 !important;
+    padding: 0 !important;
+
+    border: none !important;
+
+    text-align: center !important;
+    color: var(--brand-muted) !important;
+
+    font-family: var(--font-main) !important;
+    font-size: 12px !important;
+    font-weight: 400 !important;
+}
+
+#kc-registration span,
+#kc-info span,
+.login-pf-signup span {
+    color: var(--brand-muted) !important;
+}
+
+#kc-registration a,
+#kc-info a,
+.login-pf-signup a {
+    display: inline-block !important;
+
+    margin-left: 8px !important;
+
+    color: var(--brand-blue) !important;
+
+    font-family: var(--font-main) !important;
+    font-size: 12px !important;
+    font-weight: 800 !important;
+
+    text-decoration: none !important;
+}
+
+#kc-registration a:hover,
+#kc-info a:hover,
+.login-pf-signup a:hover {
+    text-decoration: underline !important;
+}
+
+/* ============================================================
+   ALERTS
+   ============================================================ */
+
+.alert,
+.pf-c-alert {
+    border: none !important;
+    border-radius: 10px !important;
+
+    padding: 10px 12px !important;
+    margin: 0 0 18px !important;
+
+    color: #ffffff !important;
+    background: var(--error) !important;
+
+    text-align: center !important;
+
+    font-family: var(--font-main) !important;
+    font-size: 12px !important;
+    line-height: 1.35 !important;
+}
+
+.alert-success,
+.pf-c-alert.pf-m-success {
+    background: var(--success) !important;
+}
+
+.alert-warning,
+.alert-info,
+.pf-c-alert.pf-m-warning,
+.pf-c-alert.pf-m-info {
+    background: var(--brand-blue) !important;
+}
+
+.kc-feedback-text,
+.pf-c-alert__title,
+.pf-c-alert__description,
+span[id="input-error"] {
+    display: block !important;
+    position: static !important;
+
+    color: #ffffff !important;
+    background: transparent !important;
+
+    border: none !important;
+
+    padding: 0 !important;
+    margin: 0 !important;
+
+    font-family: var(--font-main) !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    line-height: 1.35 !important;
+
+    text-align: center !important;
+}
+
+.pf-c-alert__icon,
+.pf-c-alert__action,
+.alert .pficon {
+    display: none !important;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 520px) {
+    body {
+        overflow-y: auto;
+    }
+
+    .login-pf-page {
+        padding: 16px;
+        align-items: flex-start;
+    }
+
+    .card-pf {
+        min-width: 0 !important;
+        max-width: calc(100vw - 32px) !important;
+        min-height: auto !important;
+        padding: 64px 32px 38px !important;
+    }
+
+    .login-pf-header::before {
+        width: 165px;
+        height: 50px;
+        margin-bottom: 44px;
+    }
+
+    #kc-locale,
+    #kc-locale-wrapper,
+    #kc-locale-dropdown,
+    .kc-dropdown {
+        top: 22px !important;
+        right: 24px !important;
+    }
+
+    #kc-form-options,
+    .login-pf-settings {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 10px !important;
+        margin-bottom: 28px !important;
+    }
+}
+
+/* ============================================================
+   ICTGROUP — Google Identity Provider Button Override
+   Compatibile Keycloak / PatternFly
+   Mettere in fondo a style.css
+   ============================================================ */
+
+/* contenitore social */
+#kc-social-providers {
+    width: 100% !important;
+    margin-top: 22px !important;
+    padding: 0 !important;
+}
+
+#kc-social-providers hr {
+    display: none !important;
+}
+
+#kc-social-providers h2 {
+    margin: 0 0 14px 0 !important;
+
+    color: #2f3442 !important;
+
+    font-family: var(--font-main, 'Open Sans', Arial, sans-serif) !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    line-height: 1.2 !important;
+
+    text-align: center !important;
+    text-transform: uppercase !important;
+}
+
+/* lista */
+#kc-social-providers ul,
+#kc-social-providers .pf-c-login__main-footer-links,
+ul.kc-social-links,
+ul.pf-c-login__main-footer-links {
+    width: 100% !important;
+
+    display: block !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    list-style: none !important;
+}
+
+/* item */
+#kc-social-providers li,
+#kc-social-providers .kc-social-item,
+ul.kc-social-links > li {
+    width: 100% !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    list-style: none !important;
+}
+
+/* bottone google / provider */
+#kc-social-providers a,
+#kc-social-providers a#social-google,
+#social-google,
+a.kc-social-item,
+a.kc-social-gray,
+a.pf-c-button.pf-m-control.pf-m-block.kc-social-item {
+    width: 100% !important;
+    min-height: 44px !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 12px !important;
+
+    margin: 0 !important;
+    padding: 0 18px !important;
+
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+    background-image: none !important;
+
+    border: 1px solid rgba(47, 52, 66, 0.14) !important;
+    border-radius: 999px !important;
+
+    color: #2f3442 !important;
+
+    font-family: var(--font-main, 'Open Sans', Arial, sans-serif) !important;
+    font-size: 14px !important;
+    font-weight: 800 !important;
+    line-height: 1 !important;
+    letter-spacing: 0.08em !important;
+    text-transform: uppercase !important;
+    text-decoration: none !important;
+
+    box-shadow: 0 4px 12px rgba(31, 45, 92, 0.06) !important;
+
+    outline: none !important;
+    cursor: pointer !important;
+
+    transition:
+            background 0.18s ease,
+            border-color 0.18s ease,
+            box-shadow 0.18s ease,
+            transform 0.18s ease !important;
+}
+
+#kc-social-providers a:hover,
+#kc-social-providers a#social-google:hover,
+#social-google:hover,
+a.kc-social-item:hover,
+a.kc-social-gray:hover,
+a.pf-c-button.pf-m-control.pf-m-block.kc-social-item:hover {
+    background: #fafbff !important;
+    border-color: rgba(69, 71, 217, 0.28) !important;
+    box-shadow: 0 8px 20px rgba(31, 45, 92, 0.12) !important;
+    transform: translateY(-1px);
+}
+
+#kc-social-providers a:focus,
+#kc-social-providers a#social-google:focus,
+#social-google:focus,
+a.kc-social-item:focus,
+a.kc-social-gray:focus,
+a.pf-c-button.pf-m-control.pf-m-block.kc-social-item:focus {
+    outline: none !important;
+    border-color: #4547d9 !important;
+    box-shadow: 0 0 0 3px rgba(69, 71, 217, 0.14) !important;
+}
+
+/* nasconde la FA google monocromatica originale */
+#social-google i.fa-google,
+#social-google .fa-google,
+#kc-social-providers i.fa-google,
+#kc-social-providers .kc-social-provider-logo.fa-google {
+    position: relative !important;
+
+    width: 20px !important;
+    min-width: 20px !important;
+    height: 20px !important;
+
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    font-size: 0 !important;
+    line-height: 1 !important;
+
+    color: transparent !important;
+    background: transparent !important;
+
+    border: none !important;
+    box-shadow: none !important;
+
+    overflow: visible !important;
+}
+
+/* icona Google colorata in SVG inline via CSS */
+#social-google i.fa-google::before,
+#social-google .fa-google::before,
+#kc-social-providers i.fa-google::before,
+#kc-social-providers .kc-social-provider-logo.fa-google::before {
+    content: "" !important;
+
+    display: block !important;
+
+    width: 20px !important;
+    height: 20px !important;
+
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+    background-size: contain !important;
+
+    background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 48 48' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='%23FFC107' d='M43.611 20.083H42V20H24v8h11.303C33.653 32.657 29.223 36 24 36c-6.627 0-12-5.373-12-12s5.373-12 12-12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 12.955 4 4 12.955 4 24s8.955 20 20 20 20-8.955 20-20c0-1.341-.138-2.65-.389-3.917z'/%3E%3Cpath fill='%23FF3D00' d='M6.306 14.691l6.571 4.819C14.655 15.108 18.961 12 24 12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 16.318 4 9.656 8.337 6.306 14.691z'/%3E%3Cpath fill='%234CAF50' d='M24 44c5.166 0 9.86-1.977 13.409-5.192l-6.19-5.238C29.211 35.091 26.715 36 24 36c-5.202 0-9.619-3.317-11.283-7.946l-6.522 5.025C9.505 39.556 16.227 44 24 44z'/%3E%3Cpath fill='%231976D2' d='M43.611 20.083H42V20H24v8h11.303c-.792 2.237-2.231 4.166-4.087 5.571l.003-.002 6.19 5.238C36.971 39.205 44 34 44 24c0-1.341-.138-2.65-.389-3.917z'/%3E%3C/svg%3E") !important;
+}
+
+/* testo Google */
+#social-google .kc-social-provider-name,
+#social-google .kc-social-icon-text,
+#kc-social-providers .kc-social-provider-name,
+#kc-social-providers .kc-social-icon-text {
+    display: inline-block !important;
+
+    color: #2f3442 !important;
+
+    font-family: var(--font-main, 'Open Sans', Arial, sans-serif) !important;
+    font-size: 14px !important;
+    font-weight: 800 !important;
+    line-height: 1 !important;
+
+    letter-spacing: 0.08em !important;
+    text-transform: uppercase !important;
+}
+
+/* elimina eventuali pseudo-elementi PatternFly/zocial */
+#social-google::before,
+#social-google::after,
+#kc-social-providers a::before,
+#kc-social-providers a::after {
+    box-shadow: none !important;
+}
+
+
+/* ============================================================
+   ICTGROUP — Google button final cleanup
+   Rimuove linea blu PatternFly e bordo rettangolare interno
+   ============================================================ */
+
+#kc-social-providers #social-google,
+#kc-social-providers a#social-google,
+a#social-google.pf-c-button,
+a#social-google.pf-c-button.pf-m-control,
+a#social-google.pf-c-button.pf-m-control.pf-m-block,
+a#social-google.kc-social-item,
+a#social-google.kc-social-gray {
+    position: relative !important;
+
+    width: 100% !important;
+    min-height: 42px !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 12px !important;
+
+    margin: 0 !important;
+    padding: 0 18px !important;
+
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+    background-image: none !important;
+
+    border: 1px solid rgba(69, 71, 217, 0.18) !important;
+    border-radius: 999px !important;
+
+    color: #2f3442 !important;
+
+    box-shadow: 0 6px 18px rgba(31, 45, 92, 0.06) !important;
+    outline: none !important;
+
+    overflow: hidden !important;
+
+    text-decoration: none !important;
+}
+
+/* Rimuove linea blu / bordo rettangolare PatternFly */
+#kc-social-providers #social-google::before,
+#kc-social-providers #social-google::after,
+#kc-social-providers a#social-google::before,
+#kc-social-providers a#social-google::after,
+a#social-google.pf-c-button::before,
+a#social-google.pf-c-button::after,
+a#social-google.pf-c-button.pf-m-control::before,
+a#social-google.pf-c-button.pf-m-control::after,
+a#social-google.pf-c-button.pf-m-block::before,
+a#social-google.pf-c-button.pf-m-block::after {
+    content: none !important;
+    display: none !important;
+
+    border: none !important;
+    border-color: transparent !important;
+
+    box-shadow: none !important;
+    background: transparent !important;
+}
+
+/* Hover pulito */
+#kc-social-providers #social-google:hover,
+#kc-social-providers a#social-google:hover,
+a#social-google.pf-c-button:hover {
+    background: #ffffff !important;
+    border-color: rgba(69, 71, 217, 0.32) !important;
+    box-shadow: 0 10px 24px rgba(31, 45, 92, 0.10) !important;
+    transform: translateY(-1px);
+}
+
+/* Focus senza riga blu sotto */
+#kc-social-providers #social-google:focus,
+#kc-social-providers #social-google:focus-visible,
+#kc-social-providers a#social-google:focus,
+#kc-social-providers a#social-google:focus-visible,
+a#social-google.pf-c-button:focus,
+a#social-google.pf-c-button:focus-visible {
+    outline: none !important;
+    border-color: rgba(69, 71, 217, 0.38) !important;
+    box-shadow: 0 0 0 3px rgba(69, 71, 217, 0.12) !important;
+}
+
+/* Active senza bordo/linea PatternFly */
+#kc-social-providers #social-google:active,
+#kc-social-providers a#social-google:active,
+a#social-google.pf-c-button:active {
+    background: #f9faff !important;
+    border-color: rgba(69, 71, 217, 0.32) !important;
+    box-shadow: 0 4px 12px rgba(31, 45, 92, 0.08) !important;
+    transform: translateY(0);
+}
+
+/* Testo Google */
+#social-google .kc-social-provider-name,
+#social-google .kc-social-icon-text {
+    color: #2f3442 !important;
+
+    font-family: var(--font-main, 'Open Sans', Arial, sans-serif) !important;
+    font-size: 14px !important;
+    font-weight: 800 !important;
+    line-height: 1 !important;
+
+    letter-spacing: 0.08em !important;
+    text-transform: uppercase !important;
+}
+
+/* Icona Google colorata */
+#social-google i.fa-google,
+#social-google .fa-google,
+#social-google .kc-social-provider-logo {
+    width: 20px !important;
+    min-width: 20px !important;
+    height: 20px !important;
+
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    font-size: 0 !important;
+    color: transparent !important;
+
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+#social-google i.fa-google::before,
+#social-google .fa-google::before,
+#social-google .kc-social-provider-logo::before {
+    content: "" !important;
+
+    display: block !important;
+
+    width: 20px !important;
+    height: 20px !important;
+
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+    background-size: contain !important;
+
+    background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 48 48' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='%23FFC107' d='M43.611 20.083H42V20H24v8h11.303C33.653 32.657 29.223 36 24 36c-6.627 0-12-5.373-12-12s5.373-12 12-12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 12.955 4 4 12.955 4 24s8.955 20 20 20 20-8.955 20-20c0-1.341-.138-2.65-.389-3.917z'/%3E%3Cpath fill='%23FF3D00' d='M6.306 14.691l6.571 4.819C14.655 15.108 18.961 12 24 12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 16.318 4 9.656 8.337 6.306 14.691z'/%3E%3Cpath fill='%234CAF50' d='M24 44c5.166 0 9.86-1.977 13.409-5.192l-6.19-5.238C29.211 35.091 26.715 36 24 36c-5.202 0-9.619-3.317-11.283-7.946l-6.522 5.025C9.505 39.556 16.227 44 24 44z'/%3E%3Cpath fill='%231976D2' d='M43.611 20.083H42V20H24v8h11.303c-.792 2.237-2.231 4.166-4.087 5.571l.003-.002 6.19 5.238C36.971 39.205 44 34 44 24c0-1.341-.138-2.65-.389-3.917z'/%3E%3C/svg%3E") !important;
+}
+
+
+/* ============================================================
+   ICTGROUP — remove blue input background
+   Mettere in fondo a style.css
+   ============================================================ */
+
+/* Input normali */
+#kc-form input[type="text"],
+#kc-form input[type="password"],
+#kc-form input[type="email"],
+#kc-form input[type="number"],
+#kc-form input.form-control,
+#kc-form .pf-c-form-control,
+#username,
+#password,
+input#username,
+input#password {
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+
+    border: none !important;
+    border-bottom: 1px solid rgba(47, 52, 66, 0.45) !important;
+    border-radius: 0 !important;
+
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+/* Focus: solo linea sotto, niente box azzurro */
+#kc-form input[type="text"]:focus,
+#kc-form input[type="password"]:focus,
+#kc-form input[type="email"]:focus,
+#kc-form input[type="number"]:focus,
+#kc-form input.form-control:focus,
+#kc-form .pf-c-form-control:focus,
+#username:focus,
+#password:focus,
+input#username:focus,
+input#password:focus {
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+
+    border-bottom-color: #4547d9 !important;
+
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+/* Password wrapper PatternFly */
+#kc-form .pf-c-input-group,
+#kc-form .input-group {
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+
+    border: none !important;
+    border-bottom: 1px solid rgba(47, 52, 66, 0.45) !important;
+    border-radius: 0 !important;
+
+    box-shadow: none !important;
+    outline: none !important;
+
+    overflow: visible !important;
+}
+
+/* Focus wrapper password */
+#kc-form .pf-c-input-group:focus-within,
+#kc-form .input-group:focus-within {
+    background: transparent !important;
+    background-color: transparent !important;
+
+    border-bottom-color: #4547d9 !important;
+
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+/* Input dentro password wrapper */
+#kc-form .pf-c-input-group input,
+#kc-form .input-group input {
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+
+    border: none !important;
+    border-radius: 0 !important;
+
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+/* Bottone occhio: niente box bianco/azzurro */
+#kc-form .pf-c-input-group .pf-c-button,
+#kc-form .input-group button,
+#kc-form .input-group .btn,
+#kc-form button[data-password-toggle],
+#kc-form button[aria-controls="password"] {
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+
+    border: none !important;
+    border-radius: 0 !important;
+
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+/* Autofill Chrome: elimina fondo azzurro/giallo */
+#kc-form input:-webkit-autofill,
+#kc-form input:-webkit-autofill:hover,
+#kc-form input:-webkit-autofill:focus,
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+    -webkit-text-fill-color: #111827 !important;
+    caret-color: #4547d9 !important;
+
+    box-shadow: 0 0 0 1000px transparent inset !important;
+    -webkit-box-shadow: 0 0 0 1000px transparent inset !important;
+
+    background: transparent !important;
+    background-color: transparent !important;
+
+    transition: background-color 9999s ease-out 0s !important;
+}
+
+/* PatternFly pseudo-element cleanup */
+#kc-form .pf-c-form-control::before,
+#kc-form .pf-c-form-control::after,
+#kc-form .pf-c-input-group::before,
+#kc-form .pf-c-input-group::after,
+#kc-form .pf-c-button::before,
+#kc-form .pf-c-button::after {
+    content: none !important;
+    display: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+}
