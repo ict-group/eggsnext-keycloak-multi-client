@@ -1,0 +1,11 @@
+.git
+.idea
+target
+node_modules
+
+**/.DS_Store
+**/Thumbs.db
+
+# Non copiare env/segreti cliente dentro il build context immagine
+clienti/*/*.env
+clienti/*/config.env
