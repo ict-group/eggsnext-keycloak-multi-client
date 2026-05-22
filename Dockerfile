@@ -1,8 +1,8 @@
 # =============================================================================
 # KEYCLOAK MULTI-CLIENT DOCKERFILE
 # Supporta:
-# - build singolo cliente: CLIENT_ID=papalini, poma, ict-group, ecc. [cite: 1]
-# - build globale: CLIENT_ID=all-themes [cite: 2]
+# - build singolo cliente: CLIENT_ID=papalini, poma, ict-group, ecc.
+# - build globale: CLIENT_ID=all-themes
 # =============================================================================
 
 ARG KEYCLOAK_VERSION=26.6.1
@@ -31,7 +31,7 @@ ARG CLIENT_ID
 COPY --from=builder /opt/keycloak/lib/quarkus/ /opt/keycloak/lib/quarkus/
 
 # Copio le cartelle clienti assegnando i permessi all'utente keycloak.
-# Gli env/config devono essere esclusi dal .dockerignore. [cite: 3]
+# Gli env/config devono essere esclusi dal .dockerignore.
 COPY --chown=keycloak:keycloak clienti /tmp/clienti
 
 # =============================================================================

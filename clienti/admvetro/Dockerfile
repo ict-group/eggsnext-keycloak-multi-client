@@ -21,7 +21,6 @@ COPY --from=builder /opt/keycloak/lib/quarkus/ /opt/keycloak/lib/quarkus/
 
 # Percorsi relativi alla root del progetto
 COPY clienti/${CLIENT_ID}/themes /opt/keycloak/themes
-COPY clienti/${CLIENT_ID}/${CLIENT_ID}.env /opt/keycloak/.env
 
 # --- VARIABILI DI COMPATIBILITÀ UNIVERSALE ---
 
