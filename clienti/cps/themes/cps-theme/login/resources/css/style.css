@@ -419,3 +419,32 @@ form#kc-form-login #kc-form-buttons {
     opacity: 1 !important;
     visibility: visible !important;
 }
+
+
+/* Allinea Remember me e Forgot Password sulla stessa riga */
+.form-group.login-pf-settings {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    width: 100% !important;
+}
+
+#kc-form-options {
+    display: flex !important;
+    align-items: center !important;
+}
+
+/* Forgot Password allineato a destra */
+.login-pf-settings > div:last-child,
+#kc-form-options ~ div,
+.login-pf-settings .col-xs-6:last-child {
+    text-align: right !important;
+    margin-left: auto !important;
+}
+
+/* Testo Forgot Password */
+.login-pf-settings a {
+    color: rgba(255, 255, 255, 0.85) !important;
+    font-size: 13px !important;
+    text-decoration: underline !important;
+}
