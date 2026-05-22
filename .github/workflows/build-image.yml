@@ -17,6 +17,13 @@ on:
           - errezeta
           - papalini
           - poma
+          - cps
+          - consoli
+          - admvetro
+          - eggsnext
+          - eter
+          - proges
+          - ict-group
       keycloak_version:
         description: 'Versione Keycloak (dropdown)'
         required: true
