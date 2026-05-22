@@ -2,10 +2,8 @@
 .idea
 target
 node_modules
-
 **/.DS_Store
 **/Thumbs.db
 
-# Non copiare env/segreti cliente dentro il build context immagine
+# Escludi solo i file sensibili, i themes devono entrare nel context
 clienti/*/*.env
-clienti/*/config.env
