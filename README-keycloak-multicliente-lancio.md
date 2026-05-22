@@ -254,7 +254,7 @@ Il Dockerfile non decide il cliente. Il cliente viene deciso dal Compose tramite
 
 ```yaml
 env_file:
-  - ./clienti/${CLIENT_ID}/errezeta.env
+  - ./clienti/${CLIENT_ID}/cps.env
 
 volumes:
   - ./clienti/${CLIENT_ID}/themes:/opt/keycloak/themes
@@ -282,7 +282,7 @@ services:
       - "${KEYCLOAK_PORT:-8080}:8080"
 
     env_file:
-      - ./clienti/${CLIENT_ID}/errezeta.env
+      - ./clienti/${CLIENT_ID}/cps.env
 
     environment:
       KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN_USER:-admin}
@@ -369,7 +369,7 @@ Il Compose usa questa variabile in tre punti importanti.
 
 ```yaml
 env_file:
-  - ./clienti/${CLIENT_ID}/errezeta.env
+  - ./clienti/${CLIENT_ID}/cps.env
 ```
 
 Quindi se `CLIENT_ID=errevi`, legge:
