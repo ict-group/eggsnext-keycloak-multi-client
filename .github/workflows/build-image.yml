@@ -106,7 +106,7 @@ jobs:
             MAJOR=$(echo "$VERSION" | cut -d. -f1)
 
             if [ "$MAJOR" -ge 17 ]; then
-              # Versioni moderne: verifica su GitHub releases
+              # Versioni moderne (Quarkus): verifica su GitHub releases
               echo "🔍 Verifico '$VERSION' su GitHub releases..."
               GITHUB_STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
                 -H "Accept: application/vnd.github+json" \
@@ -119,28 +119,33 @@ jobs:
               fi
               echo "✅ Versione '$VERSION' verificata su GitHub"
             else
-              # Versioni legacy (<17): verifica che il zip esista su GitHub releases
-              echo "🔍 Versione legacy ($VERSION) — verifico archivio su GitHub..."
-              ZIP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
-                "https://github.com/keycloak/keycloak/releases/download/${VERSION}/keycloak-${VERSION}.zip")
+              # Versioni legacy (WildFly < 17): verifica che il tag esista su Quay.io
+              # Quay.io risponde 401 quando il tag esiste (auth richiesta per manifest)
+              # Risponde 404 quando il tag non esiste
+              echo "🔍 Versione legacy ($VERSION) — verifico tag su Quay.io..."
+              QUAY_STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
+                "https://quay.io/v2/keycloak/keycloak/manifests/$VERSION")
 
-              if [ "$ZIP_STATUS" != "200" ] && [ "$ZIP_STATUS" != "302" ]; then
-                echo "❌ Archivio keycloak-${VERSION}.zip non trovato su GitHub (HTTP $ZIP_STATUS)"
-                echo "   Controlla: https://github.com/keycloak/keycloak/releases/tag/$VERSION"
+              if [ "$QUAY_STATUS" = "401" ] || [ "$QUAY_STATUS" = "200" ]; then
+                echo "✅ Tag '$VERSION' trovato su Quay.io (legacy/WildFly)"
+              else
+                echo "❌ Tag '$VERSION' non trovato su Quay.io (HTTP $QUAY_STATUS)"
+                echo "   Controlla: https://quay.io/repository/keycloak/keycloak?tab=tags&tag=$VERSION"
                 exit 1
               fi
-              echo "✅ Archivio '$VERSION' trovato su GitHub releases"
             fi
           fi
 
-          # Sceglie il Dockerfile in base alla major version
+          # Sceglie il Dockerfile in base alla major version:
+          #   >= 17 → Quarkus  (/opt/keycloak,  kc.sh)
+          #   <  17 → WildFly  (/opt/jboss/keycloak, standalone.sh)
           MAJOR=$(echo "$VERSION" | cut -d. -f1)
           if [ "$MAJOR" -ge 17 ]; then
             DOCKERFILE="./Dockerfile"
-            echo "🐳 Dockerfile: moderno Quarkus (>= 17)"
+            echo "🐳 Dockerfile: Quarkus >= 17 → ./Dockerfile"
           else
             DOCKERFILE="./Dockerfile.legacy"
-            echo "🐳 Dockerfile: legacy WildFly (< 17)"
+            echo "🐳 Dockerfile: WildFly < 17  → ./Dockerfile.legacy"
           fi
 
           echo "version=$VERSION"       >> $GITHUB_OUTPUT
@@ -176,7 +181,7 @@ jobs:
           echo "=== ROOT ===" && ls -la
           echo "=== CLIENTI ===" && ls -la clienti/
           echo "=== BASE ===" && ls -la base/ || echo "base/ non esiste!"
-          echo "=== DOCKERFILE USATO ===" && echo "${{ needs.resolve-version.outputs.dockerfile }}"
+          echo "=== DOCKERFILE ===" && echo "${{ needs.resolve-version.outputs.dockerfile }}"
 
       - name: Verify Files
         run: |
