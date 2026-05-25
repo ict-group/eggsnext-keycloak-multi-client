@@ -3,11 +3,13 @@ set -euo pipefail
 
 CLIENT_ID=${1:?"Devi passare CLIENT_ID. Es: ./test-compose-ghcr.sh cps 11.0.0"}
 KEYCLOAK_VERSION=${2:-26.6.1}
+POSTGRES_VERSION=${3:-16}
 
 MAJOR=$(echo "$KEYCLOAK_VERSION" | cut -d. -f1)
 
 export CLIENT_ID
 export KEYCLOAK_VERSION
+export POSTGRES_VERSION
 export REGISTRY_PREFIX="ghcr.io/ict-group/eggsnext-keycloak-multi-client/"
 
 if [ "$MAJOR" -ge 17 ]; then
@@ -20,6 +22,7 @@ else
   export KEYCLOAK_CMD="-b 0.0.0.0"
 fi
 
+echo "Postgres version: ${POSTGRES_VERSION}"
 echo "Mailpit: http://localhost:8025"
 
 docker compose -f docker-compose-test-ghcr.yml up
