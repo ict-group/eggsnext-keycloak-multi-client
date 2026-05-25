@@ -1,0 +1,100 @@
+services:
+  keycloak:
+    image: ${REGISTRY_PREFIX:-ghcr.io/ict-group/eggsnext-keycloak-multi-client/}keycloak-${CLIENT_ID}:${KEYCLOAK_VERSION}
+    container_name: keycloak-${CLIENT_ID}-${KEYCLOAK_VERSION}
+
+    ports:
+      - "${KEYCLOAK_PORT:-8080}:8080"
+
+    env_file:
+      - ./clienti/${CLIENT_ID}/${CLIENT_ID}.env
+
+    environment:
+      # =========================================================
+      # Admin - WildFly / Keycloak < 17
+      # =========================================================
+      KEYCLOAK_USER: ${KEYCLOAK_ADMIN_USER:-admin}
+      KEYCLOAK_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:-Expert0.}
+
+      # =========================================================
+      # Admin - Quarkus / Keycloak >= 17
+      # =========================================================
+      KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN_USER:-admin}
+      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:-Expert0.}
+
+      # Compatibile con versioni Quarkus più nuove
+      KC_BOOTSTRAP_ADMIN_USERNAME: ${KEYCLOAK_ADMIN_USER:-admin}
+      KC_BOOTSTRAP_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:-Expert0.}
+
+      # =========================================================
+      # Database - WildFly / Keycloak < 17
+      # =========================================================
+      DB_VENDOR: postgres
+      DB_ADDR: postgres
+      DB_PORT: 5432
+      DB_DATABASE: ${KEYCLOAK_DB_NAME:-keycloak_${CLIENT_ID}}
+      DB_USER: ${KEYCLOAK_DB_USER:-keycloak}
+      DB_PASSWORD: ${KEYCLOAK_DB_PASSWORD:-Expert0.}
+
+      # =========================================================
+      # Database - Quarkus / Keycloak >= 17
+      # =========================================================
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://postgres:5432/${KEYCLOAK_DB_NAME:-keycloak_${CLIENT_ID}}
+      KC_DB_USERNAME: ${KEYCLOAK_DB_USER:-keycloak}
+      KC_DB_PASSWORD: ${KEYCLOAK_DB_PASSWORD:-Expert0.}
+
+      # =========================================================
+      # HTTP / hostname - Quarkus
+      # =========================================================
+      KC_HTTP_ENABLED: "true"
+      KC_HOSTNAME_STRICT: "false"
+      KC_HOSTNAME_STRICT_HTTPS: "false"
+
+      # =========================================================
+      # Theme cache - Quarkus
+      # =========================================================
+      KC_SPI_THEME_STATIC_MAX_AGE: "-1"
+      KC_SPI_THEME_CACHE_THEMES: "false"
+      KC_SPI_THEME_CACHE_TEMPLATES: "false"
+
+    command: ${KEYCLOAK_CMD}
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+      mailpit:
+        condition: service_started
+
+  postgres:
+    image: postgres:13
+    container_name: postgres-${CLIENT_ID}
+
+    environment:
+      POSTGRES_DB: ${KEYCLOAK_DB_NAME:-keycloak_${CLIENT_ID}}
+      POSTGRES_USER: ${KEYCLOAK_DB_USER:-keycloak}
+      POSTGRES_PASSWORD: ${KEYCLOAK_DB_PASSWORD:-Expert0.}
+
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${KEYCLOAK_DB_USER:-keycloak} -d ${KEYCLOAK_DB_NAME:-keycloak_${CLIENT_ID}}"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+
+  mailpit:
+    image: axllent/mailpit:latest
+    container_name: mailpit-${CLIENT_ID}
+
+    ports:
+      - "${MAILPIT_SMTP_PORT:-1025}:1025"
+      - "${MAILPIT_WEB_PORT:-8025}:8025"
+
+volumes:
+  postgres-data:
+    name: keycloak-postgres-${CLIENT_ID}
