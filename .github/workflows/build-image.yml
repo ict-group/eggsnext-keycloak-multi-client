@@ -1,10 +1,15 @@
 name: Build Keycloak Images
+
 on:
   push:
     branches:
       - main
     paths:
       - 'clienti/**'
+      - 'base/**'
+      - 'Dockerfile'
+      - 'Dockerfile.legacy'
+      - '.github/workflows/build-image.yml'
   workflow_dispatch:
     inputs:
       client:
@@ -25,7 +30,7 @@ on:
           - proges
           - ict-group
       keycloak_version:
-        description: 'Versione Keycloak (dropdown)'
+        description: 'Versione Keycloak'
         required: true
         type: choice
         options:
@@ -38,13 +43,26 @@ on:
           - 20.0.5
           - 19.0.3
           - 18.0.2
+          - 16.1.1
+          - 15.1.1
+          - 12.0.4
+          - 11.0.0
       keycloak_version_manual:
-        description: 'Oppure inserisci versione manuale (es. 11.0.0) — ha priorità sul dropdown se compilata'
+        description: 'Oppure inserisci versione manuale X.Y.Z; ha priorità sul dropdown'
         required: false
         type: string
+      include_extensions:
+        description: 'Copia anche base/extensions? Usare solo se i provider sono compatibili con questa versione'
+        required: true
+        type: choice
+        options:
+          - 'false'
+          - 'true'
+        default: 'false'
 
 env:
   REGISTRY: ghcr.io
+  DEFAULT_KEYCLOAK_VERSION: 26.6.1
 
 jobs:
   fetch-clients:
@@ -53,11 +71,17 @@ jobs:
       clients: ${{ steps.clients.outputs.list }}
     steps:
       - uses: actions/checkout@v4
+
       - name: List clients
         id: clients
         run: |
-          CLIENTS=$(ls -d clienti/*/ 2>/dev/null | sed 's|clienti/||g' | sed 's|/||g' | sort | jq -R -s -c 'split("\n")[:-1]')
-          echo "list=$CLIENTS" >> $GITHUB_OUTPUT
+          set -euo pipefail
+          CLIENTS=$(find clienti -mindepth 1 -maxdepth 1 -type d -printf '%f\n' 2>/dev/null | sort | jq -R -s -c 'split("\n")[:-1]')
+          if [ "$CLIENTS" = "[]" ]; then
+            echo "❌ Nessun cliente trovato sotto clienti/"
+            exit 1
+          fi
+          echo "list=$CLIENTS" >> "$GITHUB_OUTPUT"
 
   detect-clients:
     needs: fetch-clients
@@ -68,103 +92,89 @@ jobs:
       - name: Generate matrix
         id: matrix
         run: |
-          if [ "${{ github.event.inputs.client }}" = "all" ]; then
+          set -euo pipefail
+          CLIENT_INPUT="${{ github.event.inputs.client }}"
+
+          # Su push non esistono input: builda tutti i clienti.
+          if [ -z "$CLIENT_INPUT" ] || [ "$CLIENT_INPUT" = "all" ]; then
             MATRIX='${{ needs.fetch-clients.outputs.clients }}'
           else
-            MATRIX='["${{ github.event.inputs.client }}"]'
+            MATRIX="[\"$CLIENT_INPUT\"]"
           fi
-          echo "data={\"client\":$(echo $MATRIX | jq -c .)}" >> $GITHUB_OUTPUT
+
+          echo "data={\"client\":$(echo "$MATRIX" | jq -c .)}" >> "$GITHUB_OUTPUT"
 
   resolve-version:
     runs-on: ubuntu-latest
     outputs:
       version: ${{ steps.resolve.outputs.version }}
+      major: ${{ steps.resolve.outputs.major }}
       dockerfile: ${{ steps.resolve.outputs.dockerfile }}
+      include_extensions: ${{ steps.resolve.outputs.include_extensions }}
     steps:
       - name: Resolve and validate Keycloak version
         id: resolve
         run: |
+          set -euo pipefail
+
           MANUAL="${{ github.event.inputs.keycloak_version_manual }}"
           DROPDOWN="${{ github.event.inputs.keycloak_version }}"
+          INCLUDE_EXTENSIONS="${{ github.event.inputs.include_extensions }}"
 
-          # Priorità: manuale se compilata, altrimenti dropdown
+          if [ -z "$INCLUDE_EXTENSIONS" ]; then
+            INCLUDE_EXTENSIONS="false"
+          fi
+
           if [ -n "$MANUAL" ]; then
             VERSION="$MANUAL"
             echo "Usando versione manuale: $VERSION"
-          else
+          elif [ -n "$DROPDOWN" ]; then
             VERSION="$DROPDOWN"
             echo "Usando versione da dropdown: $VERSION"
+          else
+            VERSION="${DEFAULT_KEYCLOAK_VERSION}"
+            echo "Push senza input: uso DEFAULT_KEYCLOAK_VERSION=$VERSION"
           fi
 
-          # Validazione formato X.Y.Z (solo se versione manuale)
-          if [ -n "$MANUAL" ]; then
-            if ! echo "$VERSION" | grep -qE '^[0-9]+\.[0-9]+\.[0-9]+$'; then
-              echo "❌ Formato versione non valido: '$VERSION'. Usa il formato X.Y.Z (es. 11.0.0)"
-              exit 1
-            fi
-
-            MAJOR=$(echo "$VERSION" | cut -d. -f1)
-
-            if [ "$MAJOR" -ge 17 ]; then
-              # Versioni moderne (Quarkus): verifica su GitHub releases
-              echo "🔍 Verifico '$VERSION' su GitHub releases..."
-              GITHUB_STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
-                -H "Accept: application/vnd.github+json" \
-                "https://api.github.com/repos/keycloak/keycloak/releases/tags/$VERSION")
-
-              if [ "$GITHUB_STATUS" != "200" ]; then
-                echo "❌ Versione '$VERSION' non trovata su GitHub (HTTP $GITHUB_STATUS)"
-                echo "   Controlla: https://github.com/keycloak/keycloak/releases/tag/$VERSION"
-                exit 1
-              fi
-              echo "✅ Versione '$VERSION' verificata su GitHub"
-            else
-              # Versioni legacy (WildFly < 17): verifica che il tag esista su Quay.io
-              # Quay.io risponde 401 quando il tag esiste (auth richiesta per manifest)
-              # Risponde 404 quando il tag non esiste
-              echo "🔍 Versione legacy ($VERSION) — verifico tag su Quay.io..."
-              QUAY_STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
-                "https://quay.io/v2/keycloak/keycloak/manifests/$VERSION")
-
-              if [ "$QUAY_STATUS" = "401" ] || [ "$QUAY_STATUS" = "200" ]; then
-                echo "✅ Tag '$VERSION' trovato su Quay.io (legacy/WildFly)"
-              else
-                echo "❌ Tag '$VERSION' non trovato su Quay.io (HTTP $QUAY_STATUS)"
-                echo "   Controlla: https://quay.io/repository/keycloak/keycloak?tab=tags&tag=$VERSION"
-                exit 1
-              fi
-            fi
+          if ! echo "$VERSION" | grep -qE '^[0-9]+\.[0-9]+\.[0-9]+$'; then
+            echo "❌ Formato versione non valido: '$VERSION'. Usa X.Y.Z, per esempio 11.0.0"
+            exit 1
           fi
 
-          # Sceglie il Dockerfile in base alla major version:
-          #   >= 17 → Quarkus  (/opt/keycloak,  kc.sh)
-          #   <  17 → WildFly  (/opt/jboss/keycloak, standalone.sh)
-          MAJOR=$(echo "$VERSION" | cut -d. -f1)
+          MAJOR="$(echo "$VERSION" | cut -d. -f1)"
+
           if [ "$MAJOR" -ge 17 ]; then
             DOCKERFILE="./Dockerfile"
-            echo "🐳 Dockerfile: Quarkus >= 17 → ./Dockerfile"
+            echo "🐳 Dockerfile moderno Quarkus: $DOCKERFILE"
           else
             DOCKERFILE="./Dockerfile.legacy"
-            echo "🐳 Dockerfile: WildFly < 17  → ./Dockerfile.legacy"
+            echo "🐳 Dockerfile legacy WildFly: $DOCKERFILE"
           fi
 
-          echo "version=$VERSION"       >> $GITHUB_OUTPUT
-          echo "dockerfile=$DOCKERFILE" >> $GITHUB_OUTPUT
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "major=$MAJOR" >> "$GITHUB_OUTPUT"
+          echo "dockerfile=$DOCKERFILE" >> "$GITHUB_OUTPUT"
+          echo "include_extensions=$INCLUDE_EXTENSIONS" >> "$GITHUB_OUTPUT"
 
   build:
-    needs: [detect-clients, resolve-version]
+    needs:
+      - detect-clients
+      - resolve-version
     runs-on: ubuntu-latest
     strategy:
       matrix: ${{ fromJson(needs.detect-clients.outputs.matrix) }}
       fail-fast: false
+
     permissions:
       contents: read
       packages: write
+
     steps:
       - uses: actions/checkout@v4
 
       - name: Prepare repository name
-        run: echo "lowercase_repo=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
+        run: |
+          echo "lowercase_repo=$(echo '${{ github.repository }}' | tr '[:upper:]' '[:lower:]')" >> "$GITHUB_ENV"
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -176,17 +186,18 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Debug - lista file
+      - name: Verify files
         run: |
-          echo "=== ROOT ===" && ls -la
-          echo "=== CLIENTI ===" && ls -la clienti/
-          echo "=== BASE ===" && ls -la base/ || echo "base/ non esiste!"
-          echo "=== DOCKERFILE ===" && echo "${{ needs.resolve-version.outputs.dockerfile }}"
-
-      - name: Verify Files
-        run: |
-          ls -d base/extensions
-          ls -d clienti/${{ matrix.client }}
+          set -euo pipefail
+          echo "Dockerfile scelto: ${{ needs.resolve-version.outputs.dockerfile }}"
+          test -f "${{ needs.resolve-version.outputs.dockerfile }}"
+          test -d "clienti/${{ matrix.client }}/themes"
+          if [ -d base/extensions ]; then
+            echo "base/extensions presente"
+            find base/extensions -maxdepth 2 -type f | sort
+          else
+            echo "base/extensions assente: ok, le estensioni sono opzionali"
+          fi
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
@@ -197,6 +208,7 @@ jobs:
           build-args: |
             KEYCLOAK_VERSION=${{ needs.resolve-version.outputs.version }}
             CLIENT_ID=${{ matrix.client }}
+            INCLUDE_EXTENSIONS=${{ needs.resolve-version.outputs.include_extensions }}
           tags: |
             ${{ env.REGISTRY }}/${{ env.lowercase_repo }}/keycloak-${{ matrix.client }}:${{ needs.resolve-version.outputs.version }}
             ${{ env.REGISTRY }}/${{ env.lowercase_repo }}/keycloak-${{ matrix.client }}:latest

@@ -1,50 +1,93 @@
 # =============================================================================
-# KEYCLOAK MULTI-CLIENT DOCKERFILE — WildFly/Legacy (< 17)
-# Usa quay.io/keycloak/keycloak che ha i tag storici fino alla 11.x
-# Struttura WildFly: /opt/jboss/keycloak  (NON /opt/keycloak come in Quarkus)
+# KEYCLOAK MULTI-CLIENT DOCKERFILE — WildFly / Legacy (Keycloak < 17)
+#
+# Usa questo file per Keycloak 16.x, 15.x, 12.x, 11.x, ecc.
+# Path legacy: /opt/jboss/keycloak
+#
+# Note importanti:
+# - Copia SOLO i temi cliente, senza mai sovrascrivere i temi di sistema:
+#   base, keycloak, keycloak-preview.
+# - Le estensioni/provider NON vengono copiate di default, perché spesso sono
+#   la causa di errori 500 nella Admin Console se non sono compilate per la
+#   stessa versione Keycloak.
+#   Abilitarle solo con: --build-arg INCLUDE_EXTENSIONS=true
 # =============================================================================
+
 ARG KEYCLOAK_VERSION=11.0.0
-ARG CLIENT_ID
 
-# STAGE 1 - BUILDER
-FROM quay.io/keycloak/keycloak:${KEYCLOAK_VERSION} AS builder
-ARG CLIENT_ID
-# Nelle versioni WildFly i provider vanno in standalone/deployments
-COPY base/extensions /opt/jboss/keycloak/standalone/deployments/
-
-# STAGE 2 - RUNTIME
 FROM quay.io/keycloak/keycloak:${KEYCLOAK_VERSION}
-ARG CLIENT_ID
 
-COPY --from=builder /opt/jboss/keycloak/standalone/deployments/ /opt/jboss/keycloak/standalone/deployments/
+ARG CLIENT_ID
+ARG INCLUDE_EXTENSIONS=false
+
+COPY --chown=jboss:jboss base /tmp/base
 COPY --chown=jboss:jboss clienti /tmp/clienti
 
-RUN mkdir -p /opt/jboss/keycloak/themes && \
-    if [ "$CLIENT_ID" = "all-themes" ] ; then \
-        echo "Building ALL THEMES image (legacy/wildfly)" ; \
-        for theme_dir in /tmp/clienti/*/themes/* ; do \
-            if [ -d "$theme_dir" ] ; then \
-                echo "Copying theme: $theme_dir" ; \
-                cp -R "$theme_dir" /opt/jboss/keycloak/themes/ ; \
-            fi ; \
-        done ; \
+RUN set -eux; \
+    if [ "${INCLUDE_EXTENSIONS}" = "true" ] && [ -d /tmp/base/extensions ] && [ "$(find /tmp/base/extensions -mindepth 1 -maxdepth 1 | wc -l)" -gt 0 ]; then \
+        echo "Copying custom providers/extensions for WildFly Keycloak"; \
+        mkdir -p /opt/jboss/keycloak/standalone/deployments; \
+        cp -R /tmp/base/extensions/* /opt/jboss/keycloak/standalone/deployments/; \
     else \
-        echo "Building single client image: $CLIENT_ID (legacy/wildfly)" ; \
-        if [ -d "/tmp/clienti/${CLIENT_ID}/themes" ] ; then \
-            cp -R /tmp/clienti/${CLIENT_ID}/themes/* /opt/jboss/keycloak/themes/ ; \
-        else \
-            echo "ERROR: themes folder not found for CLIENT_ID=${CLIENT_ID}" ; \
-            exit 1 ; \
-        fi ; \
-    fi && \
-    rm -rf /tmp/clienti && \
-    for f in /opt/jboss/keycloak/themes/*/login/theme.properties \
-              /opt/jboss/keycloak/themes/*/email/theme.properties \
-              /opt/jboss/keycloak/themes/*/account/theme.properties \
-              /opt/jboss/keycloak/themes/*/admin/theme.properties ; do \
-        [ -f "$f" ] && sed -i 's/^parent=base$/parent=keycloak/g' "$f" ; \
-    done
+        echo "Skipping providers/extensions. Set INCLUDE_EXTENSIONS=true to enable them."; \
+    fi; \
+    THEME_ROOT="/opt/jboss/keycloak/themes"; \
+    mkdir -p "${THEME_ROOT}"; \
+    copy_theme() { \
+        src="$1"; \
+        name="$(basename "$src")"; \
+        case "$name" in \
+            base|keycloak|keycloak-preview) \
+                echo "ERROR: refusing to copy reserved Keycloak system theme: $name"; \
+                exit 1; \
+                ;; \
+        esac; \
+        echo "Copying theme: $src -> ${THEME_ROOT}/$name"; \
+        cp -R "$src" "${THEME_ROOT}/"; \
+    }; \
+    if [ -z "${CLIENT_ID:-}" ]; then \
+        echo "ERROR: CLIENT_ID is required. Example: --build-arg CLIENT_ID=cps"; \
+        exit 1; \
+    fi; \
+    if [ "${CLIENT_ID}" = "all" ] || [ "${CLIENT_ID}" = "all-themes" ]; then \
+        echo "Building image with ALL client themes"; \
+        found=0; \
+        for theme_dir in /tmp/clienti/*/themes/*; do \
+            if [ -d "$theme_dir" ]; then \
+                found=1; \
+                copy_theme "$theme_dir"; \
+            fi; \
+        done; \
+        if [ "$found" = "0" ]; then \
+            echo "ERROR: no themes found under /tmp/clienti/*/themes/*"; \
+            exit 1; \
+        fi; \
+    else \
+        echo "Building single client image: ${CLIENT_ID}"; \
+        if [ ! -d "/tmp/clienti/${CLIENT_ID}/themes" ]; then \
+            echo "ERROR: themes folder not found: /tmp/clienti/${CLIENT_ID}/themes"; \
+            exit 1; \
+        fi; \
+        found=0; \
+        for theme_dir in /tmp/clienti/${CLIENT_ID}/themes/*; do \
+            if [ -d "$theme_dir" ]; then \
+                found=1; \
+                copy_theme "$theme_dir"; \
+            fi; \
+        done; \
+        if [ "$found" = "0" ]; then \
+            echo "ERROR: no theme folders found for CLIENT_ID=${CLIENT_ID}"; \
+            exit 1; \
+        fi; \
+    fi; \
+    rm -rf /tmp/base /tmp/clienti; \
+    find "${THEME_ROOT}" -mindepth 1 -maxdepth 1 -type d -print
 
-# NOTA: Il blocco RUN add-user-keycloak.sh è stato rimosso.
-# L'utente amministratore viene ora generato in modo sicuro a runtime
-# dallo script d'ingresso nativo di Keycloak.
+# Admin locale per immagini legacy. In produzione sovrascrivi queste variabili.
+ENV KEYCLOAK_USER=admin
+ENV KEYCLOAK_PASSWORD=admin
+
+EXPOSE 8080
+
+ENTRYPOINT ["/opt/jboss/tools/docker-entrypoint.sh"]
+CMD ["-b", "0.0.0.0"]
