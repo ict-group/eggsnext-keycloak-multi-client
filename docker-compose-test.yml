@@ -17,10 +17,13 @@ services:
       - ./clienti/${CLIENT_ID}/${CLIENT_ID}.env
 
     environment:
-      # --- Credenziali admin (valide per entrambe le architetture) ---
+      # --- Credenziali admin ---
+      # WildFly (< 17)
+      KEYCLOAK_USER: ${KEYCLOAK_ADMIN_USER:-admin}
+      KEYCLOAK_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:-Expert0.}
+      # Quarkus (>= 17)
       KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN_USER:-admin}
       KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:-Expert0.}
-      # Quarkus (>= 17)
       KC_BOOTSTRAP_ADMIN_USERNAME: ${KEYCLOAK_ADMIN_USER:-admin}
       KC_BOOTSTRAP_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:-Expert0.}
       # --- DB ---
@@ -36,6 +39,8 @@ services:
       DB_DATABASE: ${KEYCLOAK_DB_NAME:-keycloak_${CLIENT_ID}}
       DB_USER: ${KEYCLOAK_DB_USER:-keycloak}
       DB_PASSWORD: ${KEYCLOAK_DB_PASSWORD:-Expert0.}
+      # --- JVM (WildFly < 17) ---
+      JAVA_OPTS: "-server -Xms256m -Xmx1024m -XX:MetaspaceSize=96M -XX:MaxMetaspaceSize=256m -Djava.net.preferIPv4Stack=true -Djboss.modules.system.pkgs=org.jboss.byteman -Djava.awt.headless=true --add-exports=java.base/sun.nio.ch=ALL-UNNAMED --add-exports=jdk.unsupported/sun.misc=ALL-UNNAMED --add-exports=jdk.unsupported/sun.reflect=ALL-UNNAMED"
       # --- Rete ---
       KC_HTTP_ENABLED: "true"
       KC_HOSTNAME: localhost
@@ -44,7 +49,7 @@ services:
       KC_PROXY: none
 
     volumes:
-      - ${KEYCLOAK_THEMES_PATH:-/opt/keycloak/themes}:/opt/keycloak/themes
+      - ${KEYCLOAK_THEMES_VOLUME:-./clienti/${CLIENT_ID}/themes:/opt/keycloak/themes}
 
     # Il command viene iniettato dallo script in base alla versione
     command: ${KEYCLOAK_CMD:-start-dev --spi-theme-static-max-age=-1 --spi-theme-cache-themes=false --spi-theme-cache-templates=false}

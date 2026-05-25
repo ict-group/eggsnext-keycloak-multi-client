@@ -37,7 +37,23 @@ RUN mkdir -p /opt/jboss/keycloak/themes && \
             exit 1 ; \
         fi ; \
     fi && \
-    rm -rf /tmp/clienti
+    rm -rf /tmp/clienti && \
+    for f in /opt/jboss/keycloak/themes/*/login/theme.properties \
+              /opt/jboss/keycloak/themes/*/email/theme.properties \
+              /opt/jboss/keycloak/themes/*/account/theme.properties \
+              /opt/jboss/keycloak/themes/*/admin/theme.properties ; do \
+        [ -f "$f" ] && sed -i 's/^parent=base$/parent=keycloak/g' "$f" ; \
+    done
+
+# Argomenti per le credenziali admin (usati solo al primo avvio)
+ARG KEYCLOAK_ADMIN_USER=admin
+ARG KEYCLOAK_ADMIN_PASSWORD=Expert0.
+
+# Crea l'utente admin iniziale dentro l'immagine
+RUN /opt/jboss/keycloak/bin/add-user-keycloak.sh \
+    -r master \
+    -u ${KEYCLOAK_ADMIN_USER} \
+    -p ${KEYCLOAK_ADMIN_PASSWORD}
 
 ENV KEYCLOAK_HTTP_ENABLED=true
 
