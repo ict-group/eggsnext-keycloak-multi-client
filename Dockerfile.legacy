@@ -1,0 +1,63 @@
+# =============================================================================
+# KEYCLOAK MULTI-CLIENT DOCKERFILE — WildFly/Legacy (< 17)
+# Usa l'archivio ufficiale Keycloak su GitHub come base
+# perché jboss/keycloak è stato rimosso da Docker Hub
+# =============================================================================
+ARG KEYCLOAK_VERSION=11.0.0
+ARG CLIENT_ID
+
+# STAGE 1 - BUILDER: scarica e installa Keycloak da zero su JDK
+FROM eclipse-temurin:11-jdk AS builder
+ARG KEYCLOAK_VERSION
+ARG CLIENT_ID
+
+RUN apt-get update && apt-get install -y curl unzip && rm -rf /var/lib/apt/lists/*
+
+# Scarica il pacchetto ufficiale da GitHub releases
+RUN curl -fsSL \
+    "https://github.com/keycloak/keycloak/releases/download/${KEYCLOAK_VERSION}/keycloak-${KEYCLOAK_VERSION}.zip" \
+    -o /tmp/keycloak.zip && \
+    unzip /tmp/keycloak.zip -d /opt && \
+    mv /opt/keycloak-${KEYCLOAK_VERSION} /opt/keycloak && \
+    rm /tmp/keycloak.zip
+
+# Copia i provider custom nelle cartelle WildFly
+COPY base/extensions /opt/keycloak/standalone/deployments/
+
+# STAGE 2 - RUNTIME
+FROM eclipse-temurin:11-jre
+ARG CLIENT_ID
+
+COPY --from=builder /opt/keycloak /opt/keycloak
+COPY --chown=1000:1000 clienti /tmp/clienti
+
+RUN groupadd -r keycloak && useradd -r -g keycloak keycloak && \
+    chown -R keycloak:keycloak /opt/keycloak
+
+RUN mkdir -p /opt/keycloak/themes && \
+    if [ "$CLIENT_ID" = "all-themes" ] ; then \
+        echo "Building ALL THEMES image (legacy)" ; \
+        for theme_dir in /tmp/clienti/*/themes/* ; do \
+            if [ -d "$theme_dir" ] ; then \
+                echo "Copying theme: $theme_dir" ; \
+                cp -R "$theme_dir" /opt/keycloak/themes/ ; \
+            fi ; \
+        done ; \
+    else \
+        echo "Building single client image: $CLIENT_ID (legacy)" ; \
+        if [ -d "/tmp/clienti/${CLIENT_ID}/themes" ] ; then \
+            cp -R /tmp/clienti/${CLIENT_ID}/themes/* /opt/keycloak/themes/ ; \
+        else \
+            echo "ERROR: themes folder not found for CLIENT_ID=${CLIENT_ID}" ; \
+            exit 1 ; \
+        fi ; \
+    fi && \
+    rm -rf /tmp/clienti
+
+USER keycloak
+WORKDIR /opt/keycloak
+
+ENV KEYCLOAK_HTTP_ENABLED=true
+
+ENTRYPOINT ["/opt/keycloak/bin/standalone.sh"]
+CMD ["-b", "0.0.0.0"]

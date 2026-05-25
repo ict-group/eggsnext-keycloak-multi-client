@@ -79,6 +79,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       version: ${{ steps.resolve.outputs.version }}
+      dockerfile: ${{ steps.resolve.outputs.dockerfile }}
     steps:
       - name: Resolve and validate Keycloak version
         id: resolve
@@ -102,34 +103,48 @@ jobs:
               exit 1
             fi
 
-            echo "🔍 Verifico versione '$VERSION' su GitHub releases..."
-            GITHUB_STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
-              -H "Accept: application/vnd.github+json" \
-              "https://api.github.com/repos/keycloak/keycloak/releases/tags/$VERSION")
+            MAJOR=$(echo "$VERSION" | cut -d. -f1)
 
-            if [ "$GITHUB_STATUS" = "200" ]; then
-              echo "✅ Versione '$VERSION' trovata su GitHub releases"
-            else
-              echo "⚠️  Versione '$VERSION' non trovata su GitHub (HTTP $GITHUB_STATUS) — verifico su Quay.io (versioni legacy)..."
+            if [ "$MAJOR" -ge 17 ]; then
+              # Versioni moderne: verifica su GitHub releases
+              echo "🔍 Verifico '$VERSION' su GitHub releases..."
+              GITHUB_STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
+                -H "Accept: application/vnd.github+json" \
+                "https://api.github.com/repos/keycloak/keycloak/releases/tags/$VERSION")
 
-              QUAY_STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
-                "https://quay.io/v2/keycloak/keycloak/manifests/$VERSION")
-
-              if [ "$QUAY_STATUS" = "200" ] || [ "$QUAY_STATUS" = "401" ]; then
-                # 401 su Quay.io significa che il tag esiste ma richiede auth per il manifest
-                # (comportamento normale per registry pubblici con autenticazione opzionale)
-                echo "✅ Versione '$VERSION' trovata su Quay.io (legacy)"
-              else
-                echo "❌ Versione Keycloak '$VERSION' non trovata né su GitHub né su Quay.io"
-                echo "   Controlla manualmente:"
-                echo "   - https://github.com/keycloak/keycloak/releases/tag/$VERSION"
-                echo "   - https://quay.io/repository/keycloak/keycloak?tab=tags"
+              if [ "$GITHUB_STATUS" != "200" ]; then
+                echo "❌ Versione '$VERSION' non trovata su GitHub (HTTP $GITHUB_STATUS)"
+                echo "   Controlla: https://github.com/keycloak/keycloak/releases/tag/$VERSION"
                 exit 1
               fi
+              echo "✅ Versione '$VERSION' verificata su GitHub"
+            else
+              # Versioni legacy (<17): verifica che il zip esista su GitHub releases
+              echo "🔍 Versione legacy ($VERSION) — verifico archivio su GitHub..."
+              ZIP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
+                "https://github.com/keycloak/keycloak/releases/download/${VERSION}/keycloak-${VERSION}.zip")
+
+              if [ "$ZIP_STATUS" != "200" ] && [ "$ZIP_STATUS" != "302" ]; then
+                echo "❌ Archivio keycloak-${VERSION}.zip non trovato su GitHub (HTTP $ZIP_STATUS)"
+                echo "   Controlla: https://github.com/keycloak/keycloak/releases/tag/$VERSION"
+                exit 1
+              fi
+              echo "✅ Archivio '$VERSION' trovato su GitHub releases"
             fi
           fi
 
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          # Sceglie il Dockerfile in base alla major version
+          MAJOR=$(echo "$VERSION" | cut -d. -f1)
+          if [ "$MAJOR" -ge 17 ]; then
+            DOCKERFILE="./Dockerfile"
+            echo "🐳 Dockerfile: moderno Quarkus (>= 17)"
+          else
+            DOCKERFILE="./Dockerfile.legacy"
+            echo "🐳 Dockerfile: legacy WildFly (< 17)"
+          fi
+
+          echo "version=$VERSION"       >> $GITHUB_OUTPUT
+          echo "dockerfile=$DOCKERFILE" >> $GITHUB_OUTPUT
 
   build:
     needs: [detect-clients, resolve-version]
@@ -144,7 +159,6 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Prepare repository name
-        id: repo
         run: echo "lowercase_repo=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
 
       - name: Set up Docker Buildx
@@ -162,6 +176,7 @@ jobs:
           echo "=== ROOT ===" && ls -la
           echo "=== CLIENTI ===" && ls -la clienti/
           echo "=== BASE ===" && ls -la base/ || echo "base/ non esiste!"
+          echo "=== DOCKERFILE USATO ===" && echo "${{ needs.resolve-version.outputs.dockerfile }}"
 
       - name: Verify Files
         run: |
@@ -172,7 +187,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          file: ./Dockerfile
+          file: ${{ needs.resolve-version.outputs.dockerfile }}
           push: true
           build-args: |
             KEYCLOAK_VERSION=${{ needs.resolve-version.outputs.version }}
