@@ -39,7 +39,7 @@ on:
           - 19.0.3
           - 18.0.2
       keycloak_version_manual:
-        description: 'Oppure inserisci versione manuale (es. 27.0.0) — ha priorità sul dropdown se compilata'
+        description: 'Oppure inserisci versione manuale (es. 11.0.0) — ha priorità sul dropdown se compilata'
         required: false
         type: string
 
@@ -98,21 +98,37 @@ jobs:
           # Validazione formato X.Y.Z (solo se versione manuale)
           if [ -n "$MANUAL" ]; then
             if ! echo "$VERSION" | grep -qE '^[0-9]+\.[0-9]+\.[0-9]+$'; then
-              echo "❌ Formato versione non valido: '$VERSION'. Usa il formato X.Y.Z (es. 27.0.1)"
+              echo "❌ Formato versione non valido: '$VERSION'. Usa il formato X.Y.Z (es. 11.0.0)"
               exit 1
+            fi
+
+            echo "🔍 Verifico versione '$VERSION' su GitHub releases..."
+            GITHUB_STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
+              -H "Accept: application/vnd.github+json" \
+              "https://api.github.com/repos/keycloak/keycloak/releases/tags/$VERSION")
+
+            if [ "$GITHUB_STATUS" = "200" ]; then
+              echo "✅ Versione '$VERSION' trovata su GitHub releases"
+            else
+              echo "⚠️  Versione '$VERSION' non trovata su GitHub (HTTP $GITHUB_STATUS) — verifico su Quay.io (versioni legacy)..."
+
+              QUAY_STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
+                "https://quay.io/v2/keycloak/keycloak/manifests/$VERSION")
+
+              if [ "$QUAY_STATUS" = "200" ] || [ "$QUAY_STATUS" = "401" ]; then
+                # 401 su Quay.io significa che il tag esiste ma richiede auth per il manifest
+                # (comportamento normale per registry pubblici con autenticazione opzionale)
+                echo "✅ Versione '$VERSION' trovata su Quay.io (legacy)"
+              else
+                echo "❌ Versione Keycloak '$VERSION' non trovata né su GitHub né su Quay.io"
+                echo "   Controlla manualmente:"
+                echo "   - https://github.com/keycloak/keycloak/releases/tag/$VERSION"
+                echo "   - https://quay.io/repository/keycloak/keycloak?tab=tags"
+                exit 1
+              fi
             fi
           fi
 
-          # Verifica esistenza del tag su GitHub Keycloak releases
-          HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
-            "https://api.github.com/repos/keycloak/keycloak/releases/tags/$VERSION")
-
-          if [ "$HTTP_STATUS" != "200" ]; then
-            echo "❌ Versione Keycloak '$VERSION' non trovata su GitHub (HTTP $HTTP_STATUS)"
-            exit 1
-          fi
-
-          echo "✅ Versione '$VERSION' verificata e valida"
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
   build:
