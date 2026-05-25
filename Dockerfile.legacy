@@ -45,17 +45,6 @@ RUN mkdir -p /opt/jboss/keycloak/themes && \
         [ -f "$f" ] && sed -i 's/^parent=base$/parent=keycloak/g' "$f" ; \
     done
 
-# Argomenti per le credenziali admin (usati solo al primo avvio)
-ARG KEYCLOAK_ADMIN_USER=admin
-ARG KEYCLOAK_ADMIN_PASSWORD=Expert0.
-
-# Crea l'utente admin iniziale dentro l'immagine
-RUN /opt/jboss/keycloak/bin/add-user-keycloak.sh \
-    -r master \
-    -u ${KEYCLOAK_ADMIN_USER} \
-    -p ${KEYCLOAK_ADMIN_PASSWORD}
-
-ENV KEYCLOAK_HTTP_ENABLED=true
-
-ENTRYPOINT ["/opt/jboss/keycloak/bin/standalone.sh"]
-CMD ["-b", "0.0.0.0"]
+# NOTA: Il blocco RUN add-user-keycloak.sh è stato rimosso.
+# L'utente amministratore viene ora generato in modo sicuro a runtime
+# dallo script d'ingresso nativo di Keycloak.

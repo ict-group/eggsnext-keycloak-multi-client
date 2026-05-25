@@ -2,7 +2,7 @@
 CLIENT_ID=${1:?"
 ❌ Devi passare CLIENT_ID. Es: ./test-image.sh papalini 26.6.1"}
 KEYCLOAK_VERSION=${2:-26.6.1}
-REGISTRY="ghcr.io/ict-group/eggsnext-keycloak-multi-client"
+REGISTRY_PREFIX="ghcr.io/ict-group/eggsnext-keycloak-multi-client/"
 
 MAJOR=$(echo "$KEYCLOAK_VERSION" | cut -d. -f1)
 
@@ -23,14 +23,14 @@ else
   echo "🐳 Architettura: WildFly (< 17) — temi dall'immagine (no volume mount)"
 fi
 
-echo "📦 Pull immagine: $REGISTRY/keycloak-$CLIENT_ID:$KEYCLOAK_VERSION"
-docker pull $REGISTRY/keycloak-$CLIENT_ID:$KEYCLOAK_VERSION
+# NOTA: Se stai testando modifiche locali al Dockerfile o ai temi,
+# buildiamo direttamente l'immagine locale invece di fare il pull da GHCR.
+echo "🚀 Avvio e ricompilazione locale con CLIENT_ID=$CLIENT_ID VERSION=$KEYCLOAK_VERSION"
 
-echo "🚀 Avvio con CLIENT_ID=$CLIENT_ID VERSION=$KEYCLOAK_VERSION"
 CLIENT_ID=$CLIENT_ID \
 KEYCLOAK_VERSION=$KEYCLOAK_VERSION \
 KEYCLOAK_DOCKERFILE=$KEYCLOAK_DOCKERFILE \
 KEYCLOAK_THEMES_PATH=$KEYCLOAK_THEMES_PATH \
 KEYCLOAK_THEMES_VOLUME="$KEYCLOAK_THEMES_VOLUME" \
 KEYCLOAK_CMD="$KEYCLOAK_CMD" \
-docker compose -f docker-compose-test.yml up
+docker compose -f docker-compose-test.yml up --build
