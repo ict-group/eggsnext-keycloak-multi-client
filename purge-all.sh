@@ -59,7 +59,7 @@ fi
 # -----------------------------------------------------------------------------
 # STEP 1 — docker compose down (tutti i servizi definiti nel compose)
 # -----------------------------------------------------------------------------
-echo -e "${CYAN}▶ [1/2] Arresto e rimozione container + volumi del progetto...${NC}"
+echo -e "${CYAN}▶ [1/3] Arresto e rimozione container + volumi del progetto...${NC}"
 
 if docker compose -f "$COMPOSE_FILE" down --volumes --remove-orphans 2>&1; then
   echo -e "${GREEN}   ✔ docker compose down completato${NC}"
@@ -70,10 +70,34 @@ fi
 echo ""
 
 # -----------------------------------------------------------------------------
-# STEP 2 — docker system prune globale
+# STEP 2 — rimozione forzata di tutti i container (anche in esecuzione) e volumi named
 # -----------------------------------------------------------------------------
-echo -e "${CYAN}▶ [2/2] Pulizia globale Docker (system prune)...${NC}"
-echo "   Rimozione di: container fermati, reti inutilizzate, immagini dangling, volumi orfani, build cache"
+echo -e "${CYAN}▶ [2/3] Rimozione forzata di tutti i container e volumi named...${NC}"
+
+CONTAINERS=$(docker ps -aq)
+if [ -n "$CONTAINERS" ]; then
+  docker stop $CONTAINERS 2>/dev/null || true
+  docker rm -f $CONTAINERS 2>/dev/null || true
+  echo -e "${GREEN}   ✔ Container rimossi${NC}"
+else
+  echo "   Nessun container da rimuovere"
+fi
+
+VOLUMES=$(docker volume ls -q)
+if [ -n "$VOLUMES" ]; then
+  docker volume rm $VOLUMES 2>/dev/null || true
+  echo -e "${GREEN}   ✔ Volumi named rimossi${NC}"
+else
+  echo "   Nessun volume named da rimuovere"
+fi
+
+echo ""
+
+# -----------------------------------------------------------------------------
+# STEP 3 — docker system prune globale (immagini, reti, build cache)
+# -----------------------------------------------------------------------------
+echo -e "${CYAN}▶ [3/3] Pulizia globale Docker (system prune)...${NC}"
+echo "   Rimozione di: immagini, reti inutilizzate, volumi orfani, build cache"
 echo ""
 
 docker system prune --all --volumes --force
