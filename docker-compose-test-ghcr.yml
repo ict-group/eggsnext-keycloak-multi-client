@@ -59,8 +59,6 @@ services:
         -Djava.net.preferIPv4Stack=true
         -Djboss.modules.system.pkgs=org.jboss.byteman
         -Djava.awt.headless=true
-        -Dkeycloak.theme.cacheThemes=false
-        -Dkeycloak.theme.cacheTemplates=false
         --add-exports=java.base/sun.nio.ch=ALL-UNNAMED
         --add-exports=jdk.unsupported/sun.misc=ALL-UNNAMED
         --add-exports=jdk.unsupported/sun.reflect=ALL-UNNAMED
