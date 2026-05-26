@@ -107,8 +107,7 @@ RUN for f in /opt/jboss/keycloak/themes/*/login/theme.properties \
         echo "Fixed parent in: $f → $(grep '^parent=' "$f")"; \
     done
 
-COPY scripts/kc-entrypoint-legacy.sh /opt/jboss/tools/kc-entrypoint-legacy.sh
-RUN chmod +x /opt/jboss/tools/kc-entrypoint-legacy.sh
+COPY --chmod=755 scripts/kc-entrypoint-legacy.sh /opt/jboss/tools/kc-entrypoint-legacy.sh
 
 # Non mettere KEYCLOAK_USER / KEYCLOAK_PASSWORD nel Dockerfile:
 # passali a runtime con -e oppure tramite secrets della piattaforma.
