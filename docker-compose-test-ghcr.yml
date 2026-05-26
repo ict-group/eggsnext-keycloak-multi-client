@@ -104,4 +104,4 @@ services:
 
 volumes:
   postgres-data:
-    name: keycloak-postgres-${CLIENT_ID}-pg${POSTGRES_VERSION:-16}
+    name: keycloak-postgres-${CLIENT_ID}-kc${KEYCLOAK_VERSION}-pg${POSTGRES_VERSION:-16}
