@@ -1,4 +1,12 @@
-/* 1. LAYOUT E SFONDO */
+/* =============================================================================
+   CPS THEME - style.css
+   Compatibile con:
+   - Keycloak <= 16  (WildFly / PatternFly 3) → classi Bootstrap + .btn, .control-label
+   - Keycloak >= 17  (Quarkus  / PatternFly 4) → classi pf-c-*, pf-m-*
+   ============================================================================= */
+
+/* ─── 1. LAYOUT E SFONDO ─────────────────────────────────────────────────── */
+
 body {
     margin: 0;
     height: 100vh;
@@ -13,10 +21,8 @@ body {
 body::before {
     content: "";
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
     background-image: url('../img/cps_background.png');
     background-size: cover;
     background-position: center;
@@ -24,12 +30,16 @@ body::before {
     z-index: 0;
 }
 
-#kc-header, #kc-page-title, .login-pf-header h1 {
+/* Nasconde header nativo (entrambe le versioni) */
+#kc-header,
+#kc-page-title,
+.login-pf-header h1 {
     display: none !important;
 }
 
-/* 2. LA LOGIN CARD */
-/* 2. LA LOGIN CARD */
+/* ─── 2. LOGIN CARD ──────────────────────────────────────────────────────── */
+
+/* Usata da entrambe le versioni */
 .card-pf {
     background: linear-gradient(180deg, #E30613 50%, transparent 130%) !important;
     border-radius: 18px !important;
@@ -44,7 +54,8 @@ body::before {
     z-index: 1;
 }
 
-/* 3. LOGO */
+/* ─── 3. LOGO ────────────────────────────────────────────────────────────── */
+
 .login-pf-header::before {
     content: "";
     display: block;
@@ -56,8 +67,12 @@ body::before {
     margin-bottom: 30px;
 }
 
-/* 4. ETICHETTE */
-.pf-c-form__label, .control-label {
+/* ─── 4. ETICHETTE ───────────────────────────────────────────────────────── */
+
+/* PF4 >= 17 */
+.pf-c-form__label,
+    /* PF3 <= 16 */
+.control-label {
     font-size: 13px !important;
     color: rgba(255, 255, 255, 0.75) !important;
     font-weight: 500 !important;
@@ -65,7 +80,8 @@ body::before {
     display: block !important;
 }
 
-/* 5. USERNAME */
+/* ─── 5. INPUT USERNAME ──────────────────────────────────────────────────── */
+
 input#username {
     border: none !important;
     border-bottom: 1px solid rgba(255, 255, 255, 0.5) !important;
@@ -76,22 +92,16 @@ input#username {
     padding: 0 0 8px 0 !important;
     margin-bottom: 25px !important;
     width: 100% !important;
-    display: flex !important;
     color: #fff !important;
     font-size: 15px !important;
 }
 
-input#username::placeholder {
-    color: rgba(255, 255, 255, 0.5) !important;
-}
+input#username::placeholder { color: rgba(255, 255, 255, 0.5) !important; }
+input#username:focus { border-bottom: 2px solid rgba(255, 255, 255, 0.9) !important; outline: none !important; box-shadow: none !important; }
 
-input#username:focus {
-    border-bottom: 2px solid rgba(255, 255, 255, 0.9) !important;
-    outline: none !important;
-    box-shadow: none !important;
-}
+/* ─── 6. INPUT PASSWORD ──────────────────────────────────────────────────── */
 
-/* 6. PASSWORD */
+/* PF4 >= 17: wrapper gruppo password */
 .pf-c-input-group {
     background-color: transparent !important;
     border: none !important;
@@ -103,11 +113,28 @@ input#username:focus {
     display: flex !important;
     align-items: center !important;
 }
-
 .pf-c-input-group:focus-within {
     border-bottom: 2px solid rgba(255, 255, 255, 0.9) !important;
 }
 
+/* PF3 <= 16: wrapper gruppo password */
+.input-group {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.5) !important;
+    margin-bottom: 20px !important;
+    display: flex !important;
+    align-items: center !important;
+    background: transparent !important;
+}
+.input-group:focus-within {
+    border-bottom: 2px solid rgba(255, 255, 255, 0.9) !important;
+}
+.input-group .input-group-addon {
+    background: transparent !important;
+    border: none !important;
+    color: rgba(255, 255, 255, 0.7) !important;
+}
+
+/* Input password (entrambe le versioni) */
 input#password,
 .pf-c-form-control {
     background-color: transparent !important;
@@ -119,20 +146,14 @@ input#password,
     height: auto !important;
     font-size: 15px !important;
 }
-
 input#password::placeholder,
-.pf-c-form-control::placeholder {
-    color: rgba(255, 255, 255, 0.5) !important;
-}
-
+.pf-c-form-control::placeholder { color: rgba(255, 255, 255, 0.5) !important; }
 input#password:focus,
-.pf-c-form-control:focus {
-    outline: none !important;
-    box-shadow: none !important;
-    border: none !important;
-}
+.pf-c-form-control:focus { outline: none !important; box-shadow: none !important; border: none !important; }
 
-/* 7. TASTO OCCHIO */
+/* ─── 7. BOTTONE OCCHIO (mostra/nascondi password) ──────────────────────── */
+
+/* PF4 */
 .pf-c-button.pf-m-control {
     background-color: transparent !important;
     border: none !important;
@@ -140,10 +161,27 @@ input#password:focus,
     outline: none !important;
     color: rgba(255, 255, 255, 0.7) !important;
     padding: 0 10px !important;
+    --pf-c-button--m-control--after--BorderColor: transparent !important;
+}
+.pf-c-button.pf-m-control::after { border: none !important; content: none !important; }
+.pf-c-form-control__icon { display: none !important; }
+
+/* PF3: bottone addon dentro input-group */
+.input-group-btn .btn {
+    background: transparent !important;
+    border: none !important;
+    color: rgba(255, 255, 255, 0.7) !important;
+    box-shadow: none !important;
 }
 
-/* 8. BOTTONE ACCEDI */
-#kc-login, input#kc-login.btn-primary {
+/* ─── 8. BOTTONE ACCEDI ──────────────────────────────────────────────────── */
+
+/* PF4 >= 17 */
+#kc-login,
+input#kc-login.btn-primary,
+    /* PF3 <= 16 */
+.btn.btn-primary,
+input[type="submit"].btn-primary {
     background-color: #fff !important;
     background-image: none !important;
     border: none !important;
@@ -157,46 +195,79 @@ input#password:focus,
     margin-top: 20px !important;
     cursor: pointer;
     letter-spacing: 0.05em !important;
+    box-shadow: none !important;
 }
+#kc-login:hover,
+.btn.btn-primary:hover,
+input[type="submit"].btn-primary:hover { background-color: #f0f0f0 !important; }
 
-#kc-login:hover {
-    background-color: #f0f0f0 !important;
+/* PF4: altri bottoni primari (forgot password submit ecc) */
+.pf-c-button.pf-m-primary,
+.pf-c-button.pf-m-block {
+    background-color: #fff !important;
+    background-image: none !important;
+    border: none !important;
+    border-radius: 30px !important;
+    padding: 12px !important;
+    font-size: 15px !important;
+    font-weight: bold !important;
+    text-transform: uppercase !important;
+    color: #c0002c !important;
+    width: 100% !important;
+    margin-top: 15px !important;
+    cursor: pointer !important;
+    box-shadow: none !important;
 }
+.pf-c-button.pf-m-primary:hover,
+.pf-c-button.pf-m-block:hover { background-color: #f0f0f0 !important; }
 
-.pf-c-form-control__icon {
-    display: none !important;
-}
+/* ─── 9. LINK PASSWORD DIMENTICATA ──────────────────────────────────────── */
 
-/* 9. LINK PASSWORD DIMENTICATA */
+/* PF4 */
 #kc-form-options a,
 .kc-forgot-password,
-a.kc-forgot-password {
-    color: rgb(85 85 85) !important;
+a.kc-forgot-password,
+    /* PF3 */
+.login-pf-page .login-pf-settings a {
+    color: rgba(255, 255, 255, 0.85) !important;
     text-decoration: underline !important;
     font-size: 13px !important;
     display: block !important;
     text-align: center !important;
     margin-top: 16px !important;
 }
-
 #kc-form-options a:hover,
-.kc-forgot-password:hover {
-    color: #fff !important;
-}
+.kc-forgot-password:hover,
+.login-pf-page .login-pf-settings a:hover { color: #fff !important; }
 
-/* 10. SOCIAL LOGIN (es. Google) */
-#kc-social-providers,
-.kc-social-section {
-    margin-top: 20px !important;
+/* ─── 10. REMEMBER ME + FORGOT PASSWORD SULLA STESSA RIGA ───────────────── */
+
+.form-group.login-pf-settings {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    width: 100% !important;
 }
+#kc-form-options { display: flex !important; align-items: center !important; }
+.login-pf-settings > div:last-child,
+.login-pf-settings .col-xs-6:last-child { text-align: right !important; margin-left: auto !important; }
+.login-pf-settings a { color: rgba(255, 255, 255, 0.85) !important; font-size: 13px !important; text-decoration: underline !important; }
+
+/* ─── 11. ORDINE FORM (PF4) ──────────────────────────────────────────────── */
+
+form#kc-form-login { display: flex !important; flex-direction: column !important; }
+form#kc-form-login .form-group.login-pf-settings { order: 2 !important; }
+form#kc-form-login #kc-form-buttons { order: 3 !important; }
+
+/* ─── 12. SOCIAL LOGIN ───────────────────────────────────────────────────── */
+
+#kc-social-providers,
+.kc-social-section { margin-top: 20px !important; }
 
 #kc-social-providers ul,
-.kc-social-providers {
-    list-style: none !important;
-    padding: 0 !important;
-    margin: 0 !important;
-}
+.kc-social-providers { list-style: none !important; padding: 0 !important; margin: 0 !important; }
 
+/* PF4 + PF3 */
 #kc-social-providers li a,
 .zocial,
 a.zocial {
@@ -216,19 +287,15 @@ a.zocial {
     box-sizing: border-box !important;
     cursor: pointer !important;
 }
-
 #kc-social-providers li a:hover,
-a.zocial:hover {
-    background-color: #f0f0f0 !important;
-}
+a.zocial:hover { background-color: #f0f0f0 !important; }
 
-/* 11. BARRA ERRORE IN CIMA */
+/* ─── 13. BARRA ERRORE IN CIMA ───────────────────────────────────────────── */
+
 .kc-feedback-text,
 span[id="input-error"] {
     position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
+    top: 0 !important; left: 0 !important; right: 0 !important;
     margin: 0 !important;
     background-color: #8b0000 !important;
     color: white !important;
@@ -241,17 +308,32 @@ span[id="input-error"] {
     display: block !important;
     animation: slideDown 0.3s ease-out;
 }
-
 .kc-feedback-text:empty,
-span[id="input-error"]:empty {
-    display: none !important;
-}
+span[id="input-error"]:empty { display: none !important; }
 
-.pf-c-alert__icon,
-.pf-c-alert__title,
-.pf-c-alert__action,
-.kc-feedback-text .pf-c-icon {
-    display: none !important;
+/* PF3 <= 16: alert errore */
+.alert.alert-error,
+.alert-danger {
+    position: fixed !important;
+    top: 0 !important; left: 0 !important; right: 0 !important;
+    margin: 0 !important;
+    background-color: #8b0000 !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 0 !important;
+    padding: 12px 15px !important;
+    font-size: 14px !important;
+    text-align: center !important;
+    z-index: 10 !important;
+    animation: slideDown 0.3s ease-out;
+}
+.alert.alert-error .kc-feedback-text,
+.alert-danger .kc-feedback-text {
+    position: static !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    animation: none !important;
 }
 
 @keyframes slideDown {
@@ -259,95 +341,13 @@ span[id="input-error"]:empty {
     to   { opacity: 1; transform: translateY(0); }
 }
 
-/* 12. FORGOT PASSWORD - Bottone Submit */
-.pf-c-button.pf-m-primary,
-.pf-c-button.pf-m-block {
-    background-color: #fff !important;
-    background-image: none !important;
-    border: none !important;
-    border-radius: 30px !important;
-    padding: 12px !important;
-    font-size: 15px !important;
-    font-weight: bold !important;
-    text-transform: uppercase !important;
-    color: #c0002c !important;
-    width: 100% !important;
-    margin-top: 15px !important;
-    cursor: pointer !important;
-    box-shadow: none !important;
-}
+/* Nasconde icona e azioni alert PF4 */
+.pf-c-alert__icon,
+.pf-c-alert__action,
+.pf-c-icon { display: none !important; }
 
-.pf-c-button.pf-m-primary:hover,
-.pf-c-button.pf-m-block:hover {
-    background-color: #f0f0f0 !important;
-}
+/* ─── 14. ALERT SUCCESSO INLINE (es. dopo forgot password) ──────────────── */
 
-
-/* Rimuove il bordo/contorno dal bottone occhio */
-.pf-c-button.pf-m-control {
-    --pf-c-button--m-control--after--BorderColor: transparent !important;
-    --pf-c-button--m-control--after--BorderTopColor: transparent !important;
-    --pf-c-button--m-control--after--BorderRightColor: transparent !important;
-    --pf-c-button--m-control--after--BorderBottomColor: transparent !important;
-    --pf-c-button--m-control--after--BorderLeftColor: transparent !important;
-    --pf-c-button--m-control--after--BorderWidth: 0 !important;
-    border: none !important;
-    outline: none !important;
-    box-shadow: none !important;
-}
-
-.pf-c-button.pf-m-control::after {
-    border: none !important;
-    outline: none !important;
-    box-shadow: none !important;
-}
-
-
-.form-group:has(input#username) {
-    position: relative !important;
-}
-
-.form-group:has(input#username)::after {
-    content: "";
-    position: absolute;
-    right: 0;
-    top: 40%;
-    transform: translateY(-50%);
-    transform: translatex(-50%);
-    width: 18px;
-    height: 18px;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='rgba(255,255,255,0.7)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2'/%3E%3Ccircle cx='12' cy='7' r='4'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-size: contain;
-    pointer-events: none;
-}
-/* Per il bordo dell'occhio - sovrascrittura PatternFly */
-.pf-c-button.pf-m-control::after {
-    content: none !important;
-}
-
-.pf-c-button.pf-m-control {
-    --pf-c-button--m-control--after--BorderColor: transparent !important;
-    border: none !important;
-    outline: none !important;
-    box-shadow: none !important;
-}
-
-form#kc-form-login {
-    display: flex !important;
-    flex-direction: column !important;
-}
-
-/* Remember me + Forgot Password block va PRIMA del bottone */
-form#kc-form-login .form-group.login-pf-settings {
-    order: 2 !important;
-}
-
-form#kc-form-login #kc-form-buttons {
-    order: 3 !important;
-}
-
-/* Alert successo inline (es. dopo forgot password) */
 .pf-c-alert.pf-m-inline.pf-m-success {
     background-color: rgba(255, 255, 255, 0.15) !important;
     border: 1.5px solid rgba(255, 255, 255, 0.6) !important;
@@ -355,41 +355,12 @@ form#kc-form-login #kc-form-buttons {
     padding: 10px 16px !important;
     margin-bottom: 16px !important;
     backdrop-filter: blur(4px) !important;
+    display: block !important;
+    overflow: visible !important;
 }
-
-.pf-c-alert.pf-m-inline.pf-m-success .pf-c-alert__icon {
-    display: none !important;
-}
-
-.pf-c-alert.pf-m-inline.pf-m-success .kc-feedback-text,
-.pf-c-alert.pf-m-inline.pf-m-success .pf-c-alert__title {
-    color: #fff !important;
-    font-size: 13px !important;
-    font-weight: 500 !important;
-    text-align: center !important;
-    width: 100% !important;
-    position: static !important;
-    background: transparent !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    box-shadow: none !important;
-    border-radius: 0 !important;
-    animation: none !important;
-}
-
-/* Ripristina il testo dell'alert inline successo */
 .pf-c-alert.pf-m-inline .kc-feedback-text,
 .pf-c-alert.pf-m-inline .pf-c-alert__title {
     position: static !important;
-    top: auto !important;
-    left: auto !important;
-    right: auto !important;
-    bottom: auto !important;
-    transform: none !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    margin: 0 !important;
-    padding: 0 !important;
     background: transparent !important;
     background-color: transparent !important;
     box-shadow: none !important;
@@ -400,51 +371,56 @@ form#kc-form-login #kc-form-buttons {
     text-align: center !important;
     animation: none !important;
     z-index: auto !important;
-}
-
-.pf-c-alert.pf-m-inline.pf-m-success {
+    padding: 0 !important;
+    margin: 0 !important;
+    top: auto !important; left: auto !important; right: auto !important;
+    width: 100% !important;
     display: block !important;
-    height: auto !important;
-    min-height: 40px !important;
-    overflow: visible !important;
-}
-
-.pf-c-alert.pf-m-inline.pf-m-success .pf-c-alert__title {
-    display: block !important;
-    height: auto !important;
-    overflow: visible !important;
-    clip: auto !important;
-    clip-path: none !important;
-    white-space: normal !important;
     opacity: 1 !important;
     visibility: visible !important;
+    white-space: normal !important;
 }
 
+/* ─── 15. ICONA UTENTE SUL CAMPO USERNAME (PF3 + PF4) ───────────────────── */
 
-/* Allinea Remember me e Forgot Password sulla stessa riga */
-.form-group.login-pf-settings {
-    display: flex !important;
-    justify-content: space-between !important;
-    align-items: center !important;
-    width: 100% !important;
+.form-group:has(input#username) { position: relative !important; }
+.form-group:has(input#username)::after {
+    content: "";
+    position: absolute;
+    right: 0; top: 40%;
+    transform: translateY(-50%);
+    width: 18px; height: 18px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='rgba(255,255,255,0.7)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2'/%3E%3Ccircle cx='12' cy='7' r='4'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-size: contain;
+    pointer-events: none;
 }
 
-#kc-form-options {
-    display: flex !important;
-    align-items: center !important;
-}
+/* ─── 16. RESET PASSWORD CSS (integrato) ────────────────────────────────── */
 
-/* Forgot Password allineato a destra */
-.login-pf-settings > div:last-child,
-#kc-form-options ~ div,
-.login-pf-settings .col-xs-6:last-child {
-    text-align: right !important;
-    margin-left: auto !important;
+/* PF3: bottone submit forgot password */
+.login-pf-page .btn.btn-primary {
+    background-color: #E30613 !important;
+    color: white !important;
 }
+.login-pf-page .btn.btn-primary:hover { background-color: #A00010 !important; }
 
-/* Testo Forgot Password */
-.login-pf-settings a {
-    color: rgba(255, 255, 255, 0.85) !important;
+/* PF3: link back to login */
+#kc-page-title ~ * a,
+.login-pf-page a,
+#kc-form-options a {
+    padding-top: 15px !important;
+    color: rgba(255,255,255,0.85) !important;
     font-size: 13px !important;
-    text-decoration: underline !important;
+    text-decoration: none !important;
+}
+.login-pf-page a:hover { color: #fff !important; text-decoration: underline !important; }
+
+/* Testo descrittivo reset password */
+#kc-form-wrapper p,
+.instruction {
+    color: rgba(255,255,255,0.8) !important;
+    font-size: 14px !important;
+    text-align: center !important;
+    margin-top: 20px !important;
 }
