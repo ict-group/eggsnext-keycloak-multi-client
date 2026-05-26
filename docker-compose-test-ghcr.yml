@@ -10,17 +10,33 @@ services:
       - ./clienti/${CLIENT_ID}/${CLIENT_ID}.env
 
     environment:
-      # ── Admin ── WildFly / Keycloak < 17 ──────────────────────────────────
+      # ─────────────────────────────────────────────────────────────────────
+      # Versione corrente in test
+      # Attenzione: non mettere KEYCLOAK_VERSION dentro il file cliente .env.
+      # Deve arrivare dallo script / shell / workflow.
+      # ─────────────────────────────────────────────────────────────────────
+      KEYCLOAK_VERSION: ${KEYCLOAK_VERSION}
+
+      # ─────────────────────────────────────────────────────────────────────
+      # Admin - WildFly / Keycloak < 17
+      # Esempio: Keycloak 11
+      # ─────────────────────────────────────────────────────────────────────
       KEYCLOAK_USER: ${KEYCLOAK_ADMIN_USER:-admin}
       KEYCLOAK_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:-Expert0.}
 
-      # ── Admin ── Quarkus / Keycloak >= 17 ─────────────────────────────────
+      # ─────────────────────────────────────────────────────────────────────
+      # Admin - Quarkus / Keycloak >= 17
+      # KEYCLOAK_ADMIN vale per molte versioni Quarkus.
+      # KC_BOOTSTRAP_ADMIN_* vale per versioni più recenti.
+      # ─────────────────────────────────────────────────────────────────────
       KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN_USER:-admin}
       KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:-Expert0.}
       KC_BOOTSTRAP_ADMIN_USERNAME: ${KEYCLOAK_ADMIN_USER:-admin}
       KC_BOOTSTRAP_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:-Expert0.}
 
-      # ── Database ── WildFly / Keycloak < 17 ───────────────────────────────
+      # ─────────────────────────────────────────────────────────────────────
+      # Database - WildFly / Keycloak < 17
+      # ─────────────────────────────────────────────────────────────────────
       DB_VENDOR: postgres
       DB_ADDR: postgres
       DB_PORT: 5432
@@ -28,35 +44,66 @@ services:
       DB_USER: ${KEYCLOAK_DB_USER:-keycloak}
       DB_PASSWORD: ${KEYCLOAK_DB_PASSWORD:-Expert0.}
 
-      # ── Database ── Quarkus / Keycloak >= 17 ──────────────────────────────
+      # ─────────────────────────────────────────────────────────────────────
+      # Database - Quarkus / Keycloak >= 17
+      # ─────────────────────────────────────────────────────────────────────
       KC_DB: postgres
       KC_DB_URL: jdbc:postgresql://postgres:5432/${KEYCLOAK_DB_NAME:-keycloak_${CLIENT_ID}}
       KC_DB_USERNAME: ${KEYCLOAK_DB_USER:-keycloak}
       KC_DB_PASSWORD: ${KEYCLOAK_DB_PASSWORD:-Expert0.}
 
-      # ── HTTP / hostname ── Quarkus >= 17 ──────────────────────────────────
+      # ─────────────────────────────────────────────────────────────────────
+      # Hostname / URL - WildFly / Keycloak < 17
+      #
+      # Fondamentale per Keycloak 11:
+      # la console admin legacy vive sotto /auth.
+      # Se manca questo valore, oppure viene preso un hostname di produzione
+      # dal file cliente, la console può restare in loading infinito.
+      # ─────────────────────────────────────────────────────────────────────
+      KEYCLOAK_FRONTEND_URL: "http://localhost:${KEYCLOAK_PORT:-8080}/auth"
+      PROXY_ADDRESS_FORWARDING: "true"
+
+      # ─────────────────────────────────────────────────────────────────────
+      # Hostname / HTTP - Quarkus / Keycloak >= 17
+      #
+      # Queste variabili sono ignorate dal legacy/WildFly.
+      # Il tuo entrypoint può normalizzarle in base alla versione.
+      # ─────────────────────────────────────────────────────────────────────
       KC_HTTP_ENABLED: "true"
       KC_HOSTNAME: "http://localhost:${KEYCLOAK_PORT:-8080}"
       KC_HOSTNAME_STRICT: "false"
       KC_HOSTNAME_STRICT_HTTPS: "false"
 
-      # ── Tema admin ────────────────────────────────────────────────────────
-      # Forza il tema admin built-in per evitare loading infinito sulla console.
-      # Il tema custom del cliente copre solo login ed email, non admin.
-      # Valido per Quarkus >= 17. Su WildFly < 17 viene ignorata.
+      # ─────────────────────────────────────────────────────────────────────
+      # Tema admin - Quarkus
+      #
+      # Serve a evitare che il tema cliente venga usato come tema admin.
+      # Per Keycloak 11/WildFly questa variabile può essere ignorata:
+      # se nel DB il realm ha adminTheme=cps-theme, va corretto via kcadm.
+      # ─────────────────────────────────────────────────────────────────────
       KC_SPI_THEME_DEFAULT_ADMIN_THEME: keycloak
 
-      # ── Theme cache ── Quarkus >= 17 ──────────────────────────────────────
+      # ─────────────────────────────────────────────────────────────────────
+      # Theme cache - Quarkus
+      # Utile durante test locali.
+      # Ignorato dal legacy/WildFly.
+      # ─────────────────────────────────────────────────────────────────────
       KC_SPI_THEME_STATIC_MAX_AGE: "-1"
       KC_SPI_THEME_CACHE_THEMES: "false"
       KC_SPI_THEME_CACHE_TEMPLATES: "false"
 
-      # ── JVM ── WildFly < 17 ───────────────────────────────────────────────
-      # WildFly parte con 512MB heap di default: insufficiente con temi complessi.
-      # Su Quarkus >= 17 questa variabile viene ignorata.
+      # ─────────────────────────────────────────────────────────────────────
+      # JVM - WildFly / Keycloak < 17
+      #
+      # Per Keycloak 11 lascia abbastanza heap.
+      # Su Quarkus moderno può essere ignorato o non usato dal tuo entrypoint.
+      # ─────────────────────────────────────────────────────────────────────
       JAVA_OPTS: >-
-        -server -Xms256m -Xmx2048m
-        -XX:MetaspaceSize=96M -XX:MaxMetaspaceSize=256m
+        -server
+        -Xms256m
+        -Xmx2048m
+        -XX:MetaspaceSize=96M
+        -XX:MaxMetaspaceSize=256m
         -Djava.net.preferIPv4Stack=true
         -Djboss.modules.system.pkgs=org.jboss.byteman
         -Djava.awt.headless=true
@@ -75,7 +122,7 @@ services:
 
   postgres:
     image: postgres:${POSTGRES_VERSION:-16}
-    container_name: postgres-${CLIENT_ID}-${POSTGRES_VERSION:-16}
+    container_name: postgres-${CLIENT_ID}-${KEYCLOAK_VERSION}-pg${POSTGRES_VERSION:-16}
 
     environment:
       POSTGRES_DB: ${KEYCLOAK_DB_NAME:-keycloak_${CLIENT_ID}}
@@ -89,7 +136,11 @@ services:
       - postgres-data:/var/lib/postgresql/data
 
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${KEYCLOAK_DB_USER:-keycloak} -d ${KEYCLOAK_DB_NAME:-keycloak_${CLIENT_ID}}"]
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U ${KEYCLOAK_DB_USER:-keycloak} -d ${KEYCLOAK_DB_NAME:-keycloak_${CLIENT_ID}}"
+        ]
       interval: 5s
       timeout: 5s
       retries: 30
