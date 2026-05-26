@@ -54,7 +54,7 @@ services:
       # WildFly parte con 512MB heap di default: insufficiente con temi complessi.
       # Su Quarkus >= 17 questa variabile viene ignorata.
       JAVA_OPTS: >-
-        -server -Xms256m -Xmx1024m
+        -server -Xms256m -Xmx2048m
         -XX:MetaspaceSize=96M -XX:MaxMetaspaceSize=256m
         -Djava.net.preferIPv4Stack=true
         -Djboss.modules.system.pkgs=org.jboss.byteman
