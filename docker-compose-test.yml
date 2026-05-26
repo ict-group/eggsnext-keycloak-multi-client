@@ -40,7 +40,7 @@ services:
       DB_USER: ${KEYCLOAK_DB_USER:-keycloak}
       DB_PASSWORD: ${KEYCLOAK_DB_PASSWORD:-Expert0.}
       # --- JVM (WildFly < 17) ---
-      JAVA_OPTS: "-server -Xms256m -Xmx2048m -XX:MetaspaceSize=96M -XX:MaxMetaspaceSize=256m -Djava.net.preferIPv4Stack=true -Djboss.modules.system.pkgs=org.jboss.byteman -Djava.awt.headless=true --add-exports=java.base/sun.nio.ch=ALL-UNNAMED --add-exports=jdk.unsupported/sun.misc=ALL-UNNAMED --add-exports=jdk.unsupported/sun.reflect=ALL-UNNAMED"
+      JAVA_OPTS: "-server -Xms256m -Xmx2048m -XX:MetaspaceSize=96M -XX:MaxMetaspaceSize=256m -Djava.net.preferIPv4Stack=true -Djboss.modules.system.pkgs=org.jboss.byteman -Djava.awt.headless=true -Dkeycloak.theme.cacheThemes=false -Dkeycloak.theme.cacheTemplates=false --add-exports=java.base/sun.nio.ch=ALL-UNNAMED --add-exports=jdk.unsupported/sun.misc=ALL-UNNAMED --add-exports=jdk.unsupported/sun.reflect=ALL-UNNAMED"
       # --- Rete ---
       KC_HTTP_ENABLED: "true"
       KC_HOSTNAME: localhost

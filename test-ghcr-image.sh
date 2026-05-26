@@ -19,7 +19,7 @@ if [ "$MAJOR" -ge 17 ]; then
 else
   echo "Architettura: WildFly legacy < 17"
   echo "Keycloak: http://localhost:8080/auth/admin/"
-  export KEYCLOAK_CMD="-b 0.0.0.0"
+  export KEYCLOAK_CMD="-b 0.0.0.0 -c standalone.xml"
 fi
 
 echo "Postgres version: ${POSTGRES_VERSION}"
