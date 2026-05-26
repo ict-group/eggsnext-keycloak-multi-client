@@ -10,17 +10,17 @@ services:
       - ./clienti/${CLIENT_ID}/${CLIENT_ID}.env
 
     environment:
-      # Admin - WildFly / Keycloak < 17
+      # ── Admin ── WildFly / Keycloak < 17 ──────────────────────────────────
       KEYCLOAK_USER: ${KEYCLOAK_ADMIN_USER:-admin}
       KEYCLOAK_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:-Expert0.}
 
-      # Admin - Quarkus / Keycloak >= 17
+      # ── Admin ── Quarkus / Keycloak >= 17 ─────────────────────────────────
       KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN_USER:-admin}
       KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:-Expert0.}
       KC_BOOTSTRAP_ADMIN_USERNAME: ${KEYCLOAK_ADMIN_USER:-admin}
       KC_BOOTSTRAP_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:-Expert0.}
 
-      # Database - WildFly / Keycloak < 17
+      # ── Database ── WildFly / Keycloak < 17 ───────────────────────────────
       DB_VENDOR: postgres
       DB_ADDR: postgres
       DB_PORT: 5432
@@ -28,21 +28,40 @@ services:
       DB_USER: ${KEYCLOAK_DB_USER:-keycloak}
       DB_PASSWORD: ${KEYCLOAK_DB_PASSWORD:-Expert0.}
 
-      # Database - Quarkus / Keycloak >= 17
+      # ── Database ── Quarkus / Keycloak >= 17 ──────────────────────────────
       KC_DB: postgres
       KC_DB_URL: jdbc:postgresql://postgres:5432/${KEYCLOAK_DB_NAME:-keycloak_${CLIENT_ID}}
       KC_DB_USERNAME: ${KEYCLOAK_DB_USER:-keycloak}
       KC_DB_PASSWORD: ${KEYCLOAK_DB_PASSWORD:-Expert0.}
 
-      # HTTP / hostname - Quarkus
+      # ── HTTP / hostname ── Quarkus >= 17 ──────────────────────────────────
       KC_HTTP_ENABLED: "true"
       KC_HOSTNAME_STRICT: "false"
       KC_HOSTNAME_STRICT_HTTPS: "false"
 
-      # Theme cache - Quarkus
+      # ── Tema admin ────────────────────────────────────────────────────────
+      # Forza il tema admin built-in per evitare loading infinito sulla console.
+      # Il tema custom del cliente copre solo login ed email, non admin.
+      # Valido per Quarkus >= 17. Su WildFly < 17 viene ignorata.
+      KC_SPI_THEME_DEFAULT_ADMIN_THEME: keycloak
+
+      # ── Theme cache ── Quarkus >= 17 ──────────────────────────────────────
       KC_SPI_THEME_STATIC_MAX_AGE: "-1"
       KC_SPI_THEME_CACHE_THEMES: "false"
       KC_SPI_THEME_CACHE_TEMPLATES: "false"
+
+      # ── JVM ── WildFly < 17 ───────────────────────────────────────────────
+      # WildFly parte con 512MB heap di default: insufficiente con temi complessi.
+      # Su Quarkus >= 17 questa variabile viene ignorata.
+      JAVA_OPTS: >-
+        -server -Xms256m -Xmx1024m
+        -XX:MetaspaceSize=96M -XX:MaxMetaspaceSize=256m
+        -Djava.net.preferIPv4Stack=true
+        -Djboss.modules.system.pkgs=org.jboss.byteman
+        -Djava.awt.headless=true
+        --add-exports=java.base/sun.nio.ch=ALL-UNNAMED
+        --add-exports=jdk.unsupported/sun.misc=ALL-UNNAMED
+        --add-exports=jdk.unsupported/sun.reflect=ALL-UNNAMED
 
     command: ${KEYCLOAK_CMD}
 
