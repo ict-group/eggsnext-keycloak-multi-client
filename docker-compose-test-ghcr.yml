@@ -55,13 +55,11 @@ services:
       # ─────────────────────────────────────────────────────────────────────
       # Hostname / URL - WildFly / Keycloak < 17
       #
-      # Fondamentale per Keycloak 11:
-      # la console admin legacy vive sotto /auth.
-      # Se manca questo valore, oppure viene preso un hostname di produzione
-      # dal file cliente, la console può restare in loading infinito.
+      # In test locale su localhost NON impostare KEYCLOAK_FRONTEND_URL.
+      # Su Keycloak 11 può rompere i redirect della console admin.
+      # Per produzione dietro reverse proxy, impostarlo tramite env dedicato.
       # ─────────────────────────────────────────────────────────────────────
-      KEYCLOAK_FRONTEND_URL: "http://localhost:${KEYCLOAK_PORT:-8080}/auth"
-      PROXY_ADDRESS_FORWARDING: "true"
+      PROXY_ADDRESS_FORWARDING: "false"
 
       # ─────────────────────────────────────────────────────────────────────
       # Hostname / HTTP - Quarkus / Keycloak >= 17
