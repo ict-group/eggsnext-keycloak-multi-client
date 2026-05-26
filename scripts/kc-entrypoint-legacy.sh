@@ -9,10 +9,14 @@
 set -e
 
 if [ -n "${KC_HOSTNAME:-}" ]; then
-    host="${KC_HOSTNAME#https://}"
-    host="${host#http://}"
-    host="${host%/}"
-    export KEYCLOAK_FRONTEND_URL="https://${host}"
+    case "${KC_HOSTNAME}" in
+        http://*|https://*)
+            export KEYCLOAK_FRONTEND_URL="${KC_HOSTNAME%/}"
+            ;;
+        *)
+            export KEYCLOAK_FRONTEND_URL="https://${KC_HOSTNAME%/}"
+            ;;
+    esac
 fi
 
 exec /opt/jboss/tools/docker-entrypoint.sh "$@"

@@ -43,7 +43,7 @@ services:
       JAVA_OPTS: "-server -Xms256m -Xmx2048m -XX:MetaspaceSize=96M -XX:MaxMetaspaceSize=256m -Djava.net.preferIPv4Stack=true -Djboss.modules.system.pkgs=org.jboss.byteman -Djava.awt.headless=true -Dkeycloak.theme.cacheThemes=false -Dkeycloak.theme.cacheTemplates=false --add-exports=java.base/sun.nio.ch=ALL-UNNAMED --add-exports=jdk.unsupported/sun.misc=ALL-UNNAMED --add-exports=jdk.unsupported/sun.reflect=ALL-UNNAMED"
       # --- Rete ---
       KC_HTTP_ENABLED: "true"
-      KC_HOSTNAME: localhost
+      KC_HOSTNAME: "http://localhost:${KEYCLOAK_PORT:-8080}"
       KC_HOSTNAME_STRICT: "false"
       KC_HOSTNAME_STRICT_HTTPS: "false"
       KC_PROXY: none
