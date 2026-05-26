@@ -9,6 +9,7 @@ FROM quay.io/keycloak/keycloak:${KEYCLOAK_VERSION}
 
 ARG CLIENT_ID
 ARG INCLUDE_EXTENSIONS=false
+ENV KEYCLOAK_VERSION=${KEYCLOAK_VERSION}
 
 COPY --chown=jboss:jboss base /tmp/base
 COPY --chown=jboss:jboss clienti /tmp/clienti
@@ -106,9 +107,12 @@ RUN for f in /opt/jboss/keycloak/themes/*/login/theme.properties \
         echo "Fixed parent in: $f → $(grep '^parent=' "$f")"; \
     done
 
+COPY scripts/kc-entrypoint-legacy.sh /opt/jboss/tools/kc-entrypoint-legacy.sh
+RUN chmod +x /opt/jboss/tools/kc-entrypoint-legacy.sh
+
 # Non mettere KEYCLOAK_USER / KEYCLOAK_PASSWORD nel Dockerfile:
 # passali a runtime con -e oppure tramite secrets della piattaforma.
 EXPOSE 8080
 
-ENTRYPOINT ["/opt/jboss/tools/docker-entrypoint.sh"]
+ENTRYPOINT ["/opt/jboss/tools/kc-entrypoint-legacy.sh"]
 CMD ["-b", "0.0.0.0"]

@@ -6,6 +6,7 @@
 ARG KEYCLOAK_VERSION=26.6.1
 
 FROM quay.io/keycloak/keycloak:${KEYCLOAK_VERSION} AS builder
+ARG KEYCLOAK_VERSION
 
 ARG INCLUDE_EXTENSIONS=false
 
@@ -33,7 +34,9 @@ RUN set -eu; \
 
 FROM quay.io/keycloak/keycloak:${KEYCLOAK_VERSION}
 
+ARG KEYCLOAK_VERSION
 ARG CLIENT_ID
+ENV KEYCLOAK_VERSION=${KEYCLOAK_VERSION}
 
 COPY --from=builder --chown=keycloak:keycloak /opt/keycloak/lib/quarkus/ /opt/keycloak/lib/quarkus/
 COPY --from=builder --chown=keycloak:keycloak /opt/keycloak/providers/ /opt/keycloak/providers/
@@ -99,9 +102,12 @@ ENV KC_SPI_THEME_STATIC_MAX_AGE=-1
 ENV KC_SPI_THEME_CACHE_THEMES=false
 ENV KC_SPI_THEME_CACHE_TEMPLATES=false
 
+COPY scripts/kc-entrypoint.sh /opt/keycloak/bin/kc-entrypoint.sh
+RUN chmod +x /opt/keycloak/bin/kc-entrypoint.sh
+
 # Non mettere KEYCLOAK_ADMIN_PASSWORD nel Dockerfile:
 # passalo a runtime con -e oppure tramite secrets della piattaforma.
 EXPOSE 8080
 
-ENTRYPOINT ["/opt/keycloak/bin/kc.sh"]
+ENTRYPOINT ["/opt/keycloak/bin/kc-entrypoint.sh"]
 CMD ["start", "--optimized"]
