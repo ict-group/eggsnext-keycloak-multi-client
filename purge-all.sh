@@ -33,18 +33,24 @@ if [ ! -f "$COMPOSE_FILE" ]; then
   exit 1
 fi
 
-# Conferma interattiva (saltabile con --force)
+# Flags
 FORCE=false
+RESTART_DAEMON=false
 for arg in "$@"; do
-  [[ "$arg" == "--force" ]] && FORCE=true
+  [[ "$arg" == "--force" ]]          && FORCE=true
+  [[ "$arg" == "--restart-daemon" ]] && RESTART_DAEMON=true
 done
 
 if [ "$FORCE" = false ]; then
   echo -e "${YELLOW}⚠️  Questo script eseguirà:${NC}"
   echo "   1. docker compose down --volumes --remove-orphans"
-  echo "   2. docker system prune --all --volumes --force"
+  echo "   2. Rimozione forzata di tutti i container e volumi named"
+  echo "   3. docker system prune --all --volumes --force"
+  if [ "$RESTART_DAEMON" = true ]; then
+    echo "   4. sudo systemctl restart docker  (reset completo del demone)"
+  fi
   echo ""
-  echo -e "${RED}   Verranno rimossi TUTTI i container, volumi, immagini e cache non in uso.${NC}"
+  echo -e "${RED}   Verranno rimossi TUTTI i container, volumi, immagini e cache.${NC}"
   echo ""
   read -r -p "   Sei sicuro? (s/N) " risposta
   case "$risposta" in
@@ -103,6 +109,23 @@ echo ""
 docker system prune --all --volumes --force
 
 echo ""
+
+# -----------------------------------------------------------------------------
+# STEP 4 (opzionale) — restart del demone Docker
+# Azzera lo stato in memoria del daemon e forza IntelliJ a ricaricare la vista.
+# Richiede sudo. Attivabile con --restart-daemon.
+# -----------------------------------------------------------------------------
+if [ "$RESTART_DAEMON" = true ]; then
+  echo -e "${CYAN}▶ [4/4] Restart del demone Docker (sudo richiesto)...${NC}"
+  if sudo systemctl restart docker; then
+    echo -e "${GREEN}   ✔ Docker daemon riavviato — stato in memoria azzerato${NC}"
+    echo "   In IntelliJ: click destro sul nodo Docker → Reconnect per aggiornare la vista"
+  else
+    echo -e "${RED}   ✖ Restart fallito (controlla i permessi sudo)${NC}"
+  fi
+  echo ""
+fi
+
 echo -e "${GREEN}╔══════════════════════════════════════════════╗${NC}"
 echo -e "${GREEN}║        ✅  PURGE COMPLETATO                  ║${NC}"
 echo -e "${GREEN}╚══════════════════════════════════════════════╝${NC}"
@@ -110,4 +133,7 @@ echo ""
 echo "   Prossimi step:"
 echo "   • Riavvia il cliente desiderato dalla Run Configuration in IntelliJ"
 echo "   • Oppure: docker compose -f docker-compose-test.yml up <servizio>"
+if [ "$RESTART_DAEMON" = false ]; then
+  echo "   • Per azzerare anche il demone: ./purge-all.sh --restart-daemon"
+fi
 echo ""
