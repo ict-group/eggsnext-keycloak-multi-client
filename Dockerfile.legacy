@@ -84,6 +84,47 @@ RUN set -eu; \
     echo "Installed themes:"; \
     ls -la "${THEME_ROOT}"
 
+# -----------------------------------------------------------------------------
+# Fix parent nei theme.properties per compatibilità WildFly (Keycloak < 17)
+#
+# In WildFly non esistono i parent "base" e "keycloak.v2" (introdotti in >= 17).
+# Vengono sostituiti automaticamente con "keycloak" che è il parent built-in
+# valido per tutte le versioni WildFly.
+#
+# Questo fix copre tutti i tipi di tema: login, email, account, admin.
+# Non usa find/xargs perché non disponibili nella shell minimale WildFly.
+# -----------------------------------------------------------------------------
+RUN for f in /opt/jboss/keycloak/themes/*/login/theme.properties \
+             /opt/jboss/keycloak/themes/*/email/theme.properties \
+             /opt/jboss/keycloak/themes/*/account/theme.properties \
+             /opt/jboss/keycloak/themes/*/admin/theme.properties ; do \
+        [ -f "$f" ] && sed -i \
+            's/^parent=base$/parent=keycloak/g; s/^parent=keycloak\.v2$/parent=keycloak/g' \
+            "$f" && echo "Fixed parent in: $f" ; \
+    done
+
+# -----------------------------------------------------------------------------
+# Crea utente admin iniziale tramite add-user-keycloak.sh
+#
+# In WildFly le variabili KEYCLOAK_USER / KEYCLOAK_PASSWORD vengono lette
+# SOLO al primissimo avvio con DB completamente vuoto. Se il container viene
+# riavviato o il DB esiste già, vengono ignorate.
+#
+# Creando l'utente durante la build il problema non si pone: l'utente esiste
+# già nel file di configurazione e Keycloak lo importa al primo avvio
+# indipendentemente dallo stato del DB.
+#
+# Le credenziali di default sono admin/Expert0. — personalizzabili tramite
+# build-arg nel workflow GitHub Actions o in locale con --build-arg.
+# -----------------------------------------------------------------------------
+ARG KEYCLOAK_ADMIN_USER=admin
+ARG KEYCLOAK_ADMIN_PASSWORD=Expert0.
+RUN /opt/jboss/keycloak/bin/add-user-keycloak.sh \
+    -r master \
+    -u ${KEYCLOAK_ADMIN_USER} \
+    -p ${KEYCLOAK_ADMIN_PASSWORD} && \
+    echo "Admin user '${KEYCLOAK_ADMIN_USER}' created successfully"
+
 # Non mettere KEYCLOAK_USER / KEYCLOAK_PASSWORD nel Dockerfile:
 # passali a runtime con -e oppure tramite secrets della piattaforma.
 EXPOSE 8080
