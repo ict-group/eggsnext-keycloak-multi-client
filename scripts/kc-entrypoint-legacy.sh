@@ -11,12 +11,15 @@ set -e
 if [ -n "${KC_HOSTNAME:-}" ]; then
     case "${KC_HOSTNAME}" in
         http://*|https://*)
-            export KEYCLOAK_FRONTEND_URL="${KC_HOSTNAME%/}"
+            base="${KC_HOSTNAME%/}"
             ;;
         *)
-            export KEYCLOAK_FRONTEND_URL="https://${KC_HOSTNAME%/}"
+            base="https://${KC_HOSTNAME%/}"
             ;;
     esac
+    # WildFly usa /auth come context root — deve essere incluso nel frontend URL
+    base="${base%/auth}"
+    export KEYCLOAK_FRONTEND_URL="${base}/auth"
 fi
 
 exec /opt/jboss/tools/docker-entrypoint.sh "$@"
