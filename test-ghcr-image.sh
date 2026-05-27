@@ -1,9 +1,9 @@
 #!/bin/bash
 set -euo pipefail
 
-CLIENT_ID=${1:?"Devi passare CLIENT_ID. Es: ./test-compose-ghcr.sh cps 11.0.0"}
+CLIENT_ID=${1:?"Devi passare CLIENT_ID. Es: ./test-ghcr-image.sh cps 11.0.0 13"}
 KEYCLOAK_VERSION=${2:-26.6.1}
-POSTGRES_VERSION=${3:-16}
+POSTGRES_VERSION=${3:-${POSTGRES_VERSION:-16}}
 
 MAJOR=$(echo "$KEYCLOAK_VERSION" | cut -d. -f1)
 
