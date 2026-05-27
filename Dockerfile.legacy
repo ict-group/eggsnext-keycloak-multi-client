@@ -7,8 +7,10 @@ ARG KEYCLOAK_VERSION=11.0.0
 
 FROM quay.io/keycloak/keycloak:${KEYCLOAK_VERSION}
 
+# Le immagini legacy Keycloak/WildFly possono eseguire la build come utente
+# non privilegiato. Usiamo root durante la fase di copia/modifica file e poi
+# torniamo a jboss prima del runtime.
 USER root
-
 
 ARG KEYCLOAK_VERSION
 ARG CLIENT_ID
@@ -90,23 +92,43 @@ RUN set -eu; \
     echo "Installed themes:"; \
     ls -la "${THEME_ROOT}"
 
-RUN for f in /opt/jboss/keycloak/themes/*/login/theme.properties \
-             /opt/jboss/keycloak/themes/*/email/theme.properties \
-             /opt/jboss/keycloak/themes/*/account/theme.properties \
-             /opt/jboss/keycloak/themes/*/admin/theme.properties ; do \
-        [ -f "$f" ] || continue; \
-        sed -i \
-            -e 's/^parent=keycloak\.v2$/parent=keycloak/' \
-            "$f"; \
-        echo "Checked parent in: $f → $(grep '^parent=' "$f" || true)"; \
+# -----------------------------------------------------------------------------
+# Fix parent nei theme.properties per compatibilità WildFly (Keycloak < 17)
+#
+# Tocchiamo solo i temi custom copiati dal progetto, saltando i temi built-in
+# base/keycloak/keycloak-preview. Per massima compatibilità legacy, normalizziamo
+# solamente il parent moderno keycloak.v2 verso keycloak.
+# -----------------------------------------------------------------------------
+RUN set -eu; \
+    for theme in /opt/jboss/keycloak/themes/*; do \
+        [ -d "$theme" ] || continue; \
+        theme_name="$(basename "$theme")"; \
+        case "$theme_name" in \
+            base|keycloak|keycloak-preview) \
+                continue \
+                ;; \
+        esac; \
+        for f in "$theme"/login/theme.properties \
+                 "$theme"/email/theme.properties \
+                 "$theme"/account/theme.properties \
+                 "$theme"/admin/theme.properties; do \
+            [ -f "$f" ] || continue; \
+            sed -i -e 's/^parent=keycloak\.v2$/parent=keycloak/' "$f"; \
+            echo "Checked parent in: $f → $(grep '^parent=' "$f" || true)"; \
+        done; \
     done
 
+RUN mkdir -p /opt/jboss/tools
 COPY scripts/kc-entrypoint-legacy.sh /opt/jboss/tools/kc-entrypoint-legacy.sh
+
 RUN chmod 755 /opt/jboss/tools/kc-entrypoint-legacy.sh \
-    && chown jboss:root /opt/jboss/tools/kc-entrypoint-legacy.sh
+    && chown jboss:root /opt/jboss/tools/kc-entrypoint-legacy.sh \
+    && chown -R jboss:root /opt/jboss/keycloak/themes
 
 USER jboss
 
+# Non mettere KEYCLOAK_USER / KEYCLOAK_PASSWORD nel Dockerfile:
+# passali a runtime con -e oppure tramite secrets della piattaforma.
 EXPOSE 8080
 
 ENTRYPOINT ["/opt/jboss/tools/kc-entrypoint-legacy.sh"]
