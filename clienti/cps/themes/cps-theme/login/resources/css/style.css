@@ -148,90 +148,49 @@ form#kc-form-login {
 }
 
 
-/* ─── 5. INPUT LOGIN KEYCLOAK 11 (CSS ONLY OVERRIDE) ────────────────────── */
+/* ─── 5. INPUT LOGIN KEYCLOAK 11 ────────────────────────────────────────── */
 
 form#kc-form-login .form-group:has(input#username),
 form#kc-form-login .form-group:has(input#password) {
+    display: flex !important;
+    flex-direction: column !important;      /* label sopra, input sotto */
     position: relative !important;
     margin-bottom: 22px !important;
     padding-bottom: 7px !important;
-    min-height: 36px !important;
     border-bottom: 1px solid rgba(255, 255, 255, 0.62) !important;
 }
 
-/* Label che fa da "placeholder visuale" */
 form#kc-form-login .control-label,
 form#kc-form-login .pf-c-form__label {
-    display: block !important;
+    order: 0 !important;                    /* label prima */
     margin: 0 !important;
     padding: 0 42px 0 0 !important;
     color: #fff !important;
     font-size: 15px !important;
     line-height: 22px !important;
     font-weight: 700 !important;
-    letter-spacing: 0 !important;
-    text-align: left !important;
     pointer-events: none !important;
+    top: auto !important;                   /* annulla qualsiasi inline style */
     position: relative !important;
-    z-index: 1 !important;
-    opacity: 1 !important;
-    transition: opacity 0.12s ease-in-out !important;
 }
 
-/* Input realmente editabili */
 form#kc-form-login input#username,
 form#kc-form-login input#password,
-form#kc-form-login .form-control,
-form#kc-form-login .pf-c-form-control {
+form#kc-form-login .form-control {
+    order: 1 !important;                    /* input dopo */
     width: 100% !important;
     height: 28px !important;
-    min-height: 28px !important;
-    margin: -24px 0 0 0 !important;
+    margin: 0 !important;                   /* niente margini negativi */
     padding: 0 42px 0 0 !important;
     border: none !important;
     border-radius: 0 !important;
     background: transparent !important;
-    background-color: transparent !important;
     box-shadow: none !important;
     outline: none !important;
     color: #fff !important;
     font-size: 15px !important;
     line-height: 28px !important;
-    position: relative !important;
-    z-index: 2 !important;
     caret-color: #fff !important;
-}
-
-/* NASCONDE LA LABEL:
-   Senza file .ftl non possiamo usare placeholder-shown o required.
-   Nascondiamo la label quando il campo è cliccato (focus) o quando
-   viene riempito dall'autofill del browser.
-*/
-form#kc-form-login .form-group:has(input:focus) .control-label,
-form#kc-form-login .form-group:has(input:-webkit-autofill) .control-label {
-    opacity: 0 !important;
-}
-
-form#kc-form-login input:focus {
-    border: none !important;
-    outline: none !important;
-    box-shadow: none !important;
-    background: transparent !important;
-    background-color: transparent !important;
-}
-
-/* TRUCCO DEFINITIVO PER AUTOFILL TRASPARENTE:
-   Niente box-shadow, solo una transizione infinita per impedire
-   al browser di applicare il suo sfondo bianco/giallo.
-*/
-input:-webkit-autofill,
-input:-webkit-autofill:hover,
-input:-webkit-autofill:focus,
-input:-webkit-autofill:active {
-    -webkit-text-fill-color: #fff !important;
-    transition: background-color 9999s ease-in-out 0s !important;
-    background-color: transparent !important;
-    box-shadow: none !important;
 }
 
 /* ─── 6. ICONA USERNAME ─────────────────────────────────────────────────── */
