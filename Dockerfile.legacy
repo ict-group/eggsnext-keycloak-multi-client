@@ -98,8 +98,13 @@ RUN for f in /opt/jboss/keycloak/themes/*/login/theme.properties \
         echo "Checked parent in: $f → $(grep '^parent=' "$f" || true)"; \
     done
 
+USER root
+
 COPY scripts/kc-entrypoint-legacy.sh /opt/jboss/tools/kc-entrypoint-legacy.sh
-RUN chmod +x /opt/jboss/tools/kc-entrypoint-legacy.sh
+RUN chmod 755 /opt/jboss/tools/kc-entrypoint-legacy.sh \
+    && chown jboss:root /opt/jboss/tools/kc-entrypoint-legacy.sh
+
+USER jboss
 
 EXPOSE 8080
 
