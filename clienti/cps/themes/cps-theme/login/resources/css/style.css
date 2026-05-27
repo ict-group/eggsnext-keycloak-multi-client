@@ -150,12 +150,6 @@ form#kc-form-login {
 
 /* ─── 5. INPUT LOGIN KEYCLOAK 11 ────────────────────────────────────────── */
 
-/*
-   Importante:
-   NON usare height: 0 sugli input.
-   Gli input devono rimanere alti/cliccabili/editabili.
-*/
-
 form#kc-form-login .form-group:has(input#username),
 form#kc-form-login .form-group:has(input#password) {
     position: relative !important;
@@ -165,9 +159,7 @@ form#kc-form-login .form-group:has(input#password) {
     border-bottom: 1px solid rgba(255, 255, 255, 0.62) !important;
 }
 
-/* Label stile screenshot.
-   La label fa da "placeholder visuale".
-   Quando il campo è in focus o contiene valore, la nascondiamo per non sovrapporla al testo digitato. */
+/* Label che fa da "placeholder visuale" */
 form#kc-form-login .control-label,
 form#kc-form-login .pf-c-form__label {
     display: block !important;
@@ -210,22 +202,17 @@ form#kc-form-login .pf-c-form-control {
     caret-color: #fff !important;
 }
 
-/* Nasconde la label mentre scrivi.
-   :valid copre Keycloak 11 perché i campi login sono normalmente required.
-   :not(:placeholder-shown) copre i browser/versioni dove esiste placeholder. */
-form#kc-form-login .form-group:has(input#username:focus) .control-label,
-form#kc-form-login .form-group:has(input#password:focus) .control-label,
-form#kc-form-login .form-group:has(input#username:valid) .control-label,
-form#kc-form-login .form-group:has(input#password:valid) .control-label,
-form#kc-form-login .form-group:has(input#username:not(:placeholder-shown)) .control-label,
-form#kc-form-login .form-group:has(input#password:not(:placeholder-shown)) .control-label {
+/* NASCONDE LA LABEL:
+   Usiamo focus-within per quando l'utente clicca,
+   e :not(:placeholder-shown) per quando c'è del testo scritto.
+   (Rimosso :valid perché in KC11 i campi non sono required di default) */
+form#kc-form-login .form-group:focus-within .control-label,
+form#kc-form-login .form-group:has(input:not(:placeholder-shown)) .control-label,
+form#kc-form-login .form-group:has(input:-webkit-autofill) .control-label {
     opacity: 0 !important;
 }
 
-form#kc-form-login input#username:focus,
-form#kc-form-login input#password:focus,
-form#kc-form-login .form-control:focus,
-form#kc-form-login .pf-c-form-control:focus {
+form#kc-form-login input:focus {
     border: none !important;
     outline: none !important;
     box-shadow: none !important;
@@ -233,21 +220,17 @@ form#kc-form-login .pf-c-form-control:focus {
     background-color: transparent !important;
 }
 
-form#kc-form-login input#username::placeholder,
-form#kc-form-login input#password::placeholder,
-form#kc-form-login .form-control::placeholder,
-form#kc-form-login .pf-c-form-control::placeholder {
-    color: transparent !important;
-    opacity: 0 !important;
-}
-
-form#kc-form-login input#username:-webkit-autofill,
-form#kc-form-login input#password:-webkit-autofill {
+/* TRUCCO DEFINITIVO PER AUTOFILL TRASPARENTE:
+   Niente box-shadow, solo una transizione infinita sul background-color */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
     -webkit-text-fill-color: #fff !important;
     transition: background-color 9999s ease-in-out 0s !important;
-    box-shadow: 0 0 0 1000px transparent inset !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
 }
-
 
 /* ─── 6. ICONA USERNAME ─────────────────────────────────────────────────── */
 
