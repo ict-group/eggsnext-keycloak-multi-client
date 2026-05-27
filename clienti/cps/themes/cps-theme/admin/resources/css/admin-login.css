@@ -1,0 +1,293 @@
+/* =============================================================================
+   CPS THEME - admin-login.css
+   Adattato da admin-login.css Errevi allo stile CPS.
+
+   Obiettivo:
+   - dare alla login/forgot-password della console admin lo stesso look della login CPS;
+   - restare compatibile con Keycloak legacy/WildFly <= 16 e con markup PatternFly 3;
+   - non rompere la console admin: questo file deve essere usato solo come CSS di login/admin theme.
+   ============================================================================= */
+
+/* ─── Layout e sfondo ───────────────────────────────────────────────────── */
+
+html,
+body {
+    min-height: 100%;
+}
+
+body {
+    margin: 0 !important;
+    min-height: 100vh !important;
+    background-color: #000 !important;
+    overflow-x: hidden !important;
+    position: relative !important;
+}
+
+/* Sfondo CPS */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background-image: url('../img/cps_background.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    filter: grayscale(100%) brightness(0.9) contrast(1.2);
+    z-index: -2;
+}
+
+/* Overlay scuro leggero per aumentare contrasto */
+body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.18);
+    z-index: -1;
+}
+
+/* Centra il contenuto di login senza impattare troppo il resto dell'admin */
+.login-pf-page,
+.login-pf {
+    min-height: 100vh !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: transparent !important;
+}
+
+/* Nasconde header/titoli nativi quando presenti */
+#kc-header,
+#kc-page-title,
+.login-pf-header h1,
+.login-pf-page .login-pf-header h1 {
+    display: none !important;
+}
+
+/* ─── Card login ────────────────────────────────────────────────────────── */
+
+.card-pf,
+.login-pf-page .card-pf {
+    width: 100% !important;
+    max-width: 377px !important;
+    min-width: 340px !important;
+    min-height: 516px !important;
+    margin: 0 auto !important;
+    padding: 40px !important;
+    border: none !important;
+    border-radius: 18px !important;
+    background: linear-gradient(180deg, #E30613 50%, rgba(227, 6, 19, 0.12) 130%) !important;
+    box-shadow: 1px 4px 11px 0 rgba(0, 0, 0, 0.25) !important;
+    color: #fff !important;
+}
+
+/* Logo CPS */
+.login-pf-header::before,
+.login-pf-page .login-pf-header::before {
+    content: "";
+    display: block;
+    height: 50px;
+    margin: 0 auto 30px auto;
+    background-image: url('../img/logo.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+/* ─── Testi, label, istruzioni ──────────────────────────────────────────── */
+
+.login-pf-page,
+.login-pf-page p,
+.login-pf-page .instruction,
+#kc-form-wrapper p,
+.instruction {
+    color: rgba(255, 255, 255, 0.82) !important;
+    font-size: 14px !important;
+    text-align: center !important;
+}
+
+.control-label,
+label {
+    display: block !important;
+    margin-bottom: 5px !important;
+    color: rgba(255, 255, 255, 0.75) !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+}
+
+/* ─── Input ─────────────────────────────────────────────────────────────── */
+
+.form-control,
+input[type="text"],
+input[type="password"],
+input[type="email"] {
+    width: 100% !important;
+    background: transparent !important;
+    border: none !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.5) !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    outline: none !important;
+    color: #fff !important;
+    font-size: 15px !important;
+    padding: 0 0 8px 0 !important;
+    margin-bottom: 20px !important;
+}
+
+.form-control:focus,
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="email"]:focus {
+    border-bottom: 2px solid rgba(255, 255, 255, 0.9) !important;
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+.form-control::placeholder,
+input::placeholder {
+    color: rgba(255, 255, 255, 0.5) !important;
+}
+
+/* Password group / addon legacy */
+.input-group {
+    width: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.5) !important;
+    margin-bottom: 20px !important;
+    background: transparent !important;
+}
+
+.input-group:focus-within {
+    border-bottom: 2px solid rgba(255, 255, 255, 0.9) !important;
+}
+
+.input-group .form-control {
+    border-bottom: none !important;
+    margin-bottom: 0 !important;
+}
+
+.input-group-addon,
+.input-group-btn .btn {
+    background: transparent !important;
+    border: none !important;
+    color: rgba(255, 255, 255, 0.7) !important;
+    box-shadow: none !important;
+}
+
+/* ─── Bottoni ───────────────────────────────────────────────────────────── */
+
+.btn.btn-primary,
+input[type="submit"].btn-primary,
+#kc-login {
+    width: 100% !important;
+    margin-top: 20px !important;
+    padding: 12px !important;
+    border: none !important;
+    border-radius: 30px !important;
+    background-color: #fff !important;
+    background-image: none !important;
+    color: #E30613 !important;
+    font-size: 15px !important;
+    font-weight: bold !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.05em !important;
+    box-shadow: none !important;
+    cursor: pointer !important;
+}
+
+.btn.btn-primary:hover,
+input[type="submit"].btn-primary:hover,
+#kc-login:hover {
+    background-color: #f0f0f0 !important;
+    color: #E30613 !important;
+}
+
+/* Bottoni secondari/link button */
+.btn-default,
+.btn.btn-default {
+    border-radius: 30px !important;
+}
+
+/* ─── Link forgot/back ──────────────────────────────────────────────────── */
+
+#kc-form-options a,
+#kc-page-title ~ * a,
+.login-pf-page a,
+.login-pf-page .login-pf-settings a {
+    color: rgba(255, 255, 255, 0.88) !important;
+    font-size: 13px !important;
+    text-decoration: underline !important;
+}
+
+#kc-form-options a:hover,
+.login-pf-page a:hover,
+.login-pf-page .login-pf-settings a:hover {
+    color: #fff !important;
+    text-decoration: underline !important;
+}
+
+/* Settings row: remember me + forgot password */
+.form-group.login-pf-settings {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 16px !important;
+}
+
+.login-pf-settings .checkbox label,
+.checkbox label {
+    color: rgba(255, 255, 255, 0.82) !important;
+    font-size: 13px !important;
+}
+
+/* ─── Alert / errori ────────────────────────────────────────────────────── */
+
+.alert,
+.alert.alert-error,
+.alert-danger,
+.alert-warning,
+.alert-success {
+    border: none !important;
+    border-radius: 12px !important;
+    padding: 10px 14px !important;
+    margin-bottom: 16px !important;
+    color: #fff !important;
+    text-align: center !important;
+    box-shadow: none !important;
+}
+
+.alert.alert-error,
+.alert-danger {
+    background-color: #8b0000 !important;
+}
+
+.alert-warning {
+    background-color: rgba(150, 90, 0, 0.9) !important;
+}
+
+.alert-success {
+    background-color: rgba(0, 110, 60, 0.9) !important;
+}
+
+.kc-feedback-text {
+    color: #fff !important;
+    font-size: 13px !important;
+}
+
+/* ─── Responsività ──────────────────────────────────────────────────────── */
+
+@media (max-width: 480px) {
+    .card-pf,
+    .login-pf-page .card-pf {
+        min-width: 0 !important;
+        max-width: calc(100vw - 32px) !important;
+        padding: 30px 24px !important;
+        min-height: auto !important;
+    }
+
+    .login-pf-header::before,
+    .login-pf-page .login-pf-header::before {
+        height: 44px;
+        margin-bottom: 24px;
+    }
+}
