@@ -165,7 +165,9 @@ form#kc-form-login .form-group:has(input#password) {
     border-bottom: 1px solid rgba(255, 255, 255, 0.62) !important;
 }
 
-/* Label stile screenshot */
+/* Label stile screenshot.
+   La label fa da "placeholder visuale".
+   Quando il campo è in focus o contiene valore, la nascondiamo per non sovrapporla al testo digitato. */
 form#kc-form-login .control-label,
 form#kc-form-login .pf-c-form__label {
     display: block !important;
@@ -180,6 +182,8 @@ form#kc-form-login .pf-c-form__label {
     pointer-events: none !important;
     position: relative !important;
     z-index: 1 !important;
+    opacity: 1 !important;
+    transition: opacity 0.12s ease-in-out !important;
 }
 
 /* Input realmente editabili */
@@ -206,11 +210,16 @@ form#kc-form-login .pf-c-form-control {
     caret-color: #fff !important;
 }
 
-/* Quando il campo è vuoto la label si vede bene.
-   Quando scrivi/focus, la label si abbassa di opacità per non disturbare. */
+/* Nasconde la label mentre scrivi.
+   :valid copre Keycloak 11 perché i campi login sono normalmente required.
+   :not(:placeholder-shown) copre i browser/versioni dove esiste placeholder. */
 form#kc-form-login .form-group:has(input#username:focus) .control-label,
-form#kc-form-login .form-group:has(input#password:focus) .control-label {
-    opacity: 0.35 !important;
+form#kc-form-login .form-group:has(input#password:focus) .control-label,
+form#kc-form-login .form-group:has(input#username:valid) .control-label,
+form#kc-form-login .form-group:has(input#password:valid) .control-label,
+form#kc-form-login .form-group:has(input#username:not(:placeholder-shown)) .control-label,
+form#kc-form-login .form-group:has(input#password:not(:placeholder-shown)) .control-label {
+    opacity: 0 !important;
 }
 
 form#kc-form-login input#username:focus,
@@ -229,6 +238,7 @@ form#kc-form-login input#password::placeholder,
 form#kc-form-login .form-control::placeholder,
 form#kc-form-login .pf-c-form-control::placeholder {
     color: transparent !important;
+    opacity: 0 !important;
 }
 
 form#kc-form-login input#username:-webkit-autofill,
