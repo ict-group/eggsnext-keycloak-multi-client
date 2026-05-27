@@ -7,8 +7,10 @@ ARG KEYCLOAK_VERSION=11.0.0
 
 FROM quay.io/keycloak/keycloak:${KEYCLOAK_VERSION}
 
+ARG KEYCLOAK_VERSION
 ARG CLIENT_ID
 ARG INCLUDE_EXTENSIONS=false
+
 ENV KEYCLOAK_VERSION=${KEYCLOAK_VERSION}
 
 COPY --chown=jboss:jboss base /tmp/base
@@ -85,32 +87,20 @@ RUN set -eu; \
     echo "Installed themes:"; \
     ls -la "${THEME_ROOT}"
 
-# -----------------------------------------------------------------------------
-# Fix parent nei theme.properties per compatibilità WildFly (Keycloak < 17)
-#
-# In WildFly non esistono i parent "base" e "keycloak.v2" (introdotti in >= 17).
-# Vengono sostituiti automaticamente con "keycloak" che è il parent built-in
-# valido per tutte le versioni WildFly.
-#
-# Questo fix copre tutti i tipi di tema: login, email, account, admin.
-# Non usa find/xargs perché non disponibili nella shell minimale WildFly.
-# -----------------------------------------------------------------------------
 RUN for f in /opt/jboss/keycloak/themes/*/login/theme.properties \
              /opt/jboss/keycloak/themes/*/email/theme.properties \
              /opt/jboss/keycloak/themes/*/account/theme.properties \
              /opt/jboss/keycloak/themes/*/admin/theme.properties ; do \
         [ -f "$f" ] || continue; \
         sed -i \
-            -e 's/^parent=base$/parent=keycloak/' \
             -e 's/^parent=keycloak\.v2$/parent=keycloak/' \
             "$f"; \
-        echo "Fixed parent in: $f → $(grep '^parent=' "$f")"; \
+        echo "Checked parent in: $f → $(grep '^parent=' "$f" || true)"; \
     done
 
-COPY --chmod=755 scripts/kc-entrypoint-legacy.sh /opt/jboss/tools/kc-entrypoint-legacy.sh
+COPY scripts/kc-entrypoint-legacy.sh /opt/jboss/tools/kc-entrypoint-legacy.sh
+RUN chmod +x /opt/jboss/tools/kc-entrypoint-legacy.sh
 
-# Non mettere KEYCLOAK_USER / KEYCLOAK_PASSWORD nel Dockerfile:
-# passali a runtime con -e oppure tramite secrets della piattaforma.
 EXPOSE 8080
 
 ENTRYPOINT ["/opt/jboss/tools/kc-entrypoint-legacy.sh"]
