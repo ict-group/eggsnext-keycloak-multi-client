@@ -148,7 +148,7 @@ form#kc-form-login {
 }
 
 
-/* ─── 5. INPUT LOGIN KEYCLOAK 11 ────────────────────────────────────────── */
+/* ─── 5. INPUT LOGIN KEYCLOAK 11 (CSS ONLY OVERRIDE) ────────────────────── */
 
 form#kc-form-login .form-group:has(input#username),
 form#kc-form-login .form-group:has(input#password) {
@@ -203,11 +203,11 @@ form#kc-form-login .pf-c-form-control {
 }
 
 /* NASCONDE LA LABEL:
-   Usiamo focus-within per quando l'utente clicca,
-   e :not(:placeholder-shown) per quando c'è del testo scritto.
-   (Rimosso :valid perché in KC11 i campi non sono required di default) */
-form#kc-form-login .form-group:focus-within .control-label,
-form#kc-form-login .form-group:has(input:not(:placeholder-shown)) .control-label,
+   Senza file .ftl non possiamo usare placeholder-shown o required.
+   Nascondiamo la label quando il campo è cliccato (focus) o quando
+   viene riempito dall'autofill del browser.
+*/
+form#kc-form-login .form-group:has(input:focus) .control-label,
 form#kc-form-login .form-group:has(input:-webkit-autofill) .control-label {
     opacity: 0 !important;
 }
@@ -221,7 +221,9 @@ form#kc-form-login input:focus {
 }
 
 /* TRUCCO DEFINITIVO PER AUTOFILL TRASPARENTE:
-   Niente box-shadow, solo una transizione infinita sul background-color */
+   Niente box-shadow, solo una transizione infinita per impedire
+   al browser di applicare il suo sfondo bianco/giallo.
+*/
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
