@@ -192,6 +192,10 @@ jobs:
           echo "Dockerfile scelto: ${{ needs.resolve-version.outputs.dockerfile }}"
           test -f "${{ needs.resolve-version.outputs.dockerfile }}"
           test -d "clienti/${{ matrix.client }}/themes"
+
+          echo "Temi trovati per ${{ matrix.client }}:"
+          find "clienti/${{ matrix.client }}/themes" -mindepth 1 -maxdepth 1 -type d -printf ' - %f\n' | sort
+
           if [ -d base/extensions ]; then
             echo "base/extensions presente"
             find base/extensions -maxdepth 2 -type f | sort
