@@ -1,273 +1,455 @@
 /* =============================================================================
    CPS THEME - style.css
-   Compatibile con:
-   - Keycloak <= 16  (WildFly / PatternFly 3) → classi Bootstrap + .btn, .control-label
-   - Keycloak >= 17  (Quarkus  / PatternFly 4) → classi pf-c-*, pf-m-*
+   Target principale: Keycloak 11 / WildFly / PatternFly 3
+   Compatibile anche con alcune classi Quarkus / PatternFly 4.
+
+   Obiettivo visuale:
+   - card rossa centrale
+   - logo CPS grande in alto
+   - campi username/password trasparenti con label bianca a sinistra
+   - icone allineate a destra sulla stessa riga del campo
+   - underline bianca sotto ogni input
+   - bottone bianco pill "ACCEDI"
    ============================================================================= */
+
 
 /* ─── 1. LAYOUT E SFONDO ─────────────────────────────────────────────────── */
 
+html,
 body {
-    margin: 0;
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    background-color: #000;
-    position: relative;
+    width: 100%;
+    height: 100%;
 }
 
+body {
+    margin: 0 !important;
+    min-height: 100vh !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    overflow: hidden !important;
+    background-color: #000 !important;
+    position: relative !important;
+    font-family: "Open Sans", Arial, sans-serif !important;
+}
+
+/* Background CPS */
 body::before {
     content: "";
     position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
+    inset: 0;
     background-image: url('../img/cps_background.png');
     background-size: cover;
     background-position: center;
-    filter: grayscale(100%) brightness(0.9) contrast(1.2);
+    background-repeat: no-repeat;
+    filter: grayscale(100%) brightness(0.92) contrast(1.15);
     z-index: 0;
 }
 
-/* Nasconde header nativo (entrambe le versioni) */
+/* Leggero velo per migliorare leggibilità */
+body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.05);
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* Wrapper Keycloak legacy */
+.login-pf-page {
+    width: 100% !important;
+    min-height: 100vh !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 24px !important;
+    background: transparent !important;
+    position: relative !important;
+    z-index: 1 !important;
+}
+
+.login-pf-page .container-fluid {
+    width: auto !important;
+    padding: 0 !important;
+}
+
+/* Nasconde header/titoli nativi */
 #kc-header,
+#kc-header-wrapper,
 #kc-page-title,
 .login-pf-header h1 {
     display: none !important;
 }
 
+
 /* ─── 2. LOGIN CARD ──────────────────────────────────────────────────────── */
 
-/* Usata da entrambe le versioni */
 .card-pf {
-    background: linear-gradient(180deg, #E30613 50%, transparent 130%) !important;
-    border-radius: 18px !important;
-    box-shadow: 1px 4px 11px 0px rgba(0, 0, 0, 0.25) !important;
-    padding: 40px !important;
-    max-width: 377px !important;
-    min-height: 516px !important;
-    min-width: 340px !important;
-    width: 100% !important;
+    width: 464px !important;
+    max-width: calc(100vw - 48px) !important;
+    min-height: 560px !important;
+    margin: 0 auto !important;
+    padding: 64px 84px 54px !important;
     border: none !important;
-    position: relative;
-    z-index: 1;
+    border-radius: 18px !important;
+    background: linear-gradient(180deg, #F00012 0%, #E30613 54%, rgba(227, 6, 19, 0.48) 100%) !important;
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.26) !important;
+    position: relative !important;
+    z-index: 1 !important;
 }
 
+/* Rimuove spazi/righe Bootstrap inutili */
+.card-pf .row,
+.card-pf .col-xs-12,
+.card-pf .col-sm-12,
+.card-pf .col-md-12,
+.card-pf .col-lg-12 {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+
 /* ─── 3. LOGO ────────────────────────────────────────────────────────────── */
+
+.login-pf-header {
+    margin: 0 0 58px 0 !important;
+    padding: 0 !important;
+    text-align: center !important;
+}
 
 .login-pf-header::before {
     content: "";
     display: block;
+    width: 220px;
+    height: 78px;
+    margin: 0 auto;
     background-image: url('../img/logo.png');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
-    height: 50px;
-    margin-bottom: 30px;
 }
 
-/* ─── 4. ETICHETTE ───────────────────────────────────────────────────────── */
 
-/* PF4 >= 17 */
-.pf-c-form__label,
-    /* PF3 <= 16 */
-.control-label {
-    font-size: 13px !important;
-    color: rgba(255, 255, 255, 0.75) !important;
-    font-weight: 500 !important;
-    margin-bottom: 5px !important;
-    display: block !important;
-}
+/* ─── 4. FORM BASE ───────────────────────────────────────────────────────── */
 
-/* ─── 5. INPUT USERNAME ──────────────────────────────────────────────────── */
-
-input#username {
-    border: none !important;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.5) !important;
-    border-radius: 0 !important;
-    background-color: transparent !important;
-    box-shadow: none !important;
-    outline: none !important;
-    padding: 0 0 8px 0 !important;
-    margin-bottom: 25px !important;
+#kc-form,
+#kc-form-wrapper,
+form#kc-form-login {
     width: 100% !important;
-    color: #fff !important;
-    font-size: 15px !important;
+    margin: 0 !important;
 }
 
-input#username::placeholder { color: rgba(255, 255, 255, 0.5) !important; }
-input#username:focus { border-bottom: 2px solid rgba(255, 255, 255, 0.9) !important; outline: none !important; box-shadow: none !important; }
-
-/* ─── 6. INPUT PASSWORD ──────────────────────────────────────────────────── */
-
-/* PF4 >= 17: wrapper gruppo password */
-.pf-c-input-group {
-    background-color: transparent !important;
-    border: none !important;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.5) !important;
-    border-radius: 0 !important;
-    box-shadow: none !important;
-    padding-bottom: 5px !important;
-    margin-bottom: 20px !important;
+form#kc-form-login {
     display: flex !important;
-    align-items: center !important;
-}
-.pf-c-input-group:focus-within {
-    border-bottom: 2px solid rgba(255, 255, 255, 0.9) !important;
+    flex-direction: column !important;
 }
 
-/* PF3 <= 16: wrapper gruppo password */
-.input-group {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.5) !important;
+.form-group {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    margin-bottom: 22px !important;
+}
+
+
+/* ─── 5. CAMPI INPUT KEYCLOAK 11 / PATTERNFLY 3 ─────────────────────────── */
+
+/*
+   Keycloak 11 renderizza:
+   <div class="form-group">
+     <label class="control-label" for="username">Username</label>
+     <input id="username" class="form-control">
+   </div>
+
+   Il design richiesto vuole label e icona sulla stessa linea visiva,
+   con underline sotto al campo.
+*/
+
+.form-group:has(input#username),
+.form-group:has(input#password) {
+    position: relative !important;
     margin-bottom: 20px !important;
-    display: flex !important;
-    align-items: center !important;
-    background: transparent !important;
-}
-.input-group:focus-within {
-    border-bottom: 2px solid rgba(255, 255, 255, 0.9) !important;
-}
-.input-group .input-group-addon {
-    background: transparent !important;
-    border: none !important;
-    color: rgba(255, 255, 255, 0.7) !important;
+    padding-bottom: 13px !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.58) !important;
 }
 
-/* Input password (entrambe le versioni) */
-input#password,
-.pf-c-form-control {
-    background-color: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
-    outline: none !important;
-    color: #fff !important;
+/* Fallback/compat: se :has non è supportato, lo stile resta comunque sugli input */
+.control-label,
+.pf-c-form__label {
+    display: block !important;
+    margin: 0 42px 0 0 !important;
     padding: 0 !important;
-    height: auto !important;
-    font-size: 15px !important;
+    color: #fff !important;
+    font-size: 16px !important;
+    line-height: 22px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0 !important;
+    text-align: left !important;
 }
-input#password::placeholder,
-.pf-c-form-control::placeholder { color: rgba(255, 255, 255, 0.5) !important; }
-input#password:focus,
-.pf-c-form-control:focus { outline: none !important; box-shadow: none !important; border: none !important; }
 
-/* ─── 7. BOTTONE OCCHIO (mostra/nascondi password) ──────────────────────── */
-
-/* PF4 */
-.pf-c-button.pf-m-control {
-    background-color: transparent !important;
+/* Input trasparenti: il testo digitato resta sulla stessa area della label.
+   In Keycloak 11 il label è visibile; il valore input appare sotto se l'utente scrive.
+*/
+input#username,
+input#password,
+.form-control,
+.pf-c-form-control {
+    width: 100% !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 42px 0 0 !important;
     border: none !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    background-color: transparent !important;
     box-shadow: none !important;
     outline: none !important;
-    color: rgba(255, 255, 255, 0.7) !important;
-    padding: 0 10px !important;
+    color: #fff !important;
+    font-size: 16px !important;
+    line-height: 22px !important;
+}
+
+/* Quando il browser/autofill o il focus mostrano testo, manteniamo il tema */
+input#username:focus,
+input#password:focus,
+.form-control:focus,
+.pf-c-form-control:focus {
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+    background-color: transparent !important;
+}
+
+input#username::placeholder,
+input#password::placeholder,
+.form-control::placeholder,
+.pf-c-form-control::placeholder {
+    color: rgba(255, 255, 255, 0.68) !important;
+}
+
+input#username:-webkit-autofill,
+input#password:-webkit-autofill {
+    -webkit-text-fill-color: #fff !important;
+    transition: background-color 9999s ease-in-out 0s !important;
+    box-shadow: 0 0 0 1000px transparent inset !important;
+}
+
+
+/* ─── 6. ICONA USERNAME ─────────────────────────────────────────────────── */
+
+.form-group:has(input#username)::after {
+    content: "";
+    position: absolute;
+    right: 15px;
+    top: 4px;
+    width: 18px;
+    height: 18px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2'/%3E%3Ccircle cx='12' cy='7' r='4'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    opacity: 0.95;
+    pointer-events: none;
+}
+
+
+/* ─── 7. PASSWORD + OCCHIO ──────────────────────────────────────────────── */
+
+/* Keycloak 11 può usare input-group / input-group-btn */
+.input-group {
+    width: 100% !important;
+    display: block !important;
+    border: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.input-group .form-control {
+    float: none !important;
+}
+
+.input-group-btn {
+    position: absolute !important;
+    right: 5px !important;
+    top: -4px !important;
+    width: 28px !important;
+    display: block !important;
+    z-index: 2 !important;
+}
+
+.input-group-btn .btn {
+    width: 28px !important;
+    height: 28px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
+    color: #fff !important;
+    opacity: 0.95 !important;
+    line-height: 28px !important;
+}
+
+.input-group-btn .btn:hover,
+.input-group-btn .btn:focus {
+    background: transparent !important;
+    color: #fff !important;
+    opacity: 1 !important;
+    outline: none !important;
+}
+
+/* PF4 compatibility */
+.pf-c-input-group {
+    display: block !important;
+    position: relative !important;
+    border: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.pf-c-button.pf-m-control {
+    position: absolute !important;
+    right: 5px !important;
+    top: -4px !important;
+    width: 28px !important;
+    height: 28px !important;
+    padding: 0 !important;
+    border: none !important;
+    background: transparent !important;
+    color: #fff !important;
+    box-shadow: none !important;
     --pf-c-button--m-control--after--BorderColor: transparent !important;
 }
-.pf-c-button.pf-m-control::after { border: none !important; content: none !important; }
-.pf-c-form-control__icon { display: none !important; }
 
-/* PF3: bottone addon dentro input-group */
-.input-group-btn .btn {
-    background: transparent !important;
-    border: none !important;
-    color: rgba(255, 255, 255, 0.7) !important;
-    box-shadow: none !important;
+.pf-c-button.pf-m-control::after,
+.pf-c-form-control__icon {
+    display: none !important;
 }
 
-/* ─── 8. BOTTONE ACCEDI ──────────────────────────────────────────────────── */
 
-/* PF4 >= 17 */
+/* ─── 8. BOTTONE ACCEDI ─────────────────────────────────────────────────── */
+
+#kc-form-buttons {
+    margin-top: 24px !important;
+}
+
 #kc-login,
 input#kc-login.btn-primary,
-    /* PF3 <= 16 */
 .btn.btn-primary,
-input[type="submit"].btn-primary {
-    background-color: #fff !important;
-    background-image: none !important;
-    border: none !important;
-    border-radius: 30px !important;
-    padding: 12px !important;
-    font-size: 15px !important;
-    font-weight: bold !important;
-    text-transform: uppercase !important;
-    color: #fb010f !important;
-    width: 100% !important;
-    margin-top: 20px !important;
-    cursor: pointer;
-    letter-spacing: 0.05em !important;
-    box-shadow: none !important;
-}
-#kc-login:hover,
-.btn.btn-primary:hover,
-input[type="submit"].btn-primary:hover { background-color: #f0f0f0 !important; }
-
-/* PF4: altri bottoni primari (forgot password submit ecc) */
+input[type="submit"].btn-primary,
 .pf-c-button.pf-m-primary,
 .pf-c-button.pf-m-block {
-    background-color: #fff !important;
-    background-image: none !important;
-    border: none !important;
-    border-radius: 30px !important;
-    padding: 12px !important;
-    font-size: 15px !important;
-    font-weight: bold !important;
-    text-transform: uppercase !important;
-    color: #c0002c !important;
     width: 100% !important;
-    margin-top: 15px !important;
-    cursor: pointer !important;
-    box-shadow: none !important;
-}
-.pf-c-button.pf-m-primary:hover,
-.pf-c-button.pf-m-block:hover { background-color: #f0f0f0 !important; }
-
-/* ─── 9. LINK PASSWORD DIMENTICATA ──────────────────────────────────────── */
-
-/* PF4 */
-#kc-form-options a,
-.kc-forgot-password,
-a.kc-forgot-password,
-    /* PF3 */
-.login-pf-page .login-pf-settings a {
-    color: rgba(255, 255, 255, 0.85) !important;
-    text-decoration: underline !important;
-    font-size: 13px !important;
-    display: block !important;
+    min-height: 44px !important;
+    padding: 12px 18px !important;
+    margin: 0 !important;
+    border: none !important;
+    border-radius: 999px !important;
+    background: #fff !important;
+    background-image: none !important;
+    box-shadow: 0 8px 14px rgba(0, 0, 0, 0.20) !important;
+    color: #E30613 !important;
+    font-size: 16px !important;
+    line-height: 20px !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.08em !important;
+    text-transform: uppercase !important;
     text-align: center !important;
-    margin-top: 16px !important;
+    cursor: pointer !important;
 }
-#kc-form-options a:hover,
-.kc-forgot-password:hover,
-.login-pf-page .login-pf-settings a:hover { color: #fff !important; }
 
-/* ─── 10. REMEMBER ME + FORGOT PASSWORD SULLA STESSA RIGA ───────────────── */
+#kc-login:hover,
+#kc-login:focus,
+.btn.btn-primary:hover,
+.btn.btn-primary:focus,
+input[type="submit"].btn-primary:hover,
+input[type="submit"].btn-primary:focus,
+.pf-c-button.pf-m-primary:hover,
+.pf-c-button.pf-m-primary:focus,
+.pf-c-button.pf-m-block:hover,
+.pf-c-button.pf-m-block:focus {
+    background: #f4f4f4 !important;
+    color: #E30613 !important;
+    outline: none !important;
+}
+
+
+/* ─── 9. LINK PASSWORD DIMENTICATA / OPZIONI ───────────────────────────── */
 
 .form-group.login-pf-settings {
     display: flex !important;
-    justify-content: space-between !important;
+    justify-content: center !important;
     align-items: center !important;
     width: 100% !important;
+    margin-top: 10px !important;
+    margin-bottom: 0 !important;
+    border: none !important;
+    padding: 0 !important;
 }
-#kc-form-options { display: flex !important; align-items: center !important; }
-.login-pf-settings > div:last-child,
-.login-pf-settings .col-xs-6:last-child { text-align: right !important; margin-left: auto !important; }
-.login-pf-settings a { color: rgba(255, 255, 255, 0.85) !important; font-size: 13px !important; text-decoration: underline !important; }
 
-/* ─── 11. ORDINE FORM (PF4) ──────────────────────────────────────────────── */
+#kc-form-options,
+.login-pf-settings .col-xs-6,
+.login-pf-settings > div {
+    width: 100% !important;
+    text-align: center !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
 
-form#kc-form-login { display: flex !important; flex-direction: column !important; }
-form#kc-form-login .form-group.login-pf-settings { order: 2 !important; }
-form#kc-form-login #kc-form-buttons { order: 3 !important; }
+#kc-form-options a,
+.kc-forgot-password,
+a.kc-forgot-password,
+.login-pf-page .login-pf-settings a,
+.login-pf-page a {
+    color: rgba(255, 255, 255, 0.88) !important;
+    font-size: 13px !important;
+    text-decoration: none !important;
+}
 
-/* ─── 12. SOCIAL LOGIN ───────────────────────────────────────────────────── */
+#kc-form-options a:hover,
+.kc-forgot-password:hover,
+.login-pf-page .login-pf-settings a:hover,
+.login-pf-page a:hover {
+    color: #fff !important;
+    text-decoration: underline !important;
+}
+
+
+/* ─── 10. ORDINE FORM ───────────────────────────────────────────────────── */
+
+form#kc-form-login .form-group.login-pf-settings {
+    order: 2 !important;
+}
+
+form#kc-form-login #kc-form-buttons {
+    order: 3 !important;
+}
+
+
+/* ─── 11. SOCIAL LOGIN ──────────────────────────────────────────────────── */
 
 #kc-social-providers,
-.kc-social-section { margin-top: 20px !important; }
+.kc-social-section {
+    margin-top: 20px !important;
+}
 
 #kc-social-providers ul,
-.kc-social-providers { list-style: none !important; padding: 0 !important; margin: 0 !important; }
+.kc-social-providers {
+    list-style: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
 
-/* PF4 + PF3 */
 #kc-social-providers li a,
 .zocial,
 a.zocial {
@@ -275,152 +457,179 @@ a.zocial {
     align-items: center !important;
     justify-content: center !important;
     gap: 10px !important;
-    background-color: #fff !important;
-    border: none !important;
-    border-radius: 30px !important;
-    padding: 11px 16px !important;
-    font-size: 14px !important;
-    font-weight: 600 !important;
-    color: #444 !important;
-    text-decoration: none !important;
     width: 100% !important;
+    padding: 11px 16px !important;
+    border: none !important;
+    border-radius: 999px !important;
+    background: #fff !important;
+    color: #444 !important;
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    text-decoration: none !important;
     box-sizing: border-box !important;
-    cursor: pointer !important;
 }
-#kc-social-providers li a:hover,
-a.zocial:hover { background-color: #f0f0f0 !important; }
 
-/* ─── 13. BARRA ERRORE IN CIMA ───────────────────────────────────────────── */
+#kc-social-providers li a:hover,
+a.zocial:hover {
+    background: #f4f4f4 !important;
+}
+
+
+/* ─── 12. ERRORI / ALERT ────────────────────────────────────────────────── */
 
 .kc-feedback-text,
 span[id="input-error"] {
-    position: fixed !important;
-    top: 0 !important; left: 0 !important; right: 0 !important;
-    margin: 0 !important;
-    background-color: #8b0000 !important;
-    color: white !important;
-    border-radius: 0 !important;
-    padding: 12px 15px !important;
-    font-size: 14px !important;
+    color: #fff !important;
+    font-size: 13px !important;
     text-align: center !important;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3) !important;
-    z-index: 10 !important;
-    display: block !important;
-    animation: slideDown 0.3s ease-out;
 }
-.kc-feedback-text:empty,
-span[id="input-error"]:empty { display: none !important; }
 
-/* PF3 <= 16: alert errore */
 .alert.alert-error,
-.alert-danger {
+.alert-danger,
+.pf-c-alert.pf-m-danger {
     position: fixed !important;
-    top: 0 !important; left: 0 !important; right: 0 !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
     margin: 0 !important;
-    background-color: #8b0000 !important;
-    color: white !important;
+    padding: 12px 15px !important;
     border: none !important;
     border-radius: 0 !important;
-    padding: 12px 15px !important;
+    background-color: #8b0000 !important;
+    color: #fff !important;
     font-size: 14px !important;
     text-align: center !important;
-    z-index: 10 !important;
+    z-index: 20 !important;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.30) !important;
     animation: slideDown 0.3s ease-out;
 }
+
 .alert.alert-error .kc-feedback-text,
-.alert-danger .kc-feedback-text {
+.alert-danger .kc-feedback-text,
+.pf-c-alert.pf-m-danger .kc-feedback-text {
     position: static !important;
+    padding: 0 !important;
+    margin: 0 !important;
     background: transparent !important;
     box-shadow: none !important;
-    padding: 0 !important;
     animation: none !important;
+}
+
+.pf-c-alert__icon,
+.pf-c-alert__action,
+.pf-c-icon {
+    display: none !important;
 }
 
 @keyframes slideDown {
-    from { opacity: 0; transform: translateY(-10px); }
-    to   { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
-/* Nasconde icona e azioni alert PF4 */
-.pf-c-alert__icon,
-.pf-c-alert__action,
-.pf-c-icon { display: none !important; }
 
-/* ─── 14. ALERT SUCCESSO INLINE (es. dopo forgot password) ──────────────── */
+/* ─── 13. RESET PASSWORD / FORGOT PASSWORD ──────────────────────────────── */
 
-.pf-c-alert.pf-m-inline.pf-m-success {
-    background-color: rgba(255, 255, 255, 0.15) !important;
-    border: 1.5px solid rgba(255, 255, 255, 0.6) !important;
-    border-radius: 12px !important;
-    padding: 10px 16px !important;
-    margin-bottom: 16px !important;
-    backdrop-filter: blur(4px) !important;
-    display: block !important;
-    overflow: visible !important;
-}
-.pf-c-alert.pf-m-inline .kc-feedback-text,
-.pf-c-alert.pf-m-inline .pf-c-alert__title {
-    position: static !important;
-    background: transparent !important;
-    background-color: transparent !important;
-    box-shadow: none !important;
-    border-radius: 0 !important;
-    color: #fff !important;
-    font-size: 13px !important;
-    font-weight: 500 !important;
-    text-align: center !important;
-    animation: none !important;
-    z-index: auto !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    top: auto !important; left: auto !important; right: auto !important;
-    width: 100% !important;
-    display: block !important;
-    opacity: 1 !important;
-    visibility: visible !important;
-    white-space: normal !important;
+#kc-reset-password-form .form-group,
+form[action*="reset-credentials"] .form-group {
+    position: relative !important;
+    margin-bottom: 22px !important;
+    padding-bottom: 13px !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.58) !important;
 }
 
-/* ─── 15. ICONA UTENTE SUL CAMPO USERNAME (PF3 + PF4) ───────────────────── */
-
-.form-group:has(input#username) { position: relative !important; }
-.form-group:has(input#username)::after {
-    content: "";
-    position: absolute;
-    right: 0; top: 40%;
-    transform: translateY(-50%);
-    width: 18px; height: 18px;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='rgba(255,255,255,0.7)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2'/%3E%3Ccircle cx='12' cy='7' r='4'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-size: contain;
-    pointer-events: none;
+/* Nel reset password l'icona utente disturba la label "Username or email" */
+#kc-reset-password-form .form-group:has(input#username)::after,
+form[action*="reset-credentials"] .form-group:has(input#username)::after {
+    display: none !important;
 }
 
-/* ─── 16. RESET PASSWORD CSS (integrato) ────────────────────────────────── */
-
-/* PF3: bottone submit forgot password */
-.login-pf-page .btn.btn-primary {
-    background-color: #E30613 !important;
-    color: white !important;
+#kc-reset-password-form #kc-form-buttons,
+form[action*="reset-credentials"] #kc-form-buttons {
+    margin-top: 22px !important;
 }
-.login-pf-page .btn.btn-primary:hover { background-color: #A00010 !important; }
 
-/* PF3: link back to login */
 #kc-page-title ~ * a,
-.login-pf-page a,
 #kc-form-options a {
+    display: inline-block !important;
     padding-top: 15px !important;
-    color: rgba(255,255,255,0.85) !important;
+    color: rgba(255, 255, 255, 0.88) !important;
     font-size: 13px !important;
     text-decoration: none !important;
 }
-.login-pf-page a:hover { color: #fff !important; text-decoration: underline !important; }
 
-/* Testo descrittivo reset password */
+#kc-page-title ~ * a:hover,
+#kc-form-options a:hover {
+    color: #fff !important;
+    text-decoration: underline !important;
+}
+
 #kc-form-wrapper p,
 .instruction {
-    color: rgba(255,255,255,0.8) !important;
+    color: rgba(255, 255, 255, 0.82) !important;
     font-size: 14px !important;
+    line-height: 1.55 !important;
     text-align: center !important;
-    margin-top: 20px !important;
+    margin-top: 24px !important;
+}
+
+
+/* ─── 14. ALERT SUCCESSO INLINE ─────────────────────────────────────────── */
+
+.pf-c-alert.pf-m-inline.pf-m-success,
+.alert.alert-success {
+    margin-bottom: 16px !important;
+    padding: 10px 16px !important;
+    border: 1.5px solid rgba(255, 255, 255, 0.60) !important;
+    border-radius: 12px !important;
+    background-color: rgba(255, 255, 255, 0.14) !important;
+    color: #fff !important;
+    text-align: center !important;
+}
+
+.pf-c-alert.pf-m-inline .kc-feedback-text,
+.pf-c-alert.pf-m-inline .pf-c-alert__title,
+.alert.alert-success .kc-feedback-text {
+    position: static !important;
+    display: block !important;
+    width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: transparent !important;
+    color: #fff !important;
+    box-shadow: none !important;
+    animation: none !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    text-align: center !important;
+}
+
+
+/* ─── 15. RESPONSIVE ────────────────────────────────────────────────────── */
+
+@media (max-width: 560px) {
+    .login-pf-page {
+        padding: 16px !important;
+    }
+
+    .card-pf {
+        width: 100% !important;
+        min-height: 520px !important;
+        padding: 48px 36px 42px !important;
+    }
+
+    .login-pf-header::before {
+        width: 185px;
+        height: 64px;
+    }
+
+    .control-label,
+    .pf-c-form__label {
+        font-size: 15px !important;
+    }
 }
