@@ -286,6 +286,17 @@ input#password:focus {
     outline: none !important;
 }
 
+/* Campo username/password "fantasma" per autocomplete browser (es. login-update-password
+   su Keycloak 11 legacy): Keycloak lo marca con style="display:none" inline, ma le regole
+   sopra forzano display:block su input#username/#password. Rispettiamo l'intento originale
+   di Keycloak indipendentemente dalla versione del tema in uso. */
+#username[style*="display:none"],
+#username[style*="display: none"],
+#password[style*="display:none"],
+#password[style*="display: none"] {
+    display: none !important;
+}
+
 /* Placeholder */
 #kc-form input::placeholder,
 input::placeholder {
