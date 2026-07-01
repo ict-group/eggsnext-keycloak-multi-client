@@ -48,13 +48,35 @@ else
 fi
 
 # -----------------------------------------------------------------------------
-# Fix parent nei theme.properties per compatibilità WildFly (Keycloak < 17)
+# Temi live (sviluppo locale) per WildFly (Keycloak < 17)
 #
-# Il Dockerfile.legacy fa già questo fix in build, ma un volume di bind mount
-# per il live-reload dei temi (usato in sviluppo locale) rimonta i file grezzi
-# dal disco sopra quelli già sistemati nell'immagine. Rifacciamo quindi il fix
-# qui, a runtime, dopo che eventuali volumi sono già montati.
+# In sviluppo, /opt/client-themes è un bind mount READ-ONLY della cartella
+# clienti/<client>/themes dell'host. Non possiamo bind-montare direttamente
+# /opt/jboss/keycloak/themes: sovrascriverebbe anche base/keycloak/keycloak-preview
+# (su WildFly sono cartelle vere dentro l'immagine, non risorse in un jar come
+# su Quarkus), e i file dell'host non sono scrivibili dall'utente jboss.
+#
+# Copiamo quindi ogni tema cliente dentro /opt/jboss/keycloak/themes (di
+# proprietà di jboss, quindi scrivibile) e lì applichiamo il fix del parent
+# (Dockerfile.legacy lo fa già in build, ma qui rifacciamo lo stesso fix sulla
+# copia fresca, per restare aggiornati a ogni riavvio del container).
 # -----------------------------------------------------------------------------
+if [ -d /opt/client-themes ]; then
+    for src in /opt/client-themes/*; do
+        [ -d "$src" ] || continue
+        theme_name="$(basename "$src")"
+        case "$theme_name" in
+            base|keycloak|keycloak-preview)
+                echo "[WARN] Ignoro tema riservato dall'host: $theme_name"
+                continue
+                ;;
+        esac
+        echo "[INFO] Copio tema live dall'host: $theme_name"
+        rm -rf "/opt/jboss/keycloak/themes/${theme_name}"
+        cp -R "$src" /opt/jboss/keycloak/themes/
+    done
+fi
+
 for theme in /opt/jboss/keycloak/themes/*; do
     [ -d "$theme" ] || continue
     theme_name="$(basename "$theme")"

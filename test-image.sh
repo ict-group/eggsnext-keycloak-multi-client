@@ -26,7 +26,10 @@ else
   echo "Keycloak:      http://localhost:8080/auth"
   echo "Admin Console: http://localhost:8080/auth/admin"
   export KEYCLOAK_DOCKERFILE=Dockerfile.legacy
-  export KEYCLOAK_THEMES_VOLUME="./clienti/${CLIENT_ID}/themes:/opt/jboss/keycloak/themes"
+  # Mount in sola lettura su uno staging path: kc-entrypoint-legacy.sh copia da
+  # qui dentro /opt/jboss/keycloak/themes, così i temi built-in (base/keycloak)
+  # non vengono cancellati dal mount e il fix del parent puo' scrivere sui file.
+  export KEYCLOAK_THEMES_VOLUME="./clienti/${CLIENT_ID}/themes:/opt/client-themes:ro"
   export KEYCLOAK_CMD="-b 0.0.0.0"
 fi
 
