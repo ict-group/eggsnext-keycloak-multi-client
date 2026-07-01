@@ -62,7 +62,7 @@ services:
 
   postgres:
     image: postgres:16
-    container_name: postgres-${CLIENT_ID}
+    container_name: postgres-${CLIENT_ID}-${KEYCLOAK_VERSION:-26.6.1}
 
     environment:
       POSTGRES_DB: ${KEYCLOAK_DB_NAME:-keycloak_${CLIENT_ID}}
@@ -91,4 +91,4 @@ services:
 
 volumes:
   postgres-data:
-    name: keycloak-postgres-${CLIENT_ID}
+    name: keycloak-postgres-${CLIENT_ID}-${KEYCLOAK_VERSION:-26.6.1}
