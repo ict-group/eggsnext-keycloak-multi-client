@@ -47,4 +47,29 @@ else
     esac
 fi
 
+# -----------------------------------------------------------------------------
+# Fix parent nei theme.properties per compatibilità WildFly (Keycloak < 17)
+#
+# Il Dockerfile.legacy fa già questo fix in build, ma un volume di bind mount
+# per il live-reload dei temi (usato in sviluppo locale) rimonta i file grezzi
+# dal disco sopra quelli già sistemati nell'immagine. Rifacciamo quindi il fix
+# qui, a runtime, dopo che eventuali volumi sono già montati.
+# -----------------------------------------------------------------------------
+for theme in /opt/jboss/keycloak/themes/*; do
+    [ -d "$theme" ] || continue
+    theme_name="$(basename "$theme")"
+    case "$theme_name" in
+        base|keycloak|keycloak-preview)
+            continue
+            ;;
+    esac
+    for f in "$theme"/login/theme.properties \
+             "$theme"/email/theme.properties \
+             "$theme"/account/theme.properties \
+             "$theme"/admin/theme.properties; do
+        [ -f "$f" ] || continue
+        sed -i -e 's/^parent=keycloak\.v2$/parent=keycloak/' "$f"
+    done
+done
+
 exec /opt/jboss/tools/docker-entrypoint.sh "$@"
