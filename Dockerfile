@@ -102,7 +102,7 @@ ENV KC_SPI_THEME_STATIC_MAX_AGE=-1
 ENV KC_SPI_THEME_CACHE_THEMES=false
 ENV KC_SPI_THEME_CACHE_TEMPLATES=false
 
-COPY scripts/kc-entrypoint.sh /opt/keycloak/bin/kc-entrypoint.sh
+COPY --chown=keycloak:keycloak scripts/kc-entrypoint.sh /opt/keycloak/bin/kc-entrypoint.sh
 RUN chmod +x /opt/keycloak/bin/kc-entrypoint.sh
 
 # Non mettere KEYCLOAK_ADMIN_PASSWORD nel Dockerfile:
