@@ -29,12 +29,14 @@ on:
           - eter
           - proges
           - ict-group
+          - virgilio
       keycloak_version:
         description: 'Versione Keycloak'
         required: true
         type: choice
         options:
           - 26.6.1
+          - 26.4.7
           - 25.0.6
           - 24.0.5
           - 23.0.7
@@ -62,7 +64,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  DEFAULT_KEYCLOAK_VERSION: 26.6.1
+  DEFAULT_KEYCLOAK_VERSION: 26.4.7
 
 jobs:
   fetch-clients:
