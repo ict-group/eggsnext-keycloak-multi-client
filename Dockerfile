@@ -12,6 +12,9 @@ ARG INCLUDE_EXTENSIONS=false
 
 COPY --chown=keycloak:keycloak base /tmp/base
 
+# Copia il file JAR dell'autenticatore personalizzato nella cartella dei provider di Keycloak
+COPY --chown=keycloak:keycloak providers/netzbegruenung.email-authenticator-v26.6.5.jar /opt/keycloak/providers/
+
 RUN set -eu; \
     mkdir -p /opt/keycloak/providers; \
     if [ "${INCLUDE_EXTENSIONS}" = "true" ] && [ -d /tmp/base/extensions ]; then \
@@ -41,9 +44,6 @@ ENV KEYCLOAK_VERSION=${KEYCLOAK_VERSION}
 COPY --from=builder --chown=keycloak:keycloak /opt/keycloak/lib/quarkus/ /opt/keycloak/lib/quarkus/
 COPY --from=builder --chown=keycloak:keycloak /opt/keycloak/providers/ /opt/keycloak/providers/
 COPY --chown=keycloak:keycloak clienti /tmp/clienti
-
-# Copia il file JAR dell'autenticatore personalizzato nella cartella dei provider di Keycloak
-COPY --chown=keycloak:keycloak providers/netzbegruenung.email-authenticator-v26.6.5.jar /opt/keycloak/providers/
 
 RUN set -eu; \
     echo "CLIENT_ID=${CLIENT_ID:-}"; \
