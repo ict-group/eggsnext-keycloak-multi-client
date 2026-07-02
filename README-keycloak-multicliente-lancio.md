@@ -223,6 +223,73 @@ La stessa logica è nel workflow GitHub Actions (`build-image.yml`) che sceglie 
 
 ---
 
+## Script di entrypoint: `kc-entrypoint.sh` e `kc-entrypoint-legacy.sh`
+
+I due Dockerfile non avviano Keycloak direttamente: ognuno usa come `ENTRYPOINT` un wrapper in `scripts/` che sistema le variabili d'ambiente **prima** di lanciare il vero avvio di Keycloak. Questo perché tra le versioni Quarkus (>= 17) e WildFly (<= 16) il modo di configurare l'hostname/frontend URL è diverso e, se lasciato "grezzo", produce bug (redirect rotti, CSP che blocca gli asset, loop sulla admin console).
+
+```text
+Dockerfile        → COPY scripts/kc-entrypoint.sh         → ENTRYPOINT /opt/keycloak/bin/kc-entrypoint.sh
+Dockerfile.legacy → COPY scripts/kc-entrypoint-legacy.sh   → ENTRYPOINT /opt/jboss/tools/kc-entrypoint-legacy.sh
+```
+
+Entrambi, alla fine, fanno `exec` del vero entrypoint originale dell'immagine Keycloak (`kc.sh` per Quarkus, `docker-entrypoint.sh` di JBoss per WildFly), passandogli tutti gli argomenti ricevuti (`"$@"`). Sono trasparenti: non cambiano il comando di avvio, sistemano solo l'ambiente.
+
+---
+
+### `scripts/kc-entrypoint.sh` (Keycloak >= 17, Quarkus)
+
+Normalizza `KC_HOSTNAME` (e `KC_HOSTNAME_ADMIN`) in base alla major version letta da `KEYCLOAK_VERSION`, perché il formato atteso è cambiato tra Keycloak 17-24 (hostname v1) e Keycloak 25+ (hostname v2):
+
+| Versione | Formato atteso di `KC_HOSTNAME` |
+|---|---|
+| 17 – 24 (hostname v1) | solo il nome host, **senza** protocollo (es. `keycloak.example.com`) |
+| 25+ (hostname v2) | URL completo **con** `https://` (es. `https://keycloak.example.com`) |
+
+Regole applicate dalla funzione `_normalize`:
+
+| Valore in ingresso | Versione | Risultato |
+|---|---|---|
+| `http://...` | qualsiasi | invariato (sviluppo locale con HTTP esplicito, mai toccato) |
+| `https://...` | 17 – 24 | protocollo rimosso → `host` (altrimenti Keycloak genera URL rotti tipo `http://https://host`, il bug CSP citato nel commento dello script) |
+| `https://...` | 25+ | invariato (è già il formato corretto) |
+| solo host, senza protocollo | 25+ | viene aggiunto `https://` davanti |
+| solo host, senza protocollo | 17 – 24 | invariato (è già il formato corretto) |
+
+Dopo la normalizzazione esporta le variabili e fa `exec /opt/keycloak/bin/kc.sh "$@"`, cioè lancia Keycloak passandogli tutti gli argomenti ricevuti dal container (es. `start-dev --http-enabled=true ...`).
+
+In pratica: puoi impostare `KC_HOSTNAME` in un solo modo nel `.env`/nel file del cliente, e lo script si occupa di adattarlo correttamente sia che tu stia testando una versione 17-24 sia una 25+.
+
+---
+
+### `scripts/kc-entrypoint-legacy.sh` (Keycloak <= 16, WildFly)
+
+Su WildFly non esiste `KC_HOSTNAME` (è una variabile Quarkus-only, ignorata da WildFly): il frontend URL si configura con `KEYCLOAK_FRONTEND_URL`. Lo script fa da ponte tra le due cose e gestisce due problemi separati.
+
+**1. Derivazione di `KEYCLOAK_FRONTEND_URL` da `KC_HOSTNAME`**
+
+| Condizione | Comportamento |
+|---|---|
+| `KC_HOSTNAME` valorizzato e contiene `localhost`/`127.0.0.1` | rimuove `KEYCLOAK_FRONTEND_URL` (se presente) ed esporta `PROXY_ADDRESS_FORWARDING=false` di default, per evitare redirect/proxy errati in locale |
+| `KC_HOSTNAME` valorizzato, ambiente non locale | costruisce `KEYCLOAK_FRONTEND_URL` a partire da `KC_HOSTNAME` (aggiunge `https://` se manca il protocollo, aggiunge sempre il suffisso `/auth`) ed esporta `PROXY_ADDRESS_FORWARDING=true` di default |
+| `KC_HOSTNAME` non impostato, ma `KEYCLOAK_FRONTEND_URL` è già valorizzato e punta a `localhost`/`127.0.0.1` | rimuove `KEYCLOAK_FRONTEND_URL` per evitare loop della admin console (bug noto di Keycloak legacy) |
+
+`PROXY_ADDRESS_FORWARDING` non viene mai sovrascritto se è già stato impostato esplicitamente da fuori (viene usato `${PROXY_ADDRESS_FORWARDING:-...}`).
+
+**2. Copia "live" dei temi cliente**
+
+Su WildFly le cartelle dei temi built-in (`base`, `keycloak`, `keycloak-preview`) sono cartelle vere dentro l'immagine (non risorse in un jar come su Quarkus) e sono di proprietà di root, non scrivibili dall'utente `jboss`. Per questo non si può fare un bind mount diretto su `/opt/jboss/keycloak/themes` come si fa su Quarkus.
+
+Lo script quindi, a ogni avvio:
+
+1. Se esiste `/opt/client-themes` (bind mount **read-only** della cartella `clienti/<CLIENT_ID>/themes` dell'host):
+   - per ogni sottocartella tema trovata, **ignora** eventuali cartelle che si chiamano `base`, `keycloak` o `keycloak-preview` (per non sovrascrivere i temi built-in);
+   - copia (`cp -R`) ogni tema cliente dentro `/opt/jboss/keycloak/themes`, che è di proprietà di `jboss` e quindi scrivibile — questo abilita il "live reload": modifichi il CSS sull'host, riavvii il container e la copia si aggiorna.
+2. Per ogni tema copiato dentro `/opt/jboss/keycloak/themes` (esclusi sempre i built-in), corregge via `sed` i file `theme.properties` di `login`, `email`, `account` e `admin`, sostituendo `parent=keycloak.v2` con `parent=keycloak` — il parent v2 non esiste su WildFly e causerebbe una `NullPointerException` in `DefaultThemeManager.loadTheme`. Il `Dockerfile.legacy` fa già questo fix in fase di build, ma lo script lo rifà sulla copia fresca a ogni riavvio, così il fix resta valido anche dopo modifiche live ai temi.
+
+Alla fine esegue `exec /opt/jboss/tools/docker-entrypoint.sh "$@"`, cioè l'entrypoint originale dell'immagine JBoss/WildFly, con tutti gli argomenti ricevuti (es. `-b 0.0.0.0`).
+
+---
+
 ## Obiettivo
 
 L'obiettivo è avere un solo repository multi-cliente dove puoi lanciare, per esempio:
