@@ -1,0 +1,172 @@
+/* ============================================================
+   SELETTORE LINGUA — pillola con mappamondo, in alto a destra
+   nella card di login.
+
+   Compatibile con il markup standard del tema "keycloak" (v1,
+   PatternFly) generato quando realm.internationalizationEnabled
+   e' attivo con 2+ lingue (es. it/en). Questo markup e' rimasto
+   invariato dal tema legacy dalla Keycloak 3.x fino alla 26.x,
+   quindi la stessa regola funziona su tutti i clienti/versioni:
+
+   #kc-locale > #kc-locale-wrapper > #kc-locale-dropdown
+     > a#kc-current-locale-link
+     > ul > li.kc-dropdown-item > a
+
+   Non serve alcuna modifica ai template .ftl: e' puro CSS.
+   ============================================================ */
+
+.card-pf {
+    position: relative !important;
+}
+
+#kc-locale {
+    position: absolute !important;
+    top: 20px !important;
+    right: 20px !important;
+    left: auto !important;
+    bottom: auto !important;
+    z-index: 40 !important;
+    width: auto !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    float: none !important;
+}
+
+#kc-locale-wrapper,
+#kc-locale-dropdown {
+    position: relative !important;
+    display: inline-block !important;
+    width: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    float: none !important;
+}
+
+/* Pulsante principale: pillola bianca semi-trasparente + mappamondo */
+#kc-current-locale-link {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    height: auto !important;
+    padding: 6px 13px !important;
+    margin: 0 !important;
+
+    background: rgba(255, 255, 255, 0.95) !important;
+    border: 1px solid rgba(0, 0, 0, 0.08) !important;
+    border-radius: 999px !important;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12) !important;
+
+    color: #33383f !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.02em !important;
+    text-transform: uppercase !important;
+    text-decoration: none !important;
+    white-space: nowrap !important;
+
+    cursor: pointer !important;
+    transition: background-color .15s ease, box-shadow .15s ease, transform .1s ease !important;
+}
+
+#kc-current-locale-link:hover,
+#kc-current-locale-link:focus {
+    background: #ffffff !important;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.18) !important;
+    text-decoration: none !important;
+    outline: none !important;
+}
+
+#kc-current-locale-link:active {
+    transform: scale(0.97) !important;
+}
+
+/* Icona mappamondo */
+#kc-current-locale-link::before {
+    content: "\1F310" !important;
+    font-size: 14px !important;
+    line-height: 1 !important;
+}
+
+/* Freccina dropdown */
+#kc-current-locale-link::after {
+    content: "" !important;
+    display: inline-block !important;
+    width: 0 !important;
+    height: 0 !important;
+    margin-left: 1px !important;
+    border-left: 4px solid transparent !important;
+    border-right: 4px solid transparent !important;
+    border-top: 5px solid currentColor !important;
+    opacity: 0.55 !important;
+}
+
+/* Menu a tendina, chiuso di default */
+#kc-locale ul,
+#kc-locale-dropdown ul {
+    display: none !important;
+    position: absolute !important;
+    top: calc(100% + 8px) !important;
+    right: 0 !important;
+    left: auto !important;
+    min-width: 140px !important;
+    margin: 0 !important;
+    padding: 6px !important;
+    list-style: none !important;
+
+    background: #ffffff !important;
+    border: 1px solid rgba(0, 0, 0, 0.08) !important;
+    border-radius: 12px !important;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18) !important;
+}
+
+/* Apertura al passaggio del mouse o al focus (tastiera) */
+#kc-locale:hover ul,
+#kc-locale:focus-within ul,
+#kc-locale-dropdown:hover ul,
+#kc-locale-dropdown:focus-within ul {
+    display: block !important;
+}
+
+#kc-locale ul li,
+#kc-locale-dropdown ul li {
+    list-style: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+#kc-locale ul li a,
+#kc-locale-dropdown ul li a {
+    display: block !important;
+    padding: 8px 12px !important;
+    border-radius: 8px !important;
+
+    background: transparent !important;
+    color: #33383f !important;
+
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    text-decoration: none !important;
+    white-space: nowrap !important;
+}
+
+#kc-locale ul li a:hover,
+#kc-locale ul li a:focus,
+#kc-locale-dropdown ul li a:hover,
+#kc-locale-dropdown ul li a:focus {
+    background: #f2f4f7 !important;
+    color: #111318 !important;
+    outline: none !important;
+}
+
+@media (max-width: 480px) {
+    #kc-locale {
+        top: 12px !important;
+        right: 12px !important;
+    }
+
+    #kc-current-locale-link {
+        padding: 5px 10px !important;
+        font-size: 11px !important;
+    }
+}

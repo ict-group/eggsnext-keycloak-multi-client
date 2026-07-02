@@ -182,10 +182,19 @@ span[id="input-error"]:empty {
 
 /* Nasconde le icone e decorazioni PatternFly sull'errore */
 .pf-c-alert__icon,
-.pf-c-alert__title,
 .pf-c-alert__action,
 .kc-feedback-text .pf-c-icon {
     display: none !important;
+}
+
+/* Il testo del messaggio (.kc-feedback-text) viene estratto in banner fisso
+   qui sopra: senza questa regola il contenitore alert originale (.alert su
+   Keycloak < 17, .pf-c-alert su Keycloak 17-26) resta vuoto ma visibile nel
+   punto in cui si trovava nel form, lasciando un riquadro "fantasma" (es.
+   sopra il campo New Password nella pagina di update password). */
+.alert,
+.pf-c-alert {
+    display: contents !important;
 }
 
 /* Rimossi i vecchi blocchi #kc-feedback e .alert-error

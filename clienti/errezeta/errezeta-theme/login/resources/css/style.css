@@ -1,0 +1,420 @@
+/* ============================================================
+   SELETTORE LINGUA — pillola con mappamondo, in alto a destra
+   nella card di login.
+
+   Compatibile con il markup standard del tema "keycloak" (v1,
+   PatternFly) generato quando realm.internationalizationEnabled
+   e' attivo con 2+ lingue (es. it/en). Questo markup e' rimasto
+   invariato dal tema legacy dalla Keycloak 3.x fino alla 26.x,
+   quindi la stessa regola funziona su tutti i clienti/versioni:
+
+   #kc-locale > #kc-locale-wrapper > #kc-locale-dropdown
+     > a#kc-current-locale-link
+     > ul > li.kc-dropdown-item > a
+
+   Non serve alcuna modifica ai template .ftl: e' puro CSS.
+   ============================================================ */
+
+.card-pf {
+    position: relative !important;
+}
+
+#kc-locale {
+    position: absolute !important;
+    top: 20px !important;
+    right: 20px !important;
+    left: auto !important;
+    bottom: auto !important;
+    z-index: 40 !important;
+    width: auto !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    float: none !important;
+}
+
+#kc-locale-wrapper,
+#kc-locale-dropdown {
+    position: relative !important;
+    display: inline-block !important;
+    width: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    float: none !important;
+}
+
+/* Pulsante principale: pillola bianca semi-trasparente + mappamondo */
+#kc-current-locale-link {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    height: auto !important;
+    padding: 6px 13px !important;
+    margin: 0 !important;
+
+    background: rgba(255, 255, 255, 0.95) !important;
+    border: 1px solid rgba(0, 0, 0, 0.08) !important;
+    border-radius: 999px !important;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12) !important;
+
+    color: #33383f !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.02em !important;
+    text-transform: uppercase !important;
+    text-decoration: none !important;
+    white-space: nowrap !important;
+
+    cursor: pointer !important;
+    transition: background-color .15s ease, box-shadow .15s ease, transform .1s ease !important;
+}
+
+#kc-current-locale-link:hover,
+#kc-current-locale-link:focus {
+    background: #ffffff !important;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.18) !important;
+    text-decoration: none !important;
+    outline: none !important;
+}
+
+#kc-current-locale-link:active {
+    transform: scale(0.97) !important;
+}
+
+/* Icona mappamondo */
+#kc-current-locale-link::before {
+    content: "\1F310" !important;
+    font-size: 14px !important;
+    line-height: 1 !important;
+}
+
+/* Freccina dropdown */
+#kc-current-locale-link::after {
+    content: "" !important;
+    display: inline-block !important;
+    width: 0 !important;
+    height: 0 !important;
+    margin-left: 1px !important;
+    border-left: 4px solid transparent !important;
+    border-right: 4px solid transparent !important;
+    border-top: 5px solid currentColor !important;
+    opacity: 0.55 !important;
+}
+
+/* Menu a tendina, chiuso di default */
+#kc-locale ul,
+#kc-locale-dropdown ul {
+    display: none !important;
+    position: absolute !important;
+    top: calc(100% + 8px) !important;
+    right: 0 !important;
+    left: auto !important;
+    min-width: 140px !important;
+    margin: 0 !important;
+    padding: 6px !important;
+    list-style: none !important;
+
+    background: #ffffff !important;
+    border: 1px solid rgba(0, 0, 0, 0.08) !important;
+    border-radius: 12px !important;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18) !important;
+}
+
+/* Apertura al passaggio del mouse o al focus (tastiera) */
+#kc-locale:hover ul,
+#kc-locale:focus-within ul,
+#kc-locale-dropdown:hover ul,
+#kc-locale-dropdown:focus-within ul {
+    display: block !important;
+}
+
+#kc-locale ul li,
+#kc-locale-dropdown ul li {
+    list-style: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+#kc-locale ul li a,
+#kc-locale-dropdown ul li a {
+    display: block !important;
+    padding: 8px 12px !important;
+    border-radius: 8px !important;
+
+    background: transparent !important;
+    color: #33383f !important;
+
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    text-decoration: none !important;
+    white-space: nowrap !important;
+}
+
+#kc-locale ul li a:hover,
+#kc-locale ul li a:focus,
+#kc-locale-dropdown ul li a:hover,
+#kc-locale-dropdown ul li a:focus {
+    background: #f2f4f7 !important;
+    color: #111318 !important;
+    outline: none !important;
+}
+
+@media (max-width: 480px) {
+    #kc-locale {
+        top: 12px !important;
+        right: 12px !important;
+    }
+
+    #kc-current-locale-link {
+        padding: 5px 10px !important;
+        font-size: 11px !important;
+    }
+}
+/* ============================================================
+   ACCESSO CON GOOGLE / MICROSOFT (AZURE) — bottoni in stile
+   ufficiale, larghezza piena, con logo reale a colori.
+
+   Compatibile con il markup standard del tema "keycloak" (v1,
+   PatternFly) generato per la lista identity provider, invariato
+   dalla Keycloak 3.x fino alla 26.x:
+
+   #kc-social-providers > ul > li > a#social-<alias>.zocial.<providerId>
+       > i.fa-<icona>  (icona assegnata di default da Keycloak
+                         per i provider nativi "google"/"microsoft")
+       > span testo
+
+   Gli agganci usano sia la classe assegnata da Keycloak in base al
+   tipo di provider (fa-google / fa-windows, presenti anche su
+   Keycloak 11 legacy) sia l'id/alias del provider, cosi' il bottone
+   si riconosce anche se l'alias e' stato rinominato nel realm.
+   Non serve alcuna modifica ai template .ftl o ai file
+   messages*.properties: e' puro CSS.
+   ============================================================ */
+
+#kc-social-providers,
+.kc-social-providers,
+.kc-social-section {
+    width: 100% !important;
+    margin-top: 22px !important;
+    padding: 0 !important;
+}
+
+#kc-social-providers hr {
+    display: none !important;
+}
+
+#kc-social-providers h2,
+.kc-social-providers h2 {
+    margin: 0 0 12px 0 !important;
+    color: inherit !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    text-align: center !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.04em !important;
+    opacity: 0.65 !important;
+}
+
+#kc-social-providers ul,
+.kc-social-providers ul,
+ul.kc-social-links,
+ul.pf-c-login__main-footer-links {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    list-style: none !important;
+}
+
+#kc-social-providers li,
+.kc-social-providers li,
+ul.kc-social-links > li {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    list-style: none !important;
+}
+
+/* --- Bottone base (neutro, stile "Accedi con ..." ufficiale) --- */
+#kc-social-providers a,
+.kc-social-providers a,
+a.zocial,
+a.kc-social-item {
+    position: relative !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 10px !important;
+
+    width: 100% !important;
+    min-height: 44px !important;
+    margin: 0 !important;
+    padding: 0 18px !important;
+
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+    background-image: none !important;
+
+    border: 1px solid #dadce0 !important;
+    border-radius: 10px !important;
+    box-shadow: none !important;
+
+    color: #3c4043 !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    line-height: 1 !important;
+    text-decoration: none !important;
+    text-transform: none !important;
+    letter-spacing: normal !important;
+
+    outline: none !important;
+    cursor: pointer !important;
+
+    transition: background-color .15s ease, border-color .15s ease, box-shadow .15s ease, transform .1s ease !important;
+}
+
+#kc-social-providers a:hover,
+.kc-social-providers a:hover,
+a.zocial:hover,
+a.kc-social-item:hover {
+    background: #f8f9fa !important;
+    border-color: #c6c9cc !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12) !important;
+    transform: translateY(-1px) !important;
+}
+
+#kc-social-providers a:focus-visible,
+a.zocial:focus-visible {
+    outline: none !important;
+    box-shadow: 0 0 0 3px rgba(66, 133, 244, 0.25) !important;
+}
+
+#kc-social-providers a:active,
+a.zocial:active {
+    background: #f1f3f4 !important;
+    transform: translateY(0) !important;
+}
+
+/* Ripulisce eventuali pseudo-elementi ereditati da PatternFly/zocial */
+#kc-social-providers a::after,
+a.zocial::after,
+a.kc-social-item::after {
+    content: none !important;
+    display: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+}
+
+/* Testo del bottone */
+#kc-social-providers .kc-social-provider-name,
+#kc-social-providers .kc-social-icon-text,
+#kc-social-providers a span,
+a.zocial span {
+    color: inherit !important;
+    font: inherit !important;
+    text-transform: none !important;
+    letter-spacing: normal !important;
+}
+
+/* ------------------------------------------------------------
+   ICONE — sostituiscono la glifa Font Awesome monocromatica
+   (fa-google / fa-windows, assegnata di default da Keycloak)
+   con il logo ufficiale a colori in SVG inline.
+   ------------------------------------------------------------ */
+
+#kc-social-providers i.fa-google,
+#kc-social-providers i.fa-windows,
+#kc-social-providers .kc-social-provider-logo.fa-google,
+#kc-social-providers .kc-social-provider-logo.fa-windows {
+    position: relative !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    width: 20px !important;
+    min-width: 20px !important;
+    height: 20px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+
+    font-size: 0 !important;
+    line-height: 1 !important;
+    color: transparent !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    overflow: visible !important;
+}
+
+/* Logo Google (4 colori ufficiali) */
+#kc-social-providers i.fa-google::before,
+#kc-social-providers .kc-social-provider-logo.fa-google::before,
+#kc-social-providers a[id*="google" i] .kc-social-provider-logo::before {
+    content: "" !important;
+    display: block !important;
+    width: 20px !important;
+    height: 20px !important;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+    background-size: contain !important;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48' width='48' height='48'%3E%3Cpath fill='%234285F4' d='M45.12 24.5c0-1.56-.14-3.06-.4-4.5H24v8.51h11.84c-.51 2.75-2.06 5.08-4.39 6.64v5.52h7.11c4.16-3.83 6.56-9.47 6.56-16.17z'/%3E%3Cpath fill='%2334A853' d='M24 46c5.94 0 10.92-1.97 14.56-5.33l-7.11-5.52c-1.97 1.32-4.49 2.1-7.45 2.1-5.73 0-10.58-3.87-12.31-9.07H4.34v5.7C7.96 41.07 15.4 46 24 46z'/%3E%3Cpath fill='%23FBBC05' d='M11.69 28.18C11.25 26.86 11 25.45 11 24s.25-2.86.69-4.18v-5.7H4.34C2.85 17.09 2 20.45 2 24s.85 6.91 2.34 9.88l7.35-5.7z'/%3E%3Cpath fill='%23EA4335' d='M24 10.75c3.23 0 6.13 1.11 8.41 3.29l6.31-6.31C34.91 4.18 29.93 2 24 2 15.4 2 7.96 6.93 4.34 14.12l7.35 5.7c1.73-5.2 6.58-9.07 12.31-9.07z'/%3E%3C/svg%3E") !important;
+}
+
+/* Logo Microsoft / Azure (icona ufficiale Azure "A", fonte az-icons.com) */
+#kc-social-providers i.fa-windows::before,
+#kc-social-providers .kc-social-provider-logo.fa-windows::before,
+#kc-social-providers a[id*="microsoft" i] .kc-social-provider-logo::before,
+#kc-social-providers a[id*="azure" i] .kc-social-provider-logo::before {
+    content: "" !important;
+    display: block !important;
+    width: 18px !important;
+    height: 18px !important;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+    background-size: contain !important;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 18 18' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M5.33492 1.37491C5.44717 1.04229 5.75909 0.818359 6.11014 0.818359H11.25L5.91513 16.6255C5.80287 16.9581 5.49095 17.182 5.13991 17.182H1.13968C0.579936 17.182 0.185466 16.6325 0.364461 16.1022L5.33492 1.37491Z' fill='url(%23paint0_linear_6102_134469)'/%3E%3Cpath d='M13.5517 11.4546H5.45126C5.1109 11.4546 4.94657 11.8715 5.19539 12.1037L10.4005 16.9618C10.552 17.1032 10.7515 17.1819 10.9587 17.1819H15.5453L13.5517 11.4546Z' fill='%230078D4'/%3E%3Cpath d='M6.11014 0.818359C5.75909 0.818359 5.44717 1.04229 5.33492 1.37491L0.364461 16.1022C0.185466 16.6325 0.579936 17.182 1.13968 17.182H5.13991C5.49095 17.182 5.80287 16.9581 5.91513 16.6255L6.90327 13.6976L10.4005 16.9617C10.552 17.1032 10.7515 17.1818 10.9588 17.1818H15.5454L13.5517 11.4545H7.66032L11.25 0.818359H6.11014Z' fill='url(%23paint1_linear_6102_134469)'/%3E%3Cpath d='M12.665 1.37478C12.5528 1.04217 12.2409 0.818237 11.8898 0.818237H6.13629H6.16254C6.51358 0.818237 6.82551 1.04217 6.93776 1.37478L11.9082 16.1021C12.0872 16.6324 11.6927 17.1819 11.133 17.1819H11.0454H16.8603C17.42 17.1819 17.8145 16.6324 17.6355 16.1021L12.665 1.37478Z' fill='url(%23paint2_linear_6102_134469)'/%3E%3Cdefs%3E%3ClinearGradient id='paint0_linear_6102_134469' x1='6.07512' y1='1.38476' x2='0.738178' y2='17.1514' gradientUnits='userSpaceOnUse'%3E%3Cstop stop-color='%23114A8B'/%3E%3Cstop offset='1' stop-color='%230669BC'/%3E%3C/linearGradient%3E%3ClinearGradient id='paint1_linear_6102_134469' x1='10.3402' y1='11.4564' x2='9.107' y2='11.8734' gradientUnits='userSpaceOnUse'%3E%3Cstop stop-opacity='0.3'/%3E%3Cstop offset='0.0711768' stop-opacity='0.2'/%3E%3Cstop offset='0.321031' stop-opacity='0.1'/%3E%3Cstop offset='0.623053' stop-opacity='0.05'/%3E%3Cstop offset='1' stop-opacity='0'/%3E%3C/linearGradient%3E%3ClinearGradient id='paint2_linear_6102_134469' x1='9.45858' y1='1.38467' x2='15.3168' y2='16.9926' gradientUnits='userSpaceOnUse'%3E%3Cstop stop-color='%233CCBF4'/%3E%3Cstop offset='1' stop-color='%232892DF'/%3E%3C/linearGradient%3E%3C/defs%3E%3C/svg%3E") !important;
+}
+
+/* Fallback: provider Microsoft/Azure con alias personalizzato che
+   non riceve l'icona di default da Keycloak (nessun elemento <i>
+   nel markup) — l'icona viene aggiunta direttamente sul bottone. */
+#kc-social-providers a[id*="microsoft" i]:not(:has(.kc-social-provider-logo)),
+#kc-social-providers a[id*="azure" i]:not(:has(.kc-social-provider-logo)) {
+    padding-left: 14px !important;
+}
+
+#kc-social-providers a[id*="microsoft" i]:not(:has(.kc-social-provider-logo))::before,
+#kc-social-providers a[id*="azure" i]:not(:has(.kc-social-provider-logo))::before {
+    content: "" !important;
+    display: inline-block !important;
+    width: 18px !important;
+    height: 18px !important;
+    flex: 0 0 18px !important;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+    background-size: contain !important;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 18 18' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M5.33492 1.37491C5.44717 1.04229 5.75909 0.818359 6.11014 0.818359H11.25L5.91513 16.6255C5.80287 16.9581 5.49095 17.182 5.13991 17.182H1.13968C0.579936 17.182 0.185466 16.6325 0.364461 16.1022L5.33492 1.37491Z' fill='url(%23paint0_linear_6102_134469)'/%3E%3Cpath d='M13.5517 11.4546H5.45126C5.1109 11.4546 4.94657 11.8715 5.19539 12.1037L10.4005 16.9618C10.552 17.1032 10.7515 17.1819 10.9587 17.1819H15.5453L13.5517 11.4546Z' fill='%230078D4'/%3E%3Cpath d='M6.11014 0.818359C5.75909 0.818359 5.44717 1.04229 5.33492 1.37491L0.364461 16.1022C0.185466 16.6325 0.579936 17.182 1.13968 17.182H5.13991C5.49095 17.182 5.80287 16.9581 5.91513 16.6255L6.90327 13.6976L10.4005 16.9617C10.552 17.1032 10.7515 17.1818 10.9588 17.1818H15.5454L13.5517 11.4545H7.66032L11.25 0.818359H6.11014Z' fill='url(%23paint1_linear_6102_134469)'/%3E%3Cpath d='M12.665 1.37478C12.5528 1.04217 12.2409 0.818237 11.8898 0.818237H6.13629H6.16254C6.51358 0.818237 6.82551 1.04217 6.93776 1.37478L11.9082 16.1021C12.0872 16.6324 11.6927 17.1819 11.133 17.1819H11.0454H16.8603C17.42 17.1819 17.8145 16.6324 17.6355 16.1021L12.665 1.37478Z' fill='url(%23paint2_linear_6102_134469)'/%3E%3Cdefs%3E%3ClinearGradient id='paint0_linear_6102_134469' x1='6.07512' y1='1.38476' x2='0.738178' y2='17.1514' gradientUnits='userSpaceOnUse'%3E%3Cstop stop-color='%23114A8B'/%3E%3Cstop offset='1' stop-color='%230669BC'/%3E%3C/linearGradient%3E%3ClinearGradient id='paint1_linear_6102_134469' x1='10.3402' y1='11.4564' x2='9.107' y2='11.8734' gradientUnits='userSpaceOnUse'%3E%3Cstop stop-opacity='0.3'/%3E%3Cstop offset='0.0711768' stop-opacity='0.2'/%3E%3Cstop offset='0.321031' stop-opacity='0.1'/%3E%3Cstop offset='0.623053' stop-opacity='0.05'/%3E%3Cstop offset='1' stop-opacity='0'/%3E%3C/linearGradient%3E%3ClinearGradient id='paint2_linear_6102_134469' x1='9.45858' y1='1.38467' x2='15.3168' y2='16.9926' gradientUnits='userSpaceOnUse'%3E%3Cstop stop-color='%233CCBF4'/%3E%3Cstop offset='1' stop-color='%232892DF'/%3E%3C/linearGradient%3E%3C/defs%3E%3C/svg%3E") !important;
+}
+
+#kc-social-providers a[id*="google" i]:not(:has(.kc-social-provider-logo))::before {
+    content: "" !important;
+    display: inline-block !important;
+    width: 20px !important;
+    height: 20px !important;
+    flex: 0 0 20px !important;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+    background-size: contain !important;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48' width='48' height='48'%3E%3Cpath fill='%234285F4' d='M45.12 24.5c0-1.56-.14-3.06-.4-4.5H24v8.51h11.84c-.51 2.75-2.06 5.08-4.39 6.64v5.52h7.11c4.16-3.83 6.56-9.47 6.56-16.17z'/%3E%3Cpath fill='%2334A853' d='M24 46c5.94 0 10.92-1.97 14.56-5.33l-7.11-5.52c-1.97 1.32-4.49 2.1-7.45 2.1-5.73 0-10.58-3.87-12.31-9.07H4.34v5.7C7.96 41.07 15.4 46 24 46z'/%3E%3Cpath fill='%23FBBC05' d='M11.69 28.18C11.25 26.86 11 25.45 11 24s.25-2.86.69-4.18v-5.7H4.34C2.85 17.09 2 20.45 2 24s.85 6.91 2.34 9.88l7.35-5.7z'/%3E%3Cpath fill='%23EA4335' d='M24 10.75c3.23 0 6.13 1.11 8.41 3.29l6.31-6.31C34.91 4.18 29.93 2 24 2 15.4 2 7.96 6.93 4.34 14.12l7.35 5.7c1.73-5.2 6.58-9.07 12.31-9.07z'/%3E%3C/svg%3E") !important;
+}
+
+@media (max-width: 480px) {
+    #kc-social-providers a,
+    a.zocial {
+        min-height: 42px !important;
+        font-size: 13px !important;
+    }
+}

@@ -518,42 +518,7 @@ form[action*="reset-credentials"] a:hover,
 
 
 /* ─── 11. SOCIAL LOGIN ──────────────────────────────────────────────────── */
-
-#kc-social-providers,
-.kc-social-section {
-    margin-top: 20px !important;
-}
-
-#kc-social-providers ul,
-.kc-social-providers {
-    list-style: none !important;
-    padding: 0 !important;
-    margin: 0 !important;
-}
-
-#kc-social-providers li a,
-.zocial,
-a.zocial {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 10px !important;
-    width: 100% !important;
-    padding: 11px 16px !important;
-    border: none !important;
-    border-radius: 999px !important;
-    background: #fff !important;
-    color: #444 !important;
-    font-size: 14px !important;
-    font-weight: 700 !important;
-    text-decoration: none !important;
-    box-sizing: border-box !important;
-}
-
-#kc-social-providers li a:hover,
-a.zocial:hover {
-    background: #f4f4f4 !important;
-}
+/* Stile bottoni Google/Microsoft ora gestito da css/social-login.css */
 
 
 /* ─── 12. ERRORI / ALERT ────────────────────────────────────────────────── */

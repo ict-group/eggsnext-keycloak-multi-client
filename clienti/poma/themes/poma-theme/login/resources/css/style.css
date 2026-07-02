@@ -652,18 +652,8 @@ span[id="input-error"] {
 }
 
 /* ============================================================
-   LANGUAGE SELECTOR — nascosto
+   Selettore lingua ora gestito da css/lang-switcher.css
    ============================================================ */
-
-#kc-locale,
-#kc-locale-wrapper,
-#kc-locale-dropdown,
-#kc-current-locale-link,
-.kc-dropdown,
-.kc-dropdown ul,
-.kc-dropdown li {
-    display: none !important;
-}
 
 /* ============================================================
    RESPONSIVE

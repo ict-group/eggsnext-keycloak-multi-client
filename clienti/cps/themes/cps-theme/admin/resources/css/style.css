@@ -260,35 +260,7 @@ form#kc-form-login .form-group.login-pf-settings { order: 2 !important; }
 form#kc-form-login #kc-form-buttons { order: 3 !important; }
 
 /* ─── 12. SOCIAL LOGIN ───────────────────────────────────────────────────── */
-
-#kc-social-providers,
-.kc-social-section { margin-top: 20px !important; }
-
-#kc-social-providers ul,
-.kc-social-providers { list-style: none !important; padding: 0 !important; margin: 0 !important; }
-
-/* PF4 + PF3 */
-#kc-social-providers li a,
-.zocial,
-a.zocial {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 10px !important;
-    background-color: #fff !important;
-    border: none !important;
-    border-radius: 30px !important;
-    padding: 11px 16px !important;
-    font-size: 14px !important;
-    font-weight: 600 !important;
-    color: #444 !important;
-    text-decoration: none !important;
-    width: 100% !important;
-    box-sizing: border-box !important;
-    cursor: pointer !important;
-}
-#kc-social-providers li a:hover,
-a.zocial:hover { background-color: #f0f0f0 !important; }
+/* Stile bottoni Google/Microsoft ora gestito da css/social-login.css */
 
 /* ─── 13. BARRA ERRORE IN CIMA ───────────────────────────────────────────── */
 

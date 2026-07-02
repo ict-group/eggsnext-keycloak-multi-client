@@ -7,9 +7,9 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap');
 
 :root {
-    --errevi-magenta: #D4005A;
-    --errevi-magenta-light: #F0057A;
-    --errevi-magenta-dim: #8C0039;
+    --errevi-magenta: #020957;
+    --errevi-magenta-light: #030c77;
+    --errevi-magenta-dim: #020957;
 
     --errevi-black: #111111;
     --errevi-gray-700: #4A4A4A;

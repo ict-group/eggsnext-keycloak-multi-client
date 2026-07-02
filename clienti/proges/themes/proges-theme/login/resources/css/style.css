@@ -701,119 +701,8 @@ input[type="submit"]:active,
 }
 
 /* ============================================================
-   SOCIAL LOGIN / IDENTITY PROVIDERS
+   Social login (Google/Microsoft) ora gestito da css/social-login.css
    ============================================================ */
-
-#kc-social-providers,
-.kc-social-providers {
-    width: 100% !important;
-    margin-top: 18px !important;
-    padding: 0 !important;
-}
-
-#kc-social-providers hr {
-    display: none !important;
-}
-
-#kc-social-providers h2,
-.kc-social-providers h2 {
-    margin: 0 0 12px 0 !important;
-
-    color: var(--proges-muted) !important;
-
-    font-size: 12px !important;
-    font-weight: 600 !important;
-    text-align: center !important;
-}
-
-#kc-social-providers ul,
-.kc-social-providers ul,
-ul.kc-social-links,
-ul.pf-c-login__main-footer-links {
-    width: 100% !important;
-
-    margin: 0 !important;
-    padding: 0 !important;
-
-    list-style: none !important;
-}
-
-#kc-social-providers li,
-.kc-social-providers li {
-    width: 100% !important;
-
-    margin: 0 !important;
-    padding: 0 !important;
-
-    list-style: none !important;
-}
-
-#kc-social-providers a,
-#kc-social-providers a.kc-social-item,
-#kc-social-providers a.pf-c-button,
-a.kc-social-item,
-a.pf-c-button.pf-m-control.pf-m-block.kc-social-item {
-    width: 100% !important;
-    min-height: 38px !important;
-
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 10px !important;
-
-    margin: 0 !important;
-    padding: 0 16px !important;
-
-    background: #ffffff !important;
-    background-color: #ffffff !important;
-    background-image: none !important;
-
-    border: 1px solid rgba(22, 32, 51, 0.14) !important;
-    border-radius: 999px !important;
-
-    color: var(--proges-text) !important;
-
-    font-family: var(--proges-font) !important;
-    font-size: 13px !important;
-    font-weight: 800 !important;
-    line-height: 1 !important;
-
-    text-decoration: none !important;
-
-    box-shadow: 0 4px 12px rgba(0,0,0,0.04) !important;
-    outline: none !important;
-
-    transition:
-            background 0.18s ease,
-            border-color 0.18s ease,
-            box-shadow 0.18s ease,
-            transform 0.18s ease !important;
-}
-
-#kc-social-providers a:hover,
-#kc-social-providers a.kc-social-item:hover,
-#kc-social-providers a.pf-c-button:hover,
-a.kc-social-item:hover {
-    background: #f9fbfd !important;
-    border-color: rgba(0, 117, 169, 0.30) !important;
-    box-shadow: 0 8px 18px rgba(0,0,0,0.08) !important;
-    transform: translateY(-1px);
-}
-
-/* Pulizia pseudo-elementi social PatternFly */
-#kc-social-providers a::before,
-#kc-social-providers a::after,
-a.kc-social-item::before,
-a.kc-social-item::after,
-a.pf-c-button.pf-m-control::before,
-a.pf-c-button.pf-m-control::after {
-    content: none !important;
-    display: none !important;
-
-    border: none !important;
-    box-shadow: none !important;
-    background: transparent !important;
-}
 
 /* ============================================================
    ALERTS
@@ -879,18 +768,8 @@ span[id="input-error"] {
 }
 
 /* ============================================================
-   LANGUAGE SELECTOR — nascosto di default
+   Selettore lingua ora gestito da css/lang-switcher.css
    ============================================================ */
-
-#kc-locale,
-#kc-locale-wrapper,
-#kc-locale-dropdown,
-#kc-current-locale-link,
-.kc-dropdown,
-.kc-dropdown ul,
-.kc-dropdown li {
-    display: none !important;
-}
 
 /* ============================================================
    RESPONSIVE

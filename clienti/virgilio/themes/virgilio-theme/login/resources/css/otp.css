@@ -7,9 +7,9 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap');
 
 :root {
-    --errevi-magenta: #D4005A;
-    --errevi-magenta-light: #F0057A;
-    --errevi-magenta-dim: #8C0039;
+    --errevi-magenta: #212dc1;
+    --errevi-magenta-light: #212dc1;
+    --errevi-magenta-dim: #020957;
 
     --errevi-black: #111111;
     --errevi-gray-700: #4A4A4A;
@@ -283,7 +283,7 @@ body:has(#kc-totp-settings) input[type="password"]:focus,
 body:has(#kc-totp-settings) input[type="number"]:focus,
 body:has(#kc-totp-settings) .form-control:focus {
     border-color: var(--errevi-magenta);
-    box-shadow: 0 0 0 3px rgba(212, 0, 90, 0.12);
+    box-shadow: 0 0 0 3px rgb(2 9 87);
 }
 
 /* Input codice OTP */
@@ -379,7 +379,7 @@ body:has(#kc-totp-settings) button[type="submit"]:hover,
 body:has(#kc-totp-settings) .btn-primary:hover {
     background: var(--errevi-magenta-light);
     border-color: var(--errevi-magenta-light);
-    box-shadow: 0 4px 16px rgba(212, 0, 90, 0.35);
+    box-shadow: 0 4px 16px rgb(2 9 87);
     transform: translateY(-1px);
 }
 
@@ -704,7 +704,7 @@ body:has(#kc-totp-settings) #kc-content-wrapper > .pf-c-alert.pf-m-success {
 body:has(#kc-totp-settings) #kc-content-wrapper > .alert-error,
 body:has(#kc-totp-settings) #kc-content-wrapper > .alert-danger,
 body:has(#kc-totp-settings) #kc-content-wrapper > .pf-c-alert.pf-m-danger {
-    background: #9E003F !important;
+    background: #030c77 !important;
 }
 
 /* ============================================================
@@ -927,7 +927,7 @@ body:has(#kc-totp-settings) #kc-totp-settings-form .form-control {
     padding: 0 14px !important;
     margin: 0 !important;
 
-    border: 1.8px solid rgba(212, 0, 90, 0.32) !important;
+    border: 1.8px solid rgb(3 12 119) !important;
     border-radius: 12px !important;
     background: rgba(255, 255, 255, 0.96) !important;
     box-shadow: 0 1px 6px rgba(0, 0, 0, 0.04) !important;
@@ -946,7 +946,7 @@ body:has(#kc-totp-settings) #kc-totp-settings-form input[type="text"]:hover,
 body:has(#kc-totp-settings) #kc-totp-settings-form input[type="password"]:hover,
 body:has(#kc-totp-settings) #kc-totp-settings-form input[type="number"]:hover,
 body:has(#kc-totp-settings) #kc-totp-settings-form .form-control:hover {
-    border-color: rgba(212, 0, 90, 0.55) !important;
+    border-color: rgb(2 9 87) !important;
     background: #ffffff !important;
 }
 
@@ -957,7 +957,7 @@ body:has(#kc-totp-settings) #kc-totp-settings-form input[type="number"]:focus,
 body:has(#kc-totp-settings) #kc-totp-settings-form .form-control:focus {
     border-color: var(--errevi-magenta) !important;
     background: #ffffff !important;
-    box-shadow: 0 0 0 3px rgba(212, 0, 90, 0.14) !important;
+    box-shadow: 0 0 0 3px rgb(11 165 241 / 0.91) !important;
 }
 
 /* Placeholder */
