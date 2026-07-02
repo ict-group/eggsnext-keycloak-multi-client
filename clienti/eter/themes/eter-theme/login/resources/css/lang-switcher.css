@@ -13,6 +13,8 @@
      > ul > li.kc-dropdown-item > a
 
    Non serve alcuna modifica ai template .ftl: e' puro CSS.
+
+   Colori adattati alla palette del tema Eter (vedi style.css).
    ============================================================ */
 
 .card-pf {
@@ -43,7 +45,7 @@
     float: none !important;
 }
 
-/* Pulsante principale: pillola bianca semi-trasparente + mappamondo */
+/* Pulsante principale: pillola colore tema + mappamondo */
 #kc-current-locale-link {
     display: inline-flex !important;
     align-items: center !important;
@@ -52,12 +54,12 @@
     padding: 6px 13px !important;
     margin: 0 !important;
 
-    background: rgba(255, 255, 255, 0.95) !important;
-    border: 1px solid rgba(0, 0, 0, 0.08) !important;
+    background: rgba(255, 255, 255, 0.92) !important;
+    border: 1px solid rgba(37, 42, 54, 0.10) !important;
     border-radius: 999px !important;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12) !important;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.18) !important;
 
-    color: #33383f !important;
+    color: var(--eter-text) !important;
     font-size: 12px !important;
     font-weight: 600 !important;
     letter-spacing: 0.02em !important;
@@ -66,13 +68,15 @@
     white-space: nowrap !important;
 
     cursor: pointer !important;
-    transition: background-color .15s ease, box-shadow .15s ease, transform .1s ease !important;
+    transition: background-color .15s ease, border-color .15s ease, color .15s ease, box-shadow .15s ease, transform .1s ease !important;
 }
 
 #kc-current-locale-link:hover,
 #kc-current-locale-link:focus {
     background: #ffffff !important;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.18) !important;
+    border-color: var(--eter-blue) !important;
+    color: var(--eter-blue) !important;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.22) !important;
     text-decoration: none !important;
     outline: none !important;
 }
@@ -98,7 +102,7 @@
     border-left: 4px solid transparent !important;
     border-right: 4px solid transparent !important;
     border-top: 5px solid currentColor !important;
-    opacity: 0.55 !important;
+    opacity: 0.7 !important;
 }
 
 /* Menu a tendina, chiuso di default */
@@ -114,10 +118,10 @@
     padding: 6px !important;
     list-style: none !important;
 
-    background: #ffffff !important;
-    border: 1px solid rgba(0, 0, 0, 0.08) !important;
+    background: var(--eter-card-bg) !important;
+    border: 1px solid var(--eter-line) !important;
     border-radius: 12px !important;
-    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18) !important;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.22) !important;
 }
 
 /* Apertura al passaggio del mouse o al focus (tastiera) */
@@ -142,7 +146,7 @@
     border-radius: 8px !important;
 
     background: transparent !important;
-    color: #33383f !important;
+    color: var(--eter-text) !important;
 
     font-size: 13px !important;
     font-weight: 500 !important;
@@ -154,8 +158,8 @@
 #kc-locale ul li a:focus,
 #kc-locale-dropdown ul li a:hover,
 #kc-locale-dropdown ul li a:focus {
-    background: #f2f4f7 !important;
-    color: #111318 !important;
+    background: rgba(40, 111, 199, 0.10) !important;
+    color: var(--eter-blue) !important;
     outline: none !important;
 }
 

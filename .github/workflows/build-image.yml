@@ -35,6 +35,7 @@ on:
         required: true
         type: choice
         options:
+          - 26.6.5
           - 26.6.1
           - 26.4.7
           - 25.0.6
@@ -48,6 +49,7 @@ on:
           - 16.1.1
           - 15.1.1
           - 12.0.4
+          - 11.0.1
           - 11.0.0
       keycloak_version_manual:
         description: 'Oppure inserisci versione manuale X.Y.Z; ha priorità sul dropdown'
