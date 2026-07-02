@@ -3,7 +3,7 @@
 # Compatibile con Keycloak 17+ fino alle versioni moderne Quarkus.
 # =============================================================================
 
-ARG KEYCLOAK_VERSION=26.6.1
+ARG KEYCLOAK_VERSION
 
 FROM quay.io/keycloak/keycloak:${KEYCLOAK_VERSION} AS builder
 ARG KEYCLOAK_VERSION
@@ -105,8 +105,8 @@ ENV KC_SPI_THEME_STATIC_MAX_AGE=-1
 ENV KC_SPI_THEME_CACHE_THEMES=false
 ENV KC_SPI_THEME_CACHE_TEMPLATES=false
 
-COPY --chown=keycloak:keycloak scripts/kc-entrypoint.sh /opt/keycloak/bin/kc-entrypoint.sh
-RUN chmod +x /opt/keycloak/bin/kc-entrypoint.sh
+#COPY --chown=keycloak:keycloak scripts/kc-entrypoint.sh /opt/keycloak/bin/kc-entrypoint.sh
+#RUN chmod +x /opt/keycloak/bin/kc-entrypoint.sh
 
 # Non mettere KEYCLOAK_ADMIN_PASSWORD nel Dockerfile:
 # passalo a runtime con -e oppure tramite secrets della piattaforma.
