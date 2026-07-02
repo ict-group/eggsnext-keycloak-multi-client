@@ -112,5 +112,5 @@ ENV KC_SPI_THEME_CACHE_TEMPLATES=false
 # passalo a runtime con -e oppure tramite secrets della piattaforma.
 EXPOSE 8080
 
-ENTRYPOINT ["/opt/keycloak/bin/kc-entrypoint.sh"]
+ENTRYPOINT ["/opt/keycloak/bin/kc.sh"]
 CMD ["start", "--optimized"]
