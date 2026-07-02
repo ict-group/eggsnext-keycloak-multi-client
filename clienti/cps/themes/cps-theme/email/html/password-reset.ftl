@@ -12,6 +12,12 @@
   <#recover>
     <#assign expirationText = "">
 </#attempt>
+<#assign logoUrl = "">
+<#attempt>
+  <#assign logoUrl = url.resourcesUrl + "/img/logo.png">
+<#recover>
+  <#assign logoUrl = msg("emailLogoUrl")!"">
+</#attempt>
 <!doctype html>
 <html lang="it">
 <head>
@@ -29,7 +35,7 @@
         <!-- HEADER ROSSO CPS -->
         <tr>
           <td style="background:#E30613;padding:28px 30px;text-align:center;">
-            <img src="${msg('emailLogoUrl')}" width="180" alt="${msg('companyName')}" style="display:inline-block;max-width:180px;width:100%;height:auto;border:0;outline:none;text-decoration:none;">
+            <img src="${logoUrl}" width="180" alt="${msg('companyName')}" style="display:inline-block;max-width:180px;width:100%;height:auto;border:0;outline:none;text-decoration:none;">
           </td>
         </tr>
 
