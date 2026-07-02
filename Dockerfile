@@ -42,6 +42,9 @@ COPY --from=builder --chown=keycloak:keycloak /opt/keycloak/lib/quarkus/ /opt/ke
 COPY --from=builder --chown=keycloak:keycloak /opt/keycloak/providers/ /opt/keycloak/providers/
 COPY --chown=keycloak:keycloak clienti /tmp/clienti
 
+# Copia il file JAR dell'autenticatore personalizzato nella cartella dei provider di Keycloak
+COPY --chown=keycloak:keycloak netzbegruenung.email-authenticator-v26.6.5.jar /opt/keycloak/providers/
+
 RUN set -eu; \
     echo "CLIENT_ID=${CLIENT_ID:-}"; \
     if [ -z "${CLIENT_ID:-}" ]; then \
