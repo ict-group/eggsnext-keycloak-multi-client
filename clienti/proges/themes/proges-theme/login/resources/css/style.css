@@ -122,10 +122,9 @@ body::after {
 
     display: flex;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: center;
 
     padding: 24px;
-    padding-left: 10vw;
 }
 
 #kc-content,
@@ -134,6 +133,14 @@ body::after {
 #kc-form-wrapper,
 #kc-form-login {
     width: 100% !important;
+    margin: 0 !important;
+}
+
+/* #kc-form ha class="row" (Bootstrap/PatternFly): senza questo reset
+   i margin-left/right negativi del grid system lo sfasano di ~20px
+   verso sinistra, scentrando tutto il contenuto del form nella card. */
+#kc-form {
+    max-width: 100% !important;
 }
 
 /* ============================================================
@@ -145,20 +152,20 @@ body::after {
     z-index: 1;
 
     width: 100% !important;
-    max-width: 374px !important;
+    max-width: 398px !important;
     min-width: 340px !important;
     min-height: 465px !important;
 
-    padding: 70px 56px 46px !important;
+    padding: 56px 48px 40px !important;
 
-    background: var(--proges-card-bg) !important;
+    background: linear-gradient(160deg, #ffffff 0%, #fdfcf1 55%, #f8f6d9 100%) !important;
 
     border: none !important;
-    border-radius: var(--proges-radius-card) !important;
+    border-radius: 22px !important;
 
     box-shadow:
-            0 18px 44px rgba(0, 0, 0, 0.10),
-            0 2px 8px rgba(0, 0, 0, 0.04) !important;
+            0 24px 60px rgba(0, 0, 0, 0.14),
+            0 4px 12px rgba(0, 0, 0, 0.06) !important;
 
     overflow: hidden;
 }
@@ -168,10 +175,10 @@ body::after {
     content: "";
     display: block;
 
-    width: 250px;
-    height: 92px;
+    width: 230px;
+    height: 84px;
 
-    margin: 0 auto 54px;
+    margin: 0 auto 40px;
 
     background-image: url('../img/logo.png');
     background-size: contain;
@@ -647,29 +654,29 @@ input[type="submit"],
     display: block !important;
 
     width: 100% !important;
-    min-height: 40px !important;
+    min-height: 44px !important;
 
     margin: 0 !important;
     padding: 11px 18px !important;
 
     border: none !important;
-    border-radius: var(--proges-radius-button) !important;
+    border-radius: 999px !important;
 
-    background: var(--proges-pink) !important;
+    background: var(--proges-blue) !important;
     background-image: none !important;
 
     box-shadow: none !important;
     outline: none !important;
 
-    color: var(--proges-text) !important;
+    color: #ffffff !important;
 
     font-family: var(--proges-font) !important;
     font-size: 13px !important;
     font-weight: 800 !important;
     line-height: 1.2 !important;
 
-    text-transform: none !important;
-    letter-spacing: 0 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.03em !important;
 
     cursor: pointer !important;
 
@@ -685,9 +692,9 @@ input#kc-login.btn-primary:hover,
 .pf-c-button.pf-m-block:hover,
 input[type="submit"]:hover,
 .btn-primary:hover {
-    background: var(--proges-pink-dark) !important;
+    background: var(--proges-blue-dark) !important;
     transform: translateY(-1px);
-    box-shadow: 0 8px 18px rgba(244, 166, 181, 0.28) !important;
+    box-shadow: 0 8px 18px rgba(0, 117, 169, 0.28) !important;
 }
 
 #kc-login:active,
@@ -772,15 +779,201 @@ span[id="input-error"] {
    ============================================================ */
 
 /* ============================================================
-   RESPONSIVE
+   LOGIN PAGE — label sopra il campo, input con sottolineatura
+   Sovrascrive lo stile "box" generico solo per #kc-form-login,
+   più specifico e dichiarato dopo, quindi vince in cascata.
    ============================================================ */
 
-@media (max-width: 900px) {
-    .login-pf-page {
-        justify-content: center;
-        padding-left: 24px;
-    }
+#kc-form-login {
+    display: flex !important;
+    flex-direction: column !important;
 }
+
+#kc-form-login .form-group:has(#username),
+#kc-form-login .form-group:has(#password) {
+    order: 1;
+
+    display: block !important;
+
+    margin: 0 0 22px 0 !important;
+    padding: 0 !important;
+
+    border-bottom: none !important;
+}
+
+#kc-form-login .form-group:has(#username) label,
+#kc-form-login .form-group:has(#password) label {
+    display: block !important;
+    width: 100% !important;
+    margin: 0 0 6px 0 !important;
+
+    font-weight: 400 !important;
+    font-size: 13px !important;
+    color: var(--proges-muted) !important;
+    white-space: nowrap !important;
+}
+
+#kc-form-login .proges-username-wrapper,
+#kc-form-login .proges-password-wrapper {
+    border-bottom: 1px solid rgba(22, 32, 51, 0.22) !important;
+    padding-bottom: 8px !important;
+
+    transition: border-color 0.18s ease !important;
+}
+
+#kc-form-login .proges-username-wrapper:focus-within,
+#kc-form-login .proges-password-wrapper:focus-within {
+    border-bottom-color: var(--proges-blue) !important;
+
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+#kc-form-login input#username,
+#kc-form-login input#password {
+    width: 100% !important;
+    min-width: 0 !important;
+
+    height: 28px !important;
+    min-height: 28px !important;
+
+    padding: 0 !important;
+
+    background-color: transparent !important;
+    background-image: none !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+
+    font-size: 14px !important;
+    font-weight: 400 !important;
+    line-height: 28px !important;
+}
+
+/* Wrapper dei campi username e password: nel markup di Keycloak 11
+   (legacy, WildFly) gli input non hanno alcun wrapper nativo — a
+   differenza delle versioni Quarkus più recenti, che aggiungono
+   .pf-c-input-group con il pulsante "mostra password" incluso.
+   Qui i wrapper (.proges-username-wrapper, .proges-password-wrapper)
+   e le rispettive icone sono aggiunti a mano in login.ftl: stessa
+   struttura flex per entrambi, così le due icone (omino e occhio)
+   risultano allineate in modo identico invece che con meccanismi
+   diversi (un tempo l'omino era un background-image sull'input,
+   centrato in modo leggermente diverso dal bottone occhio). */
+#kc-form-login .proges-username-wrapper,
+#kc-form-login .proges-password-wrapper {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+
+    width: 100% !important;
+}
+
+#kc-form-login .proges-username-wrapper input#username,
+#kc-form-login .proges-password-wrapper input#password {
+    flex: 1 1 auto !important;
+}
+
+#kc-form-login .proges-password-toggle {
+    flex: 0 0 20px !important;
+    width: 20px !important;
+    min-width: 20px !important;
+    height: 20px !important;
+    min-height: 20px !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    outline: none !important;
+
+    cursor: pointer !important;
+    opacity: 0.55 !important;
+}
+
+#kc-form-login .proges-password-toggle:hover,
+#kc-form-login .proges-password-toggle:focus-visible {
+    opacity: 1 !important;
+}
+
+#kc-form-login .proges-eye-icon,
+#kc-form-login .proges-username-icon {
+    display: block !important;
+    flex: 0 0 18px !important;
+    width: 18px !important;
+    height: 18px !important;
+
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+    background-size: contain !important;
+
+    opacity: 0.55 !important;
+}
+
+#kc-form-login .proges-eye-icon {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23162033' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z'/%3E%3Ccircle cx='12' cy='12' r='3'/%3E%3C/svg%3E") !important;
+}
+
+#kc-form-login .proges-password-toggle.is-visible .proges-eye-icon {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23162033' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8a21.6 21.6 0 0 1 5.06-6.06M9.9 4.24A10.4 10.4 0 0 1 12 4c7 0 11 8 11 8a21.6 21.6 0 0 1-2.61 3.81M14.12 14.12a3 3 0 1 1-4.24-4.24'/%3E%3Cline x1='1' y1='1' x2='23' y2='23'/%3E%3C/svg%3E") !important;
+}
+
+#kc-form-login .proges-username-icon {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23162033' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 21v-1a7 7 0 0 1 7-7h2a7 7 0 0 1 7 7v1'/%3E%3Ccircle cx='12' cy='7' r='4'/%3E%3C/svg%3E") !important;
+}
+
+/* Pulsante di accesso: sotto ai campi */
+#kc-form-buttons {
+    order: 2;
+}
+
+/* #kc-form-buttons eredita margin-bottom:16px dallo stile generico
+   ".form-group" (sezione FORM BASE più sopra): sommandosi al
+   margin-top di .login-pf-settings creava uno spazio doppio sopra
+   "Password dimenticata" rispetto a quello sotto (verso Google). */
+#kc-form-login #kc-form-buttons {
+    margin-bottom: 0 !important;
+}
+
+/* Opzioni: solo link "Password dimenticata", centrato, sotto al bottone.
+   ATTENZIONE: nel markup generato da Keycloak il link vive in un div
+   fratello di #kc-form-options (quest'ultimo contiene solo il checkbox
+   "ricordami", vuoto perché disabilitato sul realm), con classe
+   "login-pf-settings" (kcFormSettingClass). L'order va quindi impostato
+   sul wrapper realmente visibile: applicarlo a #kc-form-options non ha
+   alcun effetto sul link, che restava al suo ordine di default (0),
+   cioè in cima al form, sopra i campi username/password. */
+#kc-form-login .login-pf-settings {
+    order: 3;
+
+    justify-content: center !important;
+
+    margin: 20px 0 0 0 !important;
+}
+
+#kc-form-login #kc-form-options {
+    display: none !important;
+}
+
+#kc-form-login .login-pf-settings a {
+    color: var(--proges-muted) !important;
+    font-weight: 500 !important;
+    text-decoration: underline !important;
+}
+
+#kc-form-login .login-pf-settings a:hover {
+    color: var(--proges-blue) !important;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
 
 @media (max-width: 520px) {
     body {
