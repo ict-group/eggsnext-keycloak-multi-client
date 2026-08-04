@@ -133,6 +133,14 @@ body::after {
 #kc-form-wrapper,
 #kc-form-login {
     width: 100% !important;
+    margin: 0 !important;
+}
+
+/* #kc-form ha class="row" (Bootstrap/PatternFly): senza questo reset
+   i margin-left/right negativi del grid system lo sfasano di ~20px
+   verso sinistra, scentrando tutto il contenuto del form nella card. */
+#kc-form {
+    max-width: 100% !important;
 }
 
 /* ============================================================
@@ -771,7 +779,7 @@ span[id="input-error"] {
    ============================================================ */
 
 /* ============================================================
-   LOGIN PAGE — campi a riga singola con sottolineatura
+   LOGIN PAGE — label sopra il campo, input con sottolineatura
    Sovrascrive lo stile "box" generico solo per #kc-form-login,
    più specifico e dichiarato dopo, quindi vince in cascata.
    ============================================================ */
@@ -785,28 +793,19 @@ span[id="input-error"] {
 #kc-form-login .form-group:has(#password) {
     order: 1;
 
-    display: flex !important;
-    align-items: center !important;
-    gap: 8px !important;
+    display: block !important;
 
     margin: 0 0 22px 0 !important;
-    padding: 0 0 8px 0 !important;
+    padding: 0 !important;
 
-    border-bottom: 1px solid rgba(22, 32, 51, 0.22) !important;
-
-    transition: border-color 0.18s ease !important;
-}
-
-#kc-form-login .form-group:has(#username:focus),
-#kc-form-login .form-group:has(#password:focus) {
-    border-bottom-color: var(--proges-blue) !important;
+    border-bottom: none !important;
 }
 
 #kc-form-login .form-group:has(#username) label,
 #kc-form-login .form-group:has(#password) label {
-    flex: 0 0 auto !important;
-    width: auto !important;
-    margin: 0 !important;
+    display: block !important;
+    width: 100% !important;
+    margin: 0 0 6px 0 !important;
 
     font-weight: 400 !important;
     font-size: 13px !important;
@@ -814,18 +813,24 @@ span[id="input-error"] {
     white-space: nowrap !important;
 }
 
-#kc-form-login .form-group:has(#username) input,
-#kc-form-login .form-group:has(#password) .pf-c-input-group,
-#kc-form-login .form-group:has(#password) .input-group {
-    flex: 1 1 auto !important;
-    width: auto !important;
-    min-width: 0 !important;
+#kc-form-login .proges-username-wrapper,
+#kc-form-login .proges-password-wrapper {
+    border-bottom: 1px solid rgba(22, 32, 51, 0.22) !important;
+    padding-bottom: 8px !important;
+
+    transition: border-color 0.18s ease !important;
+}
+
+#kc-form-login .proges-username-wrapper:focus-within,
+#kc-form-login .proges-password-wrapper:focus-within {
+    border-bottom-color: var(--proges-blue) !important;
+
+    background: transparent !important;
+    box-shadow: none !important;
 }
 
 #kc-form-login input#username,
-#kc-form-login input#password,
-#kc-form-login .pf-c-input-group input,
-#kc-form-login .input-group input {
+#kc-form-login input#password {
     width: 100% !important;
     min-width: 0 !important;
 
@@ -834,7 +839,8 @@ span[id="input-error"] {
 
     padding: 0 !important;
 
-    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
     border: none !important;
     border-radius: 0 !important;
     box-shadow: none !important;
@@ -844,42 +850,82 @@ span[id="input-error"] {
     line-height: 28px !important;
 }
 
-#kc-form-login .pf-c-input-group,
-#kc-form-login .input-group {
-    height: 28px !important;
-    background: transparent !important;
-    box-shadow: none !important;
+/* Wrapper dei campi username e password: nel markup di Keycloak 11
+   (legacy, WildFly) gli input non hanno alcun wrapper nativo — a
+   differenza delle versioni Quarkus più recenti, che aggiungono
+   .pf-c-input-group con il pulsante "mostra password" incluso.
+   Qui i wrapper (.proges-username-wrapper, .proges-password-wrapper)
+   e le rispettive icone sono aggiunti a mano in login.ftl: stessa
+   struttura flex per entrambi, così le due icone (omino e occhio)
+   risultano allineate in modo identico invece che con meccanismi
+   diversi (un tempo l'omino era un background-image sull'input,
+   centrato in modo leggermente diverso dal bottone occhio). */
+#kc-form-login .proges-username-wrapper,
+#kc-form-login .proges-password-wrapper {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+
+    width: 100% !important;
 }
 
-#kc-form-login .pf-c-input-group .pf-c-button,
-#kc-form-login .input-group .btn,
-#kc-form-login .input-group button,
-#kc-form-login button[data-password-toggle],
-#kc-form-login button[aria-controls="password"] {
+#kc-form-login .proges-username-wrapper input#username,
+#kc-form-login .proges-password-wrapper input#password {
+    flex: 1 1 auto !important;
+}
+
+#kc-form-login .proges-password-toggle {
     flex: 0 0 20px !important;
     width: 20px !important;
     min-width: 20px !important;
     height: 20px !important;
     min-height: 20px !important;
-    max-height: 20px !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    outline: none !important;
+
+    cursor: pointer !important;
+    opacity: 0.55 !important;
+}
+
+#kc-form-login .proges-password-toggle:hover,
+#kc-form-login .proges-password-toggle:focus-visible {
+    opacity: 1 !important;
+}
+
+#kc-form-login .proges-eye-icon,
+#kc-form-login .proges-username-icon {
+    display: block !important;
+    flex: 0 0 18px !important;
+    width: 18px !important;
+    height: 18px !important;
+
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+    background-size: contain !important;
 
     opacity: 0.55 !important;
 }
 
-/* Icona utente decorativa a fine riga */
-#kc-form-login .form-group:has(#username)::after {
-    content: "";
-    flex: 0 0 16px;
-    width: 16px;
-    height: 16px;
+#kc-form-login .proges-eye-icon {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23162033' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z'/%3E%3Ccircle cx='12' cy='12' r='3'/%3E%3C/svg%3E") !important;
+}
 
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23162033' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 21v-1a7 7 0 0 1 7-7h2a7 7 0 0 1 7 7v1'/%3E%3Ccircle cx='12' cy='7' r='4'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: contain;
+#kc-form-login .proges-password-toggle.is-visible .proges-eye-icon {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23162033' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8a21.6 21.6 0 0 1 5.06-6.06M9.9 4.24A10.4 10.4 0 0 1 12 4c7 0 11 8 11 8a21.6 21.6 0 0 1-2.61 3.81M14.12 14.12a3 3 0 1 1-4.24-4.24'/%3E%3Cline x1='1' y1='1' x2='23' y2='23'/%3E%3C/svg%3E") !important;
+}
 
-    opacity: 0.55;
-    pointer-events: none;
+#kc-form-login .proges-username-icon {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23162033' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 21v-1a7 7 0 0 1 7-7h2a7 7 0 0 1 7 7v1'/%3E%3Ccircle cx='12' cy='7' r='4'/%3E%3C/svg%3E") !important;
 }
 
 /* Pulsante di accesso: sotto ai campi */
@@ -887,26 +933,41 @@ span[id="input-error"] {
     order: 2;
 }
 
-/* Opzioni: solo link "Password dimenticata", centrato, sotto al bottone */
-#kc-form-login #kc-form-options {
+/* #kc-form-buttons eredita margin-bottom:16px dallo stile generico
+   ".form-group" (sezione FORM BASE più sopra): sommandosi al
+   margin-top di .login-pf-settings creava uno spazio doppio sopra
+   "Password dimenticata" rispetto a quello sotto (verso Google). */
+#kc-form-login #kc-form-buttons {
+    margin-bottom: 0 !important;
+}
+
+/* Opzioni: solo link "Password dimenticata", centrato, sotto al bottone.
+   ATTENZIONE: nel markup generato da Keycloak il link vive in un div
+   fratello di #kc-form-options (quest'ultimo contiene solo il checkbox
+   "ricordami", vuoto perché disabilitato sul realm), con classe
+   "login-pf-settings" (kcFormSettingClass). L'order va quindi impostato
+   sul wrapper realmente visibile: applicarlo a #kc-form-options non ha
+   alcun effetto sul link, che restava al suo ordine di default (0),
+   cioè in cima al form, sopra i campi username/password. */
+#kc-form-login .login-pf-settings {
     order: 3;
 
     justify-content: center !important;
 
-    margin: 16px 0 0 0 !important;
+    margin: 20px 0 0 0 !important;
 }
 
-#kc-form-login #kc-form-options .checkbox {
+#kc-form-login #kc-form-options {
     display: none !important;
 }
 
-#kc-form-login #kc-form-options a {
+#kc-form-login .login-pf-settings a {
     color: var(--proges-muted) !important;
     font-weight: 500 !important;
     text-decoration: underline !important;
 }
 
-#kc-form-login #kc-form-options a:hover {
+#kc-form-login .login-pf-settings a:hover {
     color: var(--proges-blue) !important;
 }
 

@@ -23,8 +23,29 @@
 .kc-social-providers,
 .kc-social-section {
     width: 100% !important;
-    margin-top: 22px !important;
     padding: 0 !important;
+
+    /* .login-pf-social-section (vendor, Keycloak 11) ha di default un
+       border-left grigio: era pensato come divisorio verticale tra la
+       colonna del form e quella dei social login nel layout a due
+       colonne originale di PatternFly. Qui il social login è impilato
+       sotto il form (non più affiancato), quindi il divisorio resta
+       come una riga verticale indesiderata a sinistra del bottone. */
+    border: none !important;
+}
+
+/* Su Keycloak 11 (legacy) #kc-social-providers ha anche class="col-xs-12
+   col-sm-6 ..." (grid PatternFly/Bootstrap): la regola generica che
+   azzera i margini di ogni div[class*="col-"] in style.css usa il
+   selettore "#kc-form div[class*="col-"]" (id + attributo + elemento),
+   più specifico del semplice "#kc-social-providers" (solo id) usato qui
+   sopra, quindi vinceva lei e lo spazio sopra il bottone social spariva.
+   Serve quindi un selettore con specificità almeno pari, con l'id del
+   genitore #kc-form incluso. */
+#kc-form #kc-social-providers,
+#kc-form .kc-social-providers,
+#kc-form .kc-social-section {
+    margin-top: 20px !important;
 }
 
 #kc-social-providers hr {
@@ -127,6 +148,21 @@ a.kc-social-item::after {
     border: none !important;
     box-shadow: none !important;
     background: transparent !important;
+}
+
+/* Su Keycloak 11 (legacy) l'icona del bottone è generata come ::before
+   sul link stesso (niente <i>, il markup è solo <a><span>Google</span></a>),
+   e lib/zocial/zocial.css (vendor, caricato da stylesCommon) applica di
+   default un border-right + box-shadow decorativi a quello stesso ::before
+   (la separazione icona/testo del framework "zocial"), visibile come una
+   linea verticale indesiderata accanto al logo. Il logo stesso (content/
+   background-image) resta impostato dalle regole più sotto: qui si toglie
+   solo bordo e ombra ereditati. */
+#kc-social-providers a::before,
+a.zocial::before,
+a.kc-social-item::before {
+    border: none !important;
+    box-shadow: none !important;
 }
 
 /* Testo del bottone */
