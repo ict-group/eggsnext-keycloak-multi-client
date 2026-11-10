@@ -30,6 +30,7 @@ on:
           - proges
           - ict-group
           - virgilio
+          - sagest
       keycloak_version:
         description: 'Versione Keycloak'
         required: true

@@ -193,9 +193,27 @@ Lo script `test-image.sh` è il modo corretto per avviare qualsiasi versione. Ge
 
 # Versione di default (26.6.1)
 ./test-image.sh cps
+
+# Login SAGEST
+./test-image.sh sagest
 ```
 
 Lo script scarica automaticamente l'immagine da GHCR prima di avviare.
+
+### Tema login SAGEST
+
+Il tema `sagest-theme` si trova in `clienti/sagest/themes` e include logo e
+sfondo originali, pannello traslucido e traduzioni italiano/inglese.
+In **Realm settings > Themes**, selezionare `sagest-theme` come **Login theme**.
+Per ottenere il testo italiano del mockup, abilitare l'internazionalizzazione
+e impostare `it` come lingua predefinita del realm.
+Abilitare **Forgot password** nelle impostazioni di login per mostrare
+il recupero password. Il pulsante **Accedi tramite Google** viene mostrato
+solo dopo aver configurato un identity provider Google nel realm; il tema
+mantiene anche gli altri provider eventualmente configurati.
+Registrazione e ricordami restano disponibili quando abilitati nel realm.
+La configurazione del cliente non contiene credenziali: per l'ambiente locale
+si usano quelle del Compose, mentre in produzione vanno fornite a runtime.
 
 ---
 
