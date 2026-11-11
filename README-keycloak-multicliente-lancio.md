@@ -217,6 +217,18 @@ si usano quelle del Compose, mentre in produzione vanno fornite a runtime.
 
 ---
 
+### Tema login Montanari & Gruzza
+
+Il cliente `montanari-gruzza` usa il tema `montanari-gruzza-theme`, con logo e
+sfondo originali, pannello traslucido, pulsanti blu e traduzioni italiano/inglese.
+Si avvia con `./test-image.sh montanari-gruzza 26.6.1`.
+Selezionare `montanari-gruzza-theme` in **Realm settings > Themes > Login theme**.
+Come per SAGEST, abilitare il recupero password e impostare `it` come lingua
+predefinita per riprodurre il mockup italiano. Il pulsante Google compare solo
+quando il relativo identity provider e' configurato nel realm.
+Il clic sui campi non modifica il loro aspetto; con Tab viene evidenziata
+la sottolineatura, mantenendo visibile il focus da tastiera.
+
 ## Come funziona la scelta automatica del Dockerfile
 
 Lo script calcola la major version e sceglie:
