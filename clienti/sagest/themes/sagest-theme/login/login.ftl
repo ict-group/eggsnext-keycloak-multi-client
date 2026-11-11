@@ -1,5 +1,9 @@
 <#import "template.ftl" as layout>
-<@layout.registrationLayout displayMessage=!messagesPerField.existsError('username','password') displayInfo=realm.password && realm.registrationAllowed && !registrationDisabled??; section>
+<#assign hasCredentialError = false>
+<#if messagesPerField.existsError?is_method>
+    <#assign hasCredentialError = messagesPerField.existsError('username','password')>
+</#if>
+<@layout.registrationLayout displayMessage=!hasCredentialError displayInfo=realm.password && realm.registrationAllowed && !registrationDisabled??; section>
     <#if section = "header">
         <span class="sagest-sr-only">${msg("loginAccountTitle")}</span>
     <#elseif section = "form">
@@ -10,9 +14,9 @@
                         <#if !usernameHidden??>
                             <div class="sagest-field sagest-username">
                                 <label class="sagest-sr-only" for="username"><#if !realm.loginWithEmailAllowed>${msg("username")}<#elseif !realm.registrationEmailAsUsername>${msg("usernameOrEmail")}<#else>${msg("email")}</#if></label>
-                                <input id="username" name="username" value="${(login.username!'')}" type="text" autofocus autocomplete="username" dir="ltr"
+                                <input id="username" name="username" value="${(login.username!'')}" type="text" <#if usernameEditDisabled??>disabled<#else>autofocus</#if> autocomplete="username" dir="ltr"
                                        placeholder="<#if !realm.loginWithEmailAllowed>${msg("username")}<#elseif !realm.registrationEmailAsUsername>${msg("usernameOrEmail")}<#else>${msg("email")}</#if>"
-                                       aria-invalid="${messagesPerField.existsError('username','password')?c}" <#if messagesPerField.existsError('username','password')>aria-describedby="input-error"</#if>/>
+                                       aria-invalid="${hasCredentialError?c}" <#if hasCredentialError>aria-describedby="input-error"</#if>/>
                                 <svg class="sagest-user-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
                                     <circle cx="12" cy="7" r="3"/><path d="M5 20v-2a7 7 0 0 1 14 0v2Z"/>
                                 </svg>
@@ -21,7 +25,7 @@
                         <div class="sagest-field sagest-password">
                             <label class="sagest-sr-only" for="password">${msg("password")}</label>
                             <input id="password" name="password" type="password" autocomplete="current-password" placeholder="${msg('password')}"
-                                   aria-invalid="${messagesPerField.existsError('username','password')?c}" <#if messagesPerField.existsError('username','password')>aria-describedby="input-error"</#if>/>
+                                   aria-invalid="${hasCredentialError?c}" <#if hasCredentialError>aria-describedby="input-error"</#if>/>
                             <button class="sagest-password-toggle" type="button" aria-label="${msg('showPassword')}" aria-controls="password" aria-pressed="false"
                                     data-label-show="${msg('showPassword')}" data-label-hide="${msg('hidePassword')}" hidden>
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
@@ -30,10 +34,10 @@
                                 </svg>
                             </button>
                         </div>
-                        <#if messagesPerField.existsError('username','password')>
+                        <#if hasCredentialError>
                             <span id="input-error" class="sagest-field-error" aria-live="polite">${kcSanitize(messagesPerField.getFirstError('username','password'))?no_esc}</span>
                         </#if>
-                        <#if realm.rememberMe && !usernameHidden??>
+                        <#if realm.rememberMe && !usernameHidden?? && !usernameEditDisabled??>
                             <div id="kc-form-options" class="sagest-remember">
                                 <label for="rememberMe"><input id="rememberMe" name="rememberMe" type="checkbox" <#if login.rememberMe??>checked</#if>/> ${msg("rememberMe")}</label>
                             </div>
